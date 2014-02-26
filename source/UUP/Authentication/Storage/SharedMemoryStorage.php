@@ -120,7 +120,7 @@ class SharedMemoryStorage implements Storage
                 if (!($data = shmop_read($this->id, self::offset, $this->size - self::offset))) {
                         throw new Exception("Failed read shared memory");
                 } else {
-                        return unserialize(trim($data));
+                        return (array) unserialize(trim($data));
                 }
         }
 

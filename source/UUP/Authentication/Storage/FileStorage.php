@@ -59,7 +59,7 @@ class FileStorage implements Storage
 
         private function read()
         {
-                return unserialize(file_get_contents($this->file));
+                return (array) unserialize(file_get_contents($this->file));
         }
 
         private function write($data)
