@@ -55,5 +55,10 @@ abstract class CredentialValidator
                 $this->pass = $pass;
         }
 
+        /**
+         * Authenticate using currently set credentials. Returns true if authentication succeed.
+         * @return bool 
+         * @throws Exception
+         */
         abstract function authenticate();
 }

@@ -26,12 +26,22 @@ namespace UUP\Authentication\Validator;
 class LdapBindValidator extends LdapConnector
 {
 
+        /**
+         * Constructor.
+         * @param string $server The LDAP server.
+         * @param int $port Port on server.
+         * @param array $options Associative array of miscellanous LDAP options.
+         * @see ldap_set_options()
+         */
         public function __construct($server, $port = 389, $options = array())
         {
                 parent::__construct($server, $port, $options);
                 $this->connect();
         }
 
+        /**
+         * Destructor.
+         */
         public function __destruct()
         {
                 $this->disconnect();

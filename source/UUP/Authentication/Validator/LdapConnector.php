@@ -64,6 +64,12 @@ abstract class LdapConnector extends CredentialValidator
                 }
         }
 
+        /**
+         * Bind to LDAP tree using supplied username and password.
+         * @param string $user The username.
+         * @param string $pass The password.
+         * @throws Exception
+         */
         public function bind($user, $pass)
         {
                 if (!ldap_bind($this->handle, $user, $pass)) {

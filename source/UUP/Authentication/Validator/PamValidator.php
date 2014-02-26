@@ -31,6 +31,12 @@ use UUP\Authentication\Exception;
 class PamValidator extends CredentialValidator
 {
 
+        /**
+         * Constructor.
+         * @param string $user The username.
+         * @param string $pass The password.
+         * @throws Exception
+         */
         public function __construct($user = "", $pass = "")
         {
                 if (!extension_loaded("pam")) {

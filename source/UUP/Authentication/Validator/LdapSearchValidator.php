@@ -77,6 +77,9 @@ class LdapSearchValidator extends LdapConnector
                 $this->connect();
         }
 
+        /**
+         * Destructor.
+         */
         public function __destruct()
         {
                 $this->disconnect();
