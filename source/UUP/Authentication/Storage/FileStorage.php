@@ -64,7 +64,7 @@ class FileStorage implements Storage
 
         private function write($data)
         {
-                file_put_contents($this->file, $data);
+                file_put_contents($this->file, serialize($data));
         }
 
 }
