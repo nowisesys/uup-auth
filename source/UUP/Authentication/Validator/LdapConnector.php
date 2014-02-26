@@ -34,7 +34,7 @@ abstract class LdapConnector extends CredentialValidator
         private $server;
         private $port;
         private $options;
-        private $handle;        // LDAP connection
+        protected $handle;        // LDAP connection
 
         /**
          * Constructor.
@@ -64,7 +64,7 @@ abstract class LdapConnector extends CredentialValidator
                 }
         }
 
-        protected function bind($user, $pass)
+        public function bind($user, $pass)
         {
                 if (!ldap_bind($this->handle, $user, $pass)) {
                         ldap_close($this->handle);
