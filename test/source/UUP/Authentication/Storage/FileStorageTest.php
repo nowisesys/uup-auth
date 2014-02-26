@@ -19,7 +19,7 @@ class FileStorageTest extends \PHPUnit_Framework_TestCase
          */
         protected function setUp()
         {
-                $this->object = new FileStorage(tempnam(sys_get_temp_dir(), __CLASS__));
+                $this->object = new FileStorage(tempnam(sys_get_temp_dir(), __FILE__));
         }
 
         /**
@@ -37,10 +37,11 @@ class FileStorageTest extends \PHPUnit_Framework_TestCase
          */
         public function testExist()
         {
-                // Remove the following lines when you implement this test.
-                $this->markTestIncomplete(
-                    'This test has not been implemented yet.'
-                );
+                $user = "olle";
+                $this->object->insert($user);
+                $this->assertEquals($this->object->exist($user), true);
+                $user = "adam";
+                $this->assertEquals($this->object->exist($user), false);
         }
 
         /**
@@ -49,10 +50,7 @@ class FileStorageTest extends \PHPUnit_Framework_TestCase
          */
         public function testInsert()
         {
-                // Remove the following lines when you implement this test.
-                $this->markTestIncomplete(
-                    'This test has not been implemented yet.'
-                );
+                $this->testExist();
         }
 
         /**
@@ -61,10 +59,11 @@ class FileStorageTest extends \PHPUnit_Framework_TestCase
          */
         public function testRemove()
         {
-                // Remove the following lines when you implement this test.
-                $this->markTestIncomplete(
-                    'This test has not been implemented yet.'
-                );
+                $user = "olle";
+                $this->object->insert($user);
+                $this->assertEquals($this->object->exist($user), true);
+                $this->object->remove($user);
+                $this->assertEquals($this->object->exist($user), false);
         }
 
 }
