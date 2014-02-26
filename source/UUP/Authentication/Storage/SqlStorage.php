@@ -30,6 +30,9 @@ use UUP\Authentication\Exception;
 class SqlStorage implements Storage
 {
 
+        const table = "sessions";
+        const field = "user";
+
         /**
          * @var PDO The database connection.
          */
@@ -44,7 +47,7 @@ class SqlStorage implements Storage
          * @param string $field The table column (field) name.
          * @throws Exception
          */
-        public function __construct($pdo, $table = "sessions", $field = "user")
+        public function __construct($pdo, $table = self::table, $field = self::field)
         {
                 if (!extension_loaded('PDO')) {
                         throw new Exception("The PDO extension is not loaded.");
