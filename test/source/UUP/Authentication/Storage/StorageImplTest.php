@@ -21,6 +21,7 @@ class StorageImplTest extends \PHPUnit_Framework_TestCase
         public function testExist()
         {
                 $user = "olle";
+                $this->assertEquals($this->object->exist($user), false);
                 $this->object->insert($user);
                 $this->assertEquals($this->object->exist($user), true);
                 $user = "adam";
