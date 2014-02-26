@@ -1,0 +1,20 @@
+{
+    "name": "bmc/uup-auth",
+    "description": "Authentication stack with various frontends and backends.",
+    "type": "library",
+    "keywords": ["authentication", "uup", "bmc"],
+    "homepage": "http://it.bmc.uu.se/andlov/proj/",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Anders Lövgren",
+            "email": "anders.lovgren@bmc.uu.se"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-4": {"UUP\\": "source/"}
+    }
+}

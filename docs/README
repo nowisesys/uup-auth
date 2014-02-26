@@ -1,0 +1,58 @@
+=============================================================================
+    UUP-AUTH - Authentication stack for PHP
+=============================================================================
+
+The uup-auth library provides an authentication stack that cleanly separates 
+the credential obtainer from the validator and storage backend. Authentication 
+using either a single or multiple (a authenication stack) account sources is 
+supported.
+
+
+This example uses the basic HTTP authenticator for obtaining the user credentials.
+Authentication is performed by the PAM-modules validator (on Linux) and logon
+session is stored in a SQL-database:
+
+    use UUP\Authentication\BasicHttpAuthenticator;
+    use UUP\Authentication\Validator\PamValidator;
+    use UUP\Authentication\Storage\SqlStorage;
+
+    $authenticator = new BasicHttpAuthenticator(
+        new PamValidator(), new SqlStorage($pdo), "My Realm"
+    );
+
+    // ... authentication is required:
+
+    if(!$authenticator->authenticated()) {
+        $authenticator->login();    // trigger logon
+    }
+
+
+Use the class AuthenticatorStack to support authentication against multiple account 
+sources. Each authenticator added to the stack can share a common storage or use 
+their own.
+
+    use UUP\Authentication\AuthenticatorStack;
+
+    $authstack = new AuthenticatorStack();
+    $authstack->add(...);
+
+        // Add any authenticators...
+
+    if(!$authstack->authenticated()) {
+        // No authenticator accepted caller as logged in, redirect to login page...
+    }
+
+When using an authentication stack, the login page usually let the caller select 
+the prefered login method (a specific authenticator). On return to login page, 
+the script check for selected authenticator in request parameters and validates 
+the user:
+
+    switch($request->login->method) {
+        case "pam":
+            $pamauth->login();
+            $authstack->setAuthenticator();
+            break;
+        // ....
+    }
+
+// Anders Lövgren, 2014-02-26
