@@ -100,6 +100,7 @@ class LdapSearchValidator extends LdapConnector
                         throw new Exception(sprintf("Failed search LDAP: %s", ldap_error($this->handle)));
                 }
                 if (!($entries = ldap_count_entries($this->handle, $result))) {
+                        ldap_free_result($result);
                         throw new Exception(sprintf("Failed fetch entries count: %s", ldap_error($this->handle)));
                 }
 
