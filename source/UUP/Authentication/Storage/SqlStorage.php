@@ -21,7 +21,7 @@ namespace UUP\Authentication\Storage;
 use UUP\Authentication\Exception;
 
 /**
- * SQL storage backend.
+ * SQL session storage backend.
  *
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -30,64 +30,41 @@ use UUP\Authentication\Exception;
 class SqlStorage implements Storage
 {
 
-        const table = "sessions";
-        const field = "user";
+        use SqlConnector {
+                initialize as private;
+        }
 
-        /**
-         * @var PDO The database connection.
-         */
-        private $pdo;
-        private $table;
-        private $field;
+        const table = "sessions";
+        const fuser = "user";
 
         /**
          * Constructor.
          * @param PDO $pdo The database connection object.
-         * @param string $table The user sessions table name.
-         * @param string $field The table column (field) name.
+         * @param string $table The logon session table name.
+         * @param string $fuser The username column (field) name.
          * @throws Exception
          */
-        public function __construct($pdo, $table = self::table, $field = self::field)
+        public function __construct($pdo, $table = self::table, $fuser = self::fuser)
         {
-                if (!extension_loaded('PDO')) {
-                        throw new Exception("The PDO extension is not loaded.");
-                }
-                $this->pdo = $pdo;
-                $this->table = $table;
-                $this->field = $field;
+                $this->initialize($pdo, $table, $fuser, "");
         }
 
         public function exist($user)
         {
-                $sql = sprintf("SELECT COUNT(*) FROM %s WHERE %s = '%s'", $this->table, $this->field, $user);
+                $sql = sprintf("SELECT COUNT(*) FROM %s WHERE %s = '%s'", $this->table, $this->fuser, $user);
                 return $this->query($sql)->fetchColumn() > 0;
         }
 
         public function insert($user)
         {
-                $sql = sprintf("INSERT INTO %s(%s) VALUES('%s')", $this->table, $this->field, $user);
+                $sql = sprintf("INSERT INTO %s(%s) VALUES('%s')", $this->table, $this->fuser, $user);
                 return $this->exec($sql) !== 0;
         }
 
         public function remove($user)
         {
-                $sql = sprintf("DELETE FROM %s WHERE %s = '%s'", $this->table, $this->field, $user);
+                $sql = sprintf("DELETE FROM %s WHERE %s = '%s'", $this->table, $this->fuser, $user);
                 return $this->exec($sql) !== 0;
-        }
-
-        private function query($sql)
-        {
-                if (!($res = $this->pdo->query($sql))) {
-                        $error = $this->pdo->errorInfo();
-                        throw new Exception(sprintf("Failed query database: %s", $error[2]));
-                } else {
-                        return $res;
-                }
-        }
-
-        private function exec($sql)
-        {
-                return $this->pdo->exec($sql);
         }
 
 }

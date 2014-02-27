@@ -18,6 +18,9 @@
 
 namespace UUP\Authentication;
 
+use UUP\Authentication\Validator\CredentialValidator;
+use UUP\Authentication\Storage\Storage;
+
 /**
  * Basic HTTP (WWW-Authenticate) authenticator.
  *
@@ -25,38 +28,79 @@ namespace UUP\Authentication;
  * @package UUP
  * @subpackage Authentication
  */
-class BasicHttpAuthenticator extends ValidatorAdapter
+class BasicHttpAuthenticator implements Authenticator
 {
 
+        /**
+         * @var CredentialValidator 
+         */
+        private $validator;
+        /**
+         * @var Storage 
+         */
+        private $storage;
         private $realm;
+        private $user = "";
+        private $pass = "";
 
         /**
          * Constructor.
          * @param CredentialValidator $validator The validator callback object.
+         * @param Storage $storage The storage backend object.
          * @param string $realm The authentication realm.
          */
-        public function __construct($validator, $realm)
+        public function __construct($validator, $storage, $realm)
         {
-                parent::__construct($validator);
+                $this->validator = $validator;
+                $this->storage = $storage;
                 $this->realm = $realm;
                 $this->initialize();
         }
 
+        public function authenticated()
+        {
+                return $this->storage->exist($this->user);
+        }
+
+        public function getUser()
+        {
+                return $this->user;
+        }
+
         public function login()
         {
-                if (!isset($_SERVER['PHP_AUTH_USER'])) {
-                        header(sprintf('WWW-Authenticate: Basic realm="%s"', $this->realm));
-                        header('HTTP/1.0 401 Unauthorized');
-                        exit;
+                if (strlen($this->user) == 0) {
+                        $this->unauthorized(false);
+                } elseif (!$this->validator->authenticate()) {
+                        $this->unauthorized(false);
                 } else {
-                        $this->validator->login();
+                        $this->storage->insert($this->user);
                 }
+        }
+
+        public function logout()
+        {
+                $this->storage->remove($this->user);
+                $this->unauthorized(true);
         }
 
         private function initialize()
         {
-                if (isset($_SERVER['PHP_AUTH_USER'])) {
-                        $this->validator->setCredentials($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+                if (isset($_SERVER['PHP_AUTH_USER']) && strlen($_SERVER['PHP_AUTH_USER']) != 0) {
+                        $this->user = $_SERVER['PHP_AUTH_USER'];
+                }
+                if (isset($_SERVER['PHP_AUTH_PW']) && strlen($_SERVER['PHP_AUTH_PW']) != 0) {
+                        $this->pass = $_SERVER['PHP_AUTH_PW'];
+                }
+                $this->validator->setCredentials($this->user, $this->pass);
+        }
+
+        private function unauthorized($redirect)
+        {
+                header(sprintf('WWW-Authenticate: Basic realm="%s"', $this->realm));
+                header('HTTP/1.0 401 Unauthorized');
+                if (!$redirect) {
+                        exit();
                 }
         }
 
