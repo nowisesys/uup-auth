@@ -42,6 +42,7 @@ class BasicHttpAuthenticator implements Authenticator
         private $realm;
         private $user = "";
         private $pass = "";
+        private $redirect = null;
 
         /**
          * Constructor.
@@ -70,9 +71,9 @@ class BasicHttpAuthenticator implements Authenticator
         public function login()
         {
                 if (strlen($this->user) == 0) {
-                        $this->unauthorized(false);
+                        $this->unauthorized();
                 } elseif (!$this->validator->authenticate()) {
-                        $this->unauthorized(false);
+                        $this->unauthorized();
                 } else {
                         $this->storage->insert($this->user);
                 }
@@ -81,7 +82,18 @@ class BasicHttpAuthenticator implements Authenticator
         public function logout()
         {
                 $this->storage->remove($this->user);
-                $this->unauthorized(true);
+                $this->unauthorized();
+        }
+
+        /**
+         * Set redirect URL. This affects whether the browser is instructed to clear the
+         * username and password associated with the authentication realm.
+         * 
+         * @param string $url The redirect URL
+         */
+        public function setRedirect($url)
+        {
+                $this->redirect = $url;
         }
 
         private function initialize()
@@ -95,11 +107,13 @@ class BasicHttpAuthenticator implements Authenticator
                 $this->validator->setCredentials($this->user, $this->pass);
         }
 
-        private function unauthorized($redirect)
+        private function unauthorized()
         {
                 header(sprintf('WWW-Authenticate: Basic realm="%s"', $this->realm));
                 header('HTTP/1.0 401 Unauthorized');
-                if (!$redirect) {
+                if (isset($this->redirect)) {
+                        header(sprintf("Location: %s", $this->redirect));
+                } else {
                         exit();
                 }
         }

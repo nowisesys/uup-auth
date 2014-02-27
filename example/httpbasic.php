@@ -43,13 +43,13 @@ limitations under the License.
                         $storage = new SqlStorage($objpdo);
                         $validator = new SqlValidator($objpdo);
                         $authenticator = new BasicHttpAuthenticator($validator, $storage, "HTTP Basic Authentication Example");
+                        // $authenticator->setRedirect(basename(__FILE__));
 
                         if (isset($_GET['login'])) {
                                 $authenticator->login();
                         }
                         if (isset($_GET['logout'])) {
                                 $authenticator->logout();
-                                header("Location: " . basename(__FILE__));
                         }
                         if (isset($_GET['create'])) {
                                 $objpdo->exec("DROP TABLE IF EXISTS sessions");
