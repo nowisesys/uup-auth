@@ -17,6 +17,7 @@
  */
 
 namespace UUP\Authentication\Validator;
+use UUP\Authentication\Connector\LdapConnector;
 
 /**
  * Validate against LDAP using a simple bind.

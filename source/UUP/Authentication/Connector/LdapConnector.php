@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace UUP\Authentication\Validator;
+namespace UUP\Authentication\Connector;
 
 use UUP\Authentication\Exception;
 

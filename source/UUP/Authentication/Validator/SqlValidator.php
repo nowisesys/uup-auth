@@ -30,7 +30,7 @@ use UUP\Authentication\Storage\SqlConnector;
 class SqlValidator extends CredentialValidator
 {
 
-        use SqlConnector {
+        use \UUP\Authentication\Connector\SqlConnector {
                 initialize as private;
         }
 
