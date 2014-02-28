@@ -36,14 +36,29 @@ limitations under the License.
                 use UUP\Authentication\Storage\SqlStorage;
                 use UUP\Authentication\Validator\SqlValidator;
 
+                class DataStorage extends SqlStorage
+                {
+
+                        public function setup()
+                        {
+                                $this->exec("DROP TABLE IF EXISTS sessions");
+                                $this->exec("DROP TABLE IF EXISTS users");
+                                $this->exec("CREATE TABLE sessions(user varchar(10), logon TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)");
+                                $this->exec("CREATE TABLE users(user varchar(10), pass varchar(10))");
+                                $this->exec("INSERT INTO users(user, pass) VALUES('admin', 'admin')");                                
+                        }
+
+                }
+                
                 try {
                         $sqlite = sprintf("sqlite:/%s/%s.sql", sys_get_temp_dir(), basename(__FILE__));
                         $objpdo = new \PDO($sqlite, null, null);
 
-                        $storage = new SqlStorage($objpdo);
+                        $storage = new DataStorage($objpdo);
                         $validator = new SqlValidator($objpdo);
                         $authenticator = new BasicHttpAuthenticator($validator, $storage, "HTTP Basic Authentication Example");
-                        // $authenticator->setRedirect(basename(__FILE__));
+                        $authenticator->message = "Logon cancelled by caller";
+//                        $authenticator->redirect = basename(__FILE__);
 
                         if (isset($_GET['login'])) {
                                 $authenticator->login();
@@ -52,11 +67,7 @@ limitations under the License.
                                 $authenticator->logout();
                         }
                         if (isset($_GET['create'])) {
-                                $objpdo->exec("DROP TABLE IF EXISTS sessions");
-                                $objpdo->exec("DROP TABLE IF EXISTS users");
-                                $objpdo->exec("CREATE TABLE sessions(user varchar(10), logon TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)");
-                                $objpdo->exec("CREATE TABLE users(user varchar(10), pass varchar(10))");
-                                $objpdo->exec("INSERT INTO users(user, pass) VALUES('admin', 'admin')");
+                                $storage->setup();
                         }
 
                         if ($authenticator->authenticated()) {
