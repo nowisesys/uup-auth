@@ -75,7 +75,7 @@ class HostnameAuthenticatorTest extends \PHPUnit_Framework_TestCase
          */
         public function testLogout()
         {
-                $this->assertNull($this->object->login());
+                $this->assertNull($this->object->logout());
         }
 
 }
