@@ -25,43 +25,15 @@ namespace UUP\Authentication;
  * @package UUP
  * @subpackage Authentication
  */
-class BasicHttpAuthenticator extends HttpAuthenticator implements Authenticator
+class BasicHttpAuthenticator implements Authenticator
 {
 
-        private $user = "";
-        private $pass = "";
+        use HttpAuthenticator;
 
         public function __construct($validator, $storage, $realm)
         {
-                parent::__construct($validator, $storage, $realm);
+                $this->config($validator, $storage, $realm);
                 $this->initialize();
-        }
-
-        public function authenticated()
-        {
-                return $this->storage->exist($this->user);
-        }
-
-        public function getUser()
-        {
-                return $this->user;
-        }
-
-        public function login()
-        {
-                if (strlen($this->user) == 0) {
-                        $this->unauthorized();
-                } elseif (!$this->validator->authenticate()) {
-                        $this->unauthorized();
-                } else {
-                        $this->storage->insert($this->user);
-                }
-        }
-
-        public function logout()
-        {
-                $this->storage->remove($this->user);
-                $this->unauthorized();
         }
 
         private function initialize()

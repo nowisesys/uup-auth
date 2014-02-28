@@ -34,6 +34,10 @@ use UUP\Authentication\Validator\PasswordProvider;
  * @property-read string $algorithm Message digest part.
  * @property-read string $method Request method.
  * @property-read string $raw The raw digest message.
+ * 
+ * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
+ * @package UUP
+ * @subpackage Authentication
  */
 class DigestHttpMessage
 {
@@ -100,6 +104,10 @@ class DigestHttpMessage
 
 /**
  * Helper class for validation of Digest HTTP messages.
+ * 
+ * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
+ * @package UUP
+ * @subpackage Authentication
  */
 class DigestHttpResponse
 {
@@ -137,10 +145,10 @@ class DigestHttpResponse
  * @package UUP
  * @subpackage Authentication
  */
-class DigestHttpAuthenticator extends HttpAuthenticator implements Authenticator
+class DigestHttpAuthenticator implements Authenticator
 {
+        use HttpAuthenticator;
 
-        private $user = "";
         private $nonce;
 
         /**
@@ -153,41 +161,14 @@ class DigestHttpAuthenticator extends HttpAuthenticator implements Authenticator
          */
         public function __construct($validator, $storage, $realm, $required = array('nonce' => 1, 'nc' => 1, 'cnonce' => 1, 'qop' => 1, 'username' => 1, 'uri' => 1, 'response' => 1, 'algorithm' => 0))
         {
-                parent::__construct($validator, $storage, $realm);
+                $this->config($validator, $storage, $realm);
                 $this->initialize($required);
-        }
-
-        public function authenticated()
-        {
-                return $this->storage->exist($this->user);
-        }
-
-        public function getUser()
-        {
-                return $this->user;
-        }
-
-        public function login()
-        {
-                if (strlen($this->user) == 0) {
-                        $this->unauthorized();
-                } elseif (!$this->validator->authenticate()) {
-                        $this->unauthorized();
-                } else {
-                        $this->storage->insert($this->user);
-                }
-        }
-
-        public function logout()
-        {
-                $this->storage->remove($this->user);
-                $this->unauthorized();
         }
 
         private function initialize($required)
         {
                 $this->nonce = uniqid();
-                
+
                 if (isset($_SERVER['PHP_AUTH_DIGEST'])) {               // mod_php
                         $digest = $_SERVER['PHP_AUTH_DIGEST'];
                 } elseif (isset($_SERVER['HTTP_AUTHENTICATION'])) {     // most other servers

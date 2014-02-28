@@ -23,7 +23,9 @@ use UUP\Authentication\Validator\Validator;
 use UUP\Authentication\Storage\Storage;
 
 /**
- * Abstract base class for HTTP authenticators.
+ * Trait for HTTP authenticators. Provides uniform login/logout functionality for all HTTP
+ * authenticator classes using this trait. Defines the methods that implements the Authenticator 
+ * interface.
  * 
  * The redirect property affects whether the browser is instructed to clear the
  * username and password associated with the authentication realm.
@@ -35,37 +37,46 @@ use UUP\Authentication\Storage\Storage;
  * @package UUP
  * @subpackage Authentication
  */
-abstract class HttpAuthenticator
+trait HttpAuthenticator
 {
 
         /**
+         * @var string The username.
+         */
+        private $user = "";
+        /**
+         * @var string The password.
+         */
+        private $pass = "";
+        /**
          * @var Validator 
          */
-        protected $validator;
+        private $validator;
         /**
          * @var Storage 
          */
-        protected $storage;
+        private $storage;
         /**
          * @var string The authentication realm.
          */
-        protected $realm;
+        private $realm;
         /**
          * @var string The redirect URL. 
          */
-        protected $redirect = null;
+        private $redirect = null;
         /**
          * @var string 
          */
-        protected $message = "";
+        private $message = "";
 
         /**
-         * Constructor.
+         * Configure the property bag for this trait.
+         * 
          * @param Validator $validator The validator callback object.
          * @param Storage $storage The storage backend object.
          * @param string $realm The authentication realm.
          */
-        protected function __construct($validator, $storage, $realm)
+        private function config($validator, $storage, $realm)
         {
                 $this->validator = $validator;
                 $this->storage = $storage;
@@ -82,6 +93,33 @@ abstract class HttpAuthenticator
                                 $this->message = (string) $value;
                                 break;
                 }
+        }
+
+        public function authenticated()
+        {
+                return $this->storage->exist($this->user);
+        }
+
+        public function getUser()
+        {
+                return $this->user;
+        }
+
+        public function login()
+        {
+                if (strlen($this->user) == 0) {
+                        $this->unauthorized();
+                } elseif (!$this->validator->authenticate()) {
+                        $this->unauthorized();
+                } else {
+                        $this->storage->insert($this->user);
+                }
+        }
+
+        public function logout()
+        {
+                $this->storage->remove($this->user);
+                $this->unauthorized();
         }
 
 }
