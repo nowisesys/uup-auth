@@ -44,28 +44,28 @@ class CasAuthenticator implements Authenticator
 
         public function authenticated()
         {
-                return strlen(phpCAS::getUser() != 0);
+                return \phpCAS::isAuthenticated();
         }
 
         public function getUser()
         {
-                return phpCAS::getUser();
+                return \phpCAS::getUser();
         }
 
         public function login()
         {
-                phpCAS::forceAuthentication();
+                \phpCAS::forceAuthentication();
         }
 
         public function logout()
         {
-                phpCAS::logout();
+                \phpCAS::logout();
         }
 
         private function initialize()
         {
-                phpCAS::client(CAS_VERSION_2_0, $this->host, $this->port, $this->path);
-                phpCAS::setNoCasServerValidation();
+                \phpCAS::client(CAS_VERSION_2_0, $this->host, $this->port, $this->path);
+                \phpCAS::setNoCasServerValidation();
         }
 
 }
