@@ -29,32 +29,37 @@ namespace UUP\Authentication;
 class HostnameAuthenticator implements Authenticator
 {
 
-        private $hostname;
+        const localhost = 'localhost';
+
+        private $accept;
 
         /**
-         * Constructor. The hostname to authenticate default to localhost if $hostname
-         * argument is missing.
-         * 
-         * @param string $hostname The hostname to authenticate.
+         * Constructor. The hostname to authenticate default to localhost if 
+         * the $accept argument is missing.
+         * @param string $accept The hostname to authenticate.
          */
-        public function __construct($hostname = null)
+        public function __construct($accept = self::localhost)
         {
-                $this->hostname = isset($hostname) ? $hostname : 'localhost';
+                $this->accept = $accept;
         }
 
-        public function setHostname($hostname)
+        /**
+         * Set the hostname to authenticate.
+         * @param string $accept The hostname to authenticate.
+         */
+        public function setHostname($accept)
         {
-                $this->hostname = $hostname;
+                $this->accept = $accept;
         }
 
         public function authenticated()
         {
-                return gethostbyaddr($_SERVER['REMOTE_ADDR']) == $this->hostname;
+                return gethostbyaddr($_SERVER['REMOTE_ADDR']) == $this->accept;
         }
 
         public function getUser()
         {
-                return $this->hostname;
+                return $this->accept;
         }
 
         public function login()
