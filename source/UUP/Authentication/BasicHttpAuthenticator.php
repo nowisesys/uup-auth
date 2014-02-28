@@ -30,6 +30,12 @@ class BasicHttpAuthenticator implements Authenticator
 
         use HttpAuthenticator;
 
+        /**
+         * Constructor.
+         * @param Validator $validator The validator callback object.
+         * @param Storage $storage The storage backend object.
+         * @param string $realm The authentication realm.
+         */
         public function __construct($validator, $storage, $realm)
         {
                 $this->config($validator, $storage, $realm);
