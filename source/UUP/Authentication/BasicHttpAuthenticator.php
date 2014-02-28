@@ -18,9 +18,6 @@
 
 namespace UUP\Authentication;
 
-use UUP\Authentication\Validator\CredentialValidator;
-use UUP\Authentication\Storage\Storage;
-
 /**
  * Basic HTTP (WWW-Authenticate) authenticator.
  *
@@ -28,33 +25,15 @@ use UUP\Authentication\Storage\Storage;
  * @package UUP
  * @subpackage Authentication
  */
-class BasicHttpAuthenticator implements Authenticator
+class BasicHttpAuthenticator extends HttpAuthenticator implements Authenticator
 {
 
-        /**
-         * @var CredentialValidator 
-         */
-        private $validator;
-        /**
-         * @var Storage 
-         */
-        private $storage;
-        private $realm;
         private $user = "";
         private $pass = "";
-        private $redirect = null;
 
-        /**
-         * Constructor.
-         * @param CredentialValidator $validator The validator callback object.
-         * @param Storage $storage The storage backend object.
-         * @param string $realm The authentication realm.
-         */
         public function __construct($validator, $storage, $realm)
         {
-                $this->validator = $validator;
-                $this->storage = $storage;
-                $this->realm = $realm;
+                parent::__construct($validator, $storage, $realm);
                 $this->initialize();
         }
 
@@ -85,17 +64,6 @@ class BasicHttpAuthenticator implements Authenticator
                 $this->unauthorized();
         }
 
-        /**
-         * Set redirect URL. This affects whether the browser is instructed to clear the
-         * username and password associated with the authentication realm.
-         * 
-         * @param string $url The redirect URL
-         */
-        public function setRedirect($url)
-        {
-                $this->redirect = $url;
-        }
-
         private function initialize()
         {
                 if (isset($_SERVER['PHP_AUTH_USER']) && strlen($_SERVER['PHP_AUTH_USER']) != 0) {
@@ -114,7 +82,7 @@ class BasicHttpAuthenticator implements Authenticator
                 if (isset($this->redirect)) {
                         header(sprintf("Location: %s", $this->redirect));
                 } else {
-                        exit();
+                        die($this->message);
                 }
         }
 
