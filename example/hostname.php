@@ -17,9 +17,10 @@ limitations under the License.
 <html>
         <head>
                 <meta charset="UTF-8">
-                <title></title>
+                <title>Hostname Authentication</title>
         </head>
         <body>
+                <h1>Hostname Authentication</h1>
                 <?php
                 require_once __DIR__ . '/../vendor/autoload.php';
 
