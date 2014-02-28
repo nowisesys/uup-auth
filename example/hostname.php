@@ -26,10 +26,10 @@ limitations under the License.
 
                 use UUP\Authentication\HostnameAuthenticator;
 
-                $hostname = new HostnameAuthenticator();
+                $authenticator = new HostnameAuthenticator();
                 printf("<p>\n");
-                printf("Name: %s<br>\n", $hostname->getUser());
-                printf("Authenticated: %s<br>\n", $hostname->authenticated() ? "yes" : "no");
+                printf("Name: %s<br>\n", $authenticator->getUser());
+                printf("Authenticated: %s<br>\n", $authenticator->authenticated() ? "yes" : "no");
                 printf("</p>\n");
 
                 ?>
