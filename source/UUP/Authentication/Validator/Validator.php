@@ -19,35 +19,26 @@
 namespace UUP\Authentication\Validator;
 
 /**
- * Credential validator callback class. This class is intended to be used 
- * as the base class for backend authenticator interfacing against external 
- * account sources (i.e. PAM, LDAP or SQL).
- *
+ * Interface for all validator classes.
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Authentication
  */
-abstract class CredentialValidator implements Validator
+interface Validator
 {
 
-        protected $user;
-        protected $pass;
+        /**
+         * Set credentials for authentication.
+         * @param string $user The username.
+         * @param string $pass The password.
+         */
+        function setCredentials($user, $pass);
 
         /**
-         * Constructor.
-         * @param string $user The username to validate.
-         * @param string $pass The password to validate.
+         * Authenticate using currently set credentials. Returns true if authentication succeed.
+         * @return bool 
+         * @throws Exception
          */
-        public function __construct($user = "", $pass = "")
-        {
-                $this->user = $user;
-                $this->pass = $pass;
-        }
-
-        public function setCredentials($user, $pass)
-        {
-                $this->user = $user;
-                $this->pass = $pass;
-        }
-
+        function authenticate();
 }

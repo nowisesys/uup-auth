@@ -19,7 +19,7 @@
 
 namespace UUP\Authentication;
 
-use UUP\Authentication\Validator\CredentialValidator;
+use UUP\Authentication\Validator\Validator;
 use UUP\Authentication\Storage\Storage;
 
 /**
@@ -39,7 +39,7 @@ abstract class HttpAuthenticator
 {
 
         /**
-         * @var CredentialValidator 
+         * @var Validator 
          */
         protected $validator;
         /**
@@ -61,7 +61,7 @@ abstract class HttpAuthenticator
 
         /**
          * Constructor.
-         * @param CredentialValidator $validator The validator callback object.
+         * @param Validator $validator The validator callback object.
          * @param Storage $storage The storage backend object.
          * @param string $realm The authentication realm.
          */

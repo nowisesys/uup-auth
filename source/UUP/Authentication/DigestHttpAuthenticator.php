@@ -144,9 +144,9 @@ class DigestHttpAuthenticator extends HttpAuthenticator implements Authenticator
         private $nonce;
 
         /**
-         * Constructor. The supplied CredentialValidator must implement the PasswordProvider
+         * Constructor. The supplied Validator object must implement the PasswordProvider
          * interface.
-         * @param CredentialValidator $validator The validator callback object.
+         * @param Validator $validator The validator callback object.
          * @param Storage $storage The storage backend object.
          * @param string $realm The authentication realm.
          * @param array $required Restriction on required digest parts.
