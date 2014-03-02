@@ -221,7 +221,7 @@ class AddressAuthenticator implements Authenticator
 
         public function authenticated()
         {
-                return $this->match($_SERVER['REMOTE_ADDR']);
+                return $this->match($this->getUser());
         }
 
         public function getUser()
