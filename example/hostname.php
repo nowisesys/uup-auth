@@ -22,6 +22,16 @@ limitations under the License.
         <body>
                 <h1>Hostname Authentication</h1>
                 <?php
+
+                // ==========================================================================
+                //  Hostname authentication.
+                //  
+                //  Demonstrate using HostnameAuthenticator class for authentication remote
+                //  peer based on its DNS-name. The HostnameAuthenticator class could be used
+                //  for granting access to priviledged computers without requiring the user
+                //  authentication.
+                // ==========================================================================
+                
                 require_once __DIR__ . '/../vendor/autoload.php';
 
                 use UUP\Authentication\HostnameAuthenticator;

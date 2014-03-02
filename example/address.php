@@ -22,6 +22,19 @@ limitations under the License.
         <body>
                 <h1>IP-Address Authentication</h1>
                 <?php
+                
+                // ==========================================================================
+                //  IP-address authentication.
+                //  
+                //  This example demonstrate how to use the AddressAuthenticator class to
+                //  authenticate remote computers based on their IP-address. More computers
+                //  can be added calling $authenticator->add(...).
+                //  
+                //  The AddressAuthenticator class can be used for implementing fine-grained
+                //  access control within the application by dynamic modify the list of
+                //  accepted hosts and networks.
+                // ==========================================================================
+                
                 require_once __DIR__ . '/../vendor/autoload.php';
 
                 use UUP\Authentication\AddressAuthenticator;

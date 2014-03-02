@@ -22,6 +22,13 @@ limitations under the License.
         <body>
                 <h1>CAS Authentication</h1>
                 <?php
+                
+                // ==========================================================================
+                //  Example for CAS authentication.
+                //  
+                //  This example uses an external CAS-server for SSO.
+                // ==========================================================================
+
                 require_once __DIR__ . '/../vendor/autoload.php';
 
                 use UUP\Authentication\CasAuthenticator;
