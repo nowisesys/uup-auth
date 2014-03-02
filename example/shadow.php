@@ -30,16 +30,17 @@ limitations under the License.
 
                 require_once __DIR__ . '/../vendor/autoload.php';
 
-use UUP\Authentication\Storage\SharedMemoryStorage;
-use UUP\Authentication\Validator\ShadowValidator;
-use UUP\Authentication\BasicHttpAuthenticator;
+                use UUP\Authentication\Storage\SharedMemoryStorage;
+                use UUP\Authentication\Validator\ShadowValidator;
+                use UUP\Authentication\BasicHttpAuthenticator;
 
-try {
+                try {
                         $validator = new ShadowValidator();
                         $storage = new SharedMemoryStorage();
                         $authenticator = new BasicHttpAuthenticator($validator, $storage, "Shadow Password Authentication Example");
                         $authenticator->message = "Logon cancelled by caller";
 //                        $authenticator->redirect = basename(__FILE__);
+//                        $validator->shadow = "/etc/apache2/shadow";
 
                         if (isset($_GET['login'])) {
                                 $authenticator->login();
