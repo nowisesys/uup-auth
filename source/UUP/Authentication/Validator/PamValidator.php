@@ -23,6 +23,11 @@ use UUP\Authentication\Exception;
 /**
  * PAM modules validator. Requires that the pam extension is loaded or that
  * the pam_auth() function is defined.
+ * 
+ * <b>Warning:</b>
+ * The web server account needs to have read access to i.e. /etc/shadow if doing 
+ * local system account authentication. This may turn your application into an 
+ * system security problem.
  *
  * @property-write bool $throws Throw exception upon failed login attempts.
  * @property-write bool $errlog Log failed login attempts to Apache error log.
