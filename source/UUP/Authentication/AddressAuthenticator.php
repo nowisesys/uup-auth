@@ -252,8 +252,8 @@ class AddressAuthenticator implements Authenticator
                 $a = new AddressProperties($address);
                 $r = new AddressProperties($remote);
 
-                self::output($a, "filter");
-                self::output($r, "remote");
+//                self::output($a, "filter");
+//                self::output($r, "remote");
 
                 return ($a->first <= $r->address) && ($r->address <= $a->last);
         }
@@ -263,8 +263,8 @@ class AddressAuthenticator implements Authenticator
                 $a = new AddressProperties($address);
                 $r = new AddressProperties($remote);
 
-                self::output($a, "filter");
-                self::output($r, "remote");
+//                self::output($a, "filter");
+//                self::output($r, "remote");
 
                 if ($a->address == 0 && $a->netmask == 0) {
                         return true;    // '0.0.0.0/0' => match all
