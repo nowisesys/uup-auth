@@ -24,12 +24,21 @@ use UUP\Authentication\Exception;
  * PAM modules validator. Requires that the pam extension is loaded or that
  * the pam_auth() function is defined.
  *
+ * @property-write bool $throws Throw exception upon failed login attempts.
+ * @property-write bool $errlog Log failed login attempts to Apache error log.
+ * @property-read string $errmsg Error message from last failed login attempt.
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Authentication
+ * @link http://pecl.php.net/pam PAM extension project page.
  */
 class PamValidator extends CredentialValidator
 {
+
+        private $errmsg;
+        private $errlog = false;
+        private $throws = false;
 
         /**
          * Constructor.
@@ -39,7 +48,7 @@ class PamValidator extends CredentialValidator
          */
         public function __construct($user = "", $pass = "")
         {
-                if (!extension_loaded("pam")) {
+                if (!extension_loaded("pam") && !extension_loaded("pam_auth")) {
                         if (!function_exists("pam_auth")) {
                                 throw new Exception("The pam_auth() function is missing");
                         } else {
@@ -49,10 +58,43 @@ class PamValidator extends CredentialValidator
                 parent::__construct($user, $pass);
         }
 
+        public function __set($name, $value)
+        {
+                if ($name == 'errlog') {
+                        $this->errlog = (bool) $value;
+                } elseif ($name == 'throws') {
+                        $this->throws = (bool) $value;
+                }
+        }
+
+        public function __get($name)
+        {
+                if ($name == 'errmsg') {
+                        return $this->errmsg;
+                }
+        }
+
         public function authenticate()
         {
-                $error = "";
-                return pam_auth($this->user, $this->pass, &$error);
+                if (pam_auth($this->user, $this->pass, $this->errmsg, false)) {
+                        return true;
+                } else {
+                        $this->failed();
+                        return false;
+                }
+        }
+
+        private function failed()
+        {
+                if ($this->errlog) {
+                        error_log(sprintf("Failed authenticate %s: %s", $this->user, $this->errmsg));
+                }
+                if ($this->throws) {
+                        throw new Exception($this->errmsg);
+                }
+                if ($this->errmsg != 'Authentication failure (in pam_authenticate)') {
+                        throw new Exception($this->errmsg);
+                }
         }
 
 }
