@@ -1,5 +1,6 @@
 {
     "name": "bmc/uup-auth",
+    "version": "1.0.0",
     "description": "Authentication stack with various frontends and backends.",
     "type": "library",
     "keywords": ["authentication", "uup", "bmc"],
