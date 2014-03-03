@@ -21,18 +21,21 @@ namespace UUP\Authentication;
 use UUP\Authentication\Exception;
 
 /**
- * Authenticator for IP-address. Authenticate caller by comparing the remote callers 
- * IP-address against the list if IP-address filters in this object. The remote caller 
- * is considered to be authenticated if one of the filter matches.
+ * Authenticator for IP-address. 
  * 
- * The IP-address argument (for constructor, add(), set() or remove()) can either be a single 
- * IP-address (string) or multiple IP-addresses using an array. The IP-address format
- * is either unique or an range: '192.168.1.1-192.168.1.129' or '192.168.1.0/24' (CIDR). 
- * An netmask can be used as an alternative to CIDR notation: '192.168.1.0/255.255.255.0'.
+ * Authenticate caller by comparing the remote callers IP-address against the 
+ * list if IP-address filters in this object. The remote caller is considered 
+ * to be authenticated if one of the filter matches.
+ * 
+ * The IP-address argument (for constructor, add(), set() or remove()) can either
+ * be a single IP-address (string) or multiple IP-addresses using an array. 
+ * The IP-address format is either unique or an range: '192.168.1.1-192.168.1.129' 
+ * or '192.168.1.0/24' (CIDR). An netmask can be used as an alternative to 
+ * CIDR notation: '192.168.1.0/255.255.255.0'.
  * 
  * IPv6 is only supported using the single IP-address format, i.e. 'fe80::e1:5fff:fe90:6b0f'.
- * IP-addresses filter for localhost (IPv4 and IPv6) are always added. All addres filters,
- * including those for localhost can be removed by calling clear().
+ * IP-addresses filter for localhost (IPv4 and IPv6) are always added. All addres 
+ * filters, including those for localhost can be removed by calling clear().
  * 
  * <code>
  * $reserved = new AddressAuthenticator('192.168.0.0/16');

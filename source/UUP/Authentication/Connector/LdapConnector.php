@@ -21,8 +21,10 @@ namespace UUP\Authentication\Connector;
 use UUP\Authentication\Exception;
 
 /**
- * The LDAP connector class. This abstract base class provides LDAP connectivity
- * to derived LDAP authentication classes.
+ * The LDAP connector class. 
+ * 
+ * This abstract base class provides LDAP connectivity to derived LDAP 
+ * authentication classes.
  *
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP

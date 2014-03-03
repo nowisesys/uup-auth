@@ -19,9 +19,10 @@
 namespace UUP\Authentication\Validator;
 
 /**
- * Credential validator callback class. This class is intended to be used 
- * as the base class for backend authenticator interfacing against external 
- * account sources (i.e. PAM, LDAP or SQL).
+ * Credential validator callback class. 
+ * 
+ * This class is intended to be used as the base class for backend authenticator 
+ * interfacing against external account sources (i.e. PAM, LDAP or SQL).
  *
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP

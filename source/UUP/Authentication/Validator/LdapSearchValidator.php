@@ -22,19 +22,21 @@ use UUP\Authentication\Exception;
 use UUP\Authentication\Connector\LdapConnector;
 
 /**
- * Validate against LDAP using a tree search. Passwords are normally stored encrypted
- * while the obtained password (from i.e. request parameters) are in plain text.
+ * Validate against LDAP using a tree search. 
  * 
- * The LDAP search filter string should contain two string substitutions, the first is
- * a placeholder for username and the second for the password:
+ * Passwords are normally stored encrypted while the obtained password (from 
+ * i.e. request parameters) are in plain text.
+ * 
+ * The LDAP search filter string should contain two string substitutions, the 
+ * first is a placeholder for username and the second for the password:
  * 
  * <code>
  * $filter = "(&(uid={%1})({passwd}={%2}))"
  * </code>
  * 
- * This example shows how to do an LDAP search to auhenticate a user ($user identified
- * by $pass below). Notice that we are binding to the LDAP tree in advance using a 
- * privileged admin account.
+ * This example shows how to do an LDAP search to auhenticate a user ($user 
+ * identified by $pass below). Notice that we are binding to the LDAP tree in 
+ * advance using a privileged admin account.
  * 
  * <code>
  * // Prepare:

@@ -21,8 +21,10 @@ namespace UUP\Authentication\Storage;
 use UUP\Authentication\Exception;
 
 /**
- * The session data. This class implements the Serializable interface so it
- * can be used direct with PHP's global session variable.
+ * The session data. 
+ * 
+ * This class implements the Serializable interface so it can be used direct 
+ * with PHP's global session variable.
  * 
  * @property string $user The username.
  * @property string $addr The associated IP-address.
@@ -63,10 +65,12 @@ class SessionData implements \Serializable
 }
 
 /**
- * Storage using PHP session. The session data is represented by a SessionData 
- * object that is stored on the server side. The session data keeps track of
- * remote peer (recorded in the session data object) and verify that the remote
- * caller is the same (prevent session hijack).
+ * Storage using PHP session. 
+ * 
+ * The session data is represented by a SessionData object that is stored on the
+ * server side. The session data keeps track of remote peer (recorded in the
+ * session data object) and verify that the remote caller is the same (prevent 
+ * session hijack).
  * 
  * @property int $expires The session length in seconds. Dynamic when exist() gets called.
  * @property bool $https Enforce HTTPS protocol for session.

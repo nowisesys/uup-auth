@@ -23,12 +23,14 @@ use UUP\Authentication\Validator\Validator;
 use UUP\Authentication\Storage\Storage;
 
 /**
- * Trait for HTTP authenticators. Provides uniform login/logout functionality for all HTTP
- * authenticator classes using this trait. Defines the methods that implements the Authenticator 
+ * Trait for HTTP authenticators. 
+ * 
+ * Provides uniform login/logout functionality for all HTTP authenticator 
+ * classes using this trait. Defines the methods that implements the Authenticator 
  * interface.
  * 
- * The redirect property affects whether the browser is instructed to clear the
- * username and password associated with the authentication realm.
+ * The redirect property affects whether the browser is instructed to clear 
+ * the username and password associated with the authentication realm.
  * 
  * @property-write string $redirect The redirect URL.
  * @property-write string $message Text to send if user hits Cancel button.

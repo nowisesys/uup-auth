@@ -21,8 +21,10 @@ namespace UUP\Authentication\Validator;
 use UUP\Authentication\Exception;
 
 /**
- * PAM modules validator. Requires that the pam extension is loaded or that
- * the pam_auth() function is defined.
+ * PAM modules validator. 
+ * 
+ * Requires that the pam extension is loaded or that the pam_auth() function 
+ * is defined.
  * 
  * <b>Warning:</b>
  * The web server account needs to have read access to i.e. /etc/shadow if doing 

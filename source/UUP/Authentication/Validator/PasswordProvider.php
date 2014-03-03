@@ -19,9 +19,11 @@
 namespace UUP\Authentication\Validator;
 
 /**
- * Any validator class with access to an account database (i.e. LDAP) could implement
- * this interface to extend its capabilities and make it useful together with authenticator
- * classes that uses hashing algorithms. 
+ * Password lookup interface.
+ * 
+ * Any validator class with access to an account database (i.e. LDAP) could 
+ * implement this interface to extend its capabilities and make it useful 
+ * together with authenticator classes that uses hashing algorithms. 
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP

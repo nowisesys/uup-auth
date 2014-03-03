@@ -21,8 +21,10 @@ namespace UUP\Authentication\Validator;
 use UUP\Authentication\Exception;
 
 /**
- * User account validation against the shadow password file. This file has 
- * to be readable by the user accoutn the web server is running under:
+ * User account validation against the shadow password file. 
+ * 
+ * The shadow password file has to be readable by the user account the web 
+ * server is running under:
  * 
  * <code>
  * # Grant access to web server user using POSIX Access Control Lists (ACLs) on Gentoo Linux:
