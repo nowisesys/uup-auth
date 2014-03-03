@@ -16,7 +16,10 @@
  * limitations under the License.
  */
 
-namespace UUP\Authentication;
+namespace UUP\Authentication\Stack;
+
+use UUP\Authentication\Authenticator;
+use UUP\Authentication\Exception;
 
 /**
  * Plugin class for unauthenticated session.
