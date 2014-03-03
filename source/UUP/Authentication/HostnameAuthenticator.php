@@ -19,8 +19,10 @@
 namespace UUP\Authentication;
 
 /**
- * Authenticator for hostname. The remote caller is considered as authenticated 
- * if a reverse lookup of IP-address in DNS matches the supplied hostname.
+ * Authenticator for hostname. 
+ * 
+ * The remote caller is considered as authenticated if a reverse lookup of 
+ * IP-address in DNS matches the supplied hostname.
  *
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP

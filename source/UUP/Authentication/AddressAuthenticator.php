@@ -306,9 +306,10 @@ class AddressAuthenticator implements Authenticator
 }
 
 /**
- * Properties for an IPv4 address (single, range or masked). An address with
- * CIDR == 32 or netmask == 255.255.255.255 denotes a PTP-link. Such addresses
- * will not have an 
+ * Properties for an IPv4 address (single, range or masked). 
+ * 
+ * An address with CIDR == 32 or netmask == 255.255.255.255 denotes a PTP-link. 
+ * Such addresses will not have network or broadcast addresses assigned to them.
  * 
  * @property-read long $address The IP-address.
  * @property-read long $network The network address.
