@@ -1,0 +1,18 @@
+# Kerberos authentication for Apache (http://modauthkerb.sourceforge.net). 
+# Include this file in a virtual host definition or web application config file.
+#
+# Author: Anders Lövgren
+# Date:   2014-03-04
+
+<IfModule auth_kerb_module>
+    <Location /login/kerberos>
+        AuthType Kerberos
+        AuthName "Kerberos Login"
+        Krb5Keytab conf/apache.keytab
+        KrbAuthRealms EXAMPLE.COM
+        KrbServiceName HTTP/www.example.com@EXAMPLE.COM
+        KrbMethodNegotiate on
+        KrbMethodK5Passwd on    # Accept password authentication
+        Require valid-user
+    </Location>
+</IfModule>

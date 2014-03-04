@@ -3,10 +3,14 @@
 =============================================================================
 
 The uup-auth library provides an authentication stack that cleanly separates 
-the credential obtainer from the validator and storage backend. Authentication 
-using either a single or multiple (a authenication stack) account sources is 
-supported.
+the credential obtainer frontend from the validator and storage backend. 
 
+All frontend authenticators is declared in the UUP\Authentication namespace.
+
+A simple web application will only use a single authenticator, but multiple 
+authenticators can be combined to support multiple authentication sources (an
+authenticator stack). The AuthenticatorStack class was designed to support
+such an stack.
 
 This example uses the basic HTTP authenticator for obtaining the user credentials.
 Authentication is performed by the PAM-modules validator (on Linux) and logon
