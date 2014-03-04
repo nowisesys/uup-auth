@@ -20,6 +20,7 @@ limitations under the License.
                 <title>Session Storage Test</title>
         </head>
         <body>
+                <h1>Session Storage Test</h1>
                 <?php
                 // ==========================================================================
                 //  Simple test of session storage.

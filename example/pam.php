@@ -20,6 +20,7 @@ limitations under the License.
                 <title>PAM Authentication Example</title>
         </head>
         <body>
+                <h1>PAM Authentication Example</h1>
                 <?php
                 
                 // ==========================================================================

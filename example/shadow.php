@@ -20,6 +20,7 @@ limitations under the License.
                 <title>Shadow Password Authentication Example</title>
         </head>
         <body>
+                <h1>Shadow Password Authentication Example</h1>
                 <?php
                 // ==========================================================================
                 //  Shadow password file authentication.
