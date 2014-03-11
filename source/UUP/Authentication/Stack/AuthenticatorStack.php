@@ -16,234 +16,272 @@
  * limitations under the License.
  */
 
-namespace UUP\Authentication\Stack;
+namespace UUP\Authentication {
 
-use UUP\Authentication\Authenticator;
-use UUP\Authentication\Exception;
-
-/**
- * Plugin class for unauthenticated session.
- * 
- * @author Anders Lövgren (QNET/BMC CompDept)
- * @package UUP
- * @subpackage Authentication
- */
-class NullAuthenticator implements Authenticator
-{
-
-        public function authenticated()
+        /**
+         * Dummy class for unauthenticated sessions.
+         * 
+         * @author Anders Lövgren (QNET/BMC CompDept)
+         * @package UUP
+         * @subpackage Authentication
+         */
+        class NullAuthenticator implements Authenticator
         {
-                return false;
-        }
 
-        public function getUser()
-        {
-                return "";
-        }
+                public function authenticated()
+                {
+                        return false;
+                }
 
-        public function login()
-        {
-                // ignore
-        }
+                public function getUser()
+                {
+                        return "";
+                }
 
-        public function logout()
-        {
-                // ignore
+                public function login()
+                {
+                        // ignore
+                }
+
+                public function logout()
+                {
+                        // ignore
+                }
+
         }
 
 }
 
-/**
- * The stack of authenticator objects. 
- * 
- * This class can be used to support multiple authentication methods in a uniform 
- * way. This example should describle the basic usage of this class:
- * <code>
- * // 
- * // logon.php handles /{login|logoff}/{method=key}
- * // 
- * 
- * $stack->add("cas", $authcas, "CAS Server");
- * $stack->add("msad", $authad, "Microsoft Active Directory");
- * 
- * class LogonController
- * {
- *      // ...
- * 
- *      public function logoff()
- *      {
- *              if($this->stack->authenticated()) {
- *                      $this->stack->logoff();       // Using current selected authenticator.
- *              }
- *      }
- * 
- *      public function login($method)
- *      {
- *              if(isset($method)) {
- *                      $this->stack->activate($method);
- *                      $this->stack->login();
- *              } else {
- *                      $view = new LogonView($this->stack);
- *                      $view->render();
- *              }
- *      }
- * }
- * 
- * class LogonView extends BasicView
- * {
- *      // ...
- * 
- *      public function render() 
- *      {
- *              printf("<h1>Select login method</h1>\n");
- *              printf("<ul>\n");
- *              foreach($stack->authenticators as $key => $auth) {
- *                      printf("<li><a href=\"?login=1&method=%s\" title=\"%s\">%s</a>\n", 
- *                              $key, $auth->description, $auth->name);
- *              }
- *              printf("</ul>\n");
- *      }
- * }
- * 
- * // 
- * // Login required on some other page:
- * // 
- * 
- * if(!$stack->authenticated()) {
- *      header("location: /logon");     // Redirect to logon page
- * }
- * </code>
- * 
- * @property-read AuthenticatorDecorator[] $authenticators Associative array of all authenticators.
- * 
- * @author Anders Lövgren (QNET/BMC CompDept)
- * @package UUP
- * @subpackage Authentication
- */
-class AuthenticatorStack implements Authenticator
-{
+namespace UUP\Authentication\Stack {
+
+        use UUP\Authentication\Authenticator,
+            UUP\Authentication\Exception;
 
         /**
-         * @var AuthenticatorDecorator[] Associative array of all authenticators. 
-         */
-        private $authenticators;
-        /**
-         * @var AuthenticatorDecorator Current accepted authenticator.
-         */
-        private $authenticator;
-
-        /**
-         * Constructor.
-         * @param AuthenticatorDecorator[] $authenticators
-         */
-        public function __construct($authenticators = array())
-        {
-                $this->authenticators = $authenticators;
-                $this->authenticator = new NullAuthenticator();
-        }
-
-        public function __get($name)
-        {
-                if ($name == 'authenticators') {
-                        return $this->authenticators;
-                }
-        }
-
-        /**
-         * Adds an authenticator to the authenticator stack.
-         * @param string $key The key for this authenticator.
-         * @param Authenticator $auth The autenticator object.
-         * @param string $name Short name for wrapped authenticator.
-         * @param string $desc Longer descriptive text for wrapped authenticator.
-         * @return AuthenticatorDecorator
-         */
-        public function add($key, $auth, $name = "", $desc = "")
-        {
-                $this->authenticators[$key] = new AuthenticatorDecorator($auth, $name, $desc);
-                return $this->authenticators[$key];
-        }
-
-        /**
-         * Get current accepted authenticator.
-         * @return AuthenticatorDecorator
-         */
-        public function current()
-        {
-                return $this->authenticator;
-        }
-
-        /**
-         * Switch current active authenticator to the one associated with the given key.
-         * @param string $key The key for the authenticator.
-         */
-        public function activate($key)
-        {
-                $this->set($this->get($key));
-        }
-
-        /**
-         * Get authenticator associated with given key.
-         * @param string $key The key for the authenticator.
-         * @return AuthenticatorDecorator
-         */
-        public function get($key)
-        {
-                return $this->authenticators[$key];
-        }
-
-        /**
-         * Set the accepted authenticator that is going to be used for next call
-         * to login() or logout(). It can also be the authenticator already used 
-         * for an accepted login event.
+         * The stack of authenticator objects. 
          * 
-         * @param AuthenticatorDecorator $auth The authenticator.
+         * This class can be used to support multiple authentication methods in a uniform 
+         * way. This example should describle the basic usage of this class:
+         * <code>
+         * // 
+         * // logon.php handles /{login|logoff}/{method=key}
+         * // 
+         * 
+         * $stack->add("cas", $authcas, "CAS Server");
+         * $stack->add("msad", $authad, "Microsoft Active Directory");
+         * 
+         * class LogonController
+         * {
+         *      // ...
+         * 
+         *      public function logoff()
+         *      {
+         *              if($this->stack->authenticated()) {
+         *                      $this->stack->logoff();       // Using current selected authenticator.
+         *              }
+         *      }
+         * 
+         *      public function login($method)
+         *      {
+         *              if(isset($method)) {
+         *                      $this->stack->activate($method);
+         *                      $this->stack->login();
+         *              } else {
+         *                      $view = new LogonView($this->stack);
+         *                      $view->render();
+         *              }
+         *      }
+         * }
+         * 
+         * class LogonView extends BasicView
+         * {
+         *      // ...
+         * 
+         *      public function render() 
+         *      {
+         *              printf("<h1>Select login method</h1>\n");
+         *              printf("<ul>\n");
+         *              foreach($this->stack->authenticators as $key => $auth) {
+         *                      printf("<li><a href=\"?login=1&method=%s\" title=\"%s\">%s</a>\n", 
+         *                              $key, $auth->description, $auth->name);
+         *              }
+         *              printf("</ul>\n");
+         *      }
+         * }
+         * 
+         * // 
+         * // Login required on some other page:
+         * // 
+         * 
+         * if(!$stack->authenticated()) {
+         *      header("location: /logon");     // Redirect to logon page
+         * }
+         * </code>
+         * 
+         * @author Anders Lövgren (QNET/BMC CompDept)
+         * @package UUP
+         * @subpackage Authentication
          */
-        public function set($auth)
+        class AuthenticatorStack extends AuthenticatorChain implements Authenticator
         {
-                $this->authenticator = $auth;
-        }
 
-        /**
-         * Check if any authenticator in the stack accepts the caller as 
-         * a logged in user. 
-         * @return bool
-         */
-        public function authenticated()
-        {
-                if (!$this->authenticator->authenticated()) {
-                        foreach ($this->authenticators as $authenticator) {
-                                if ($authenticator->authenticated()) {
-                                        $this->authenticator = $authenticator;
-                                }
+                /**
+                 * @var Authenticator Current active authenticator.
+                 */
+                private $authenticator;
+
+                /**
+                 * Constructor.
+                 * @param AuthenticatorChain[] $chains Array of authenticator chains.
+                 */
+                public function __construct($chains = array())
+                {
+                        parent::__construct($chains);
+                        $this->authenticator = new NullAuthenticator();
+                }
+
+                /**
+                 * Get current accepted authenticator.
+                 * @return Authenticator
+                 */
+                public function getAuthenticator()
+                {
+                        return $this->authenticator;
+                }
+
+                /**
+                 * Set the accepted authenticator that is going to be used for next call
+                 * to login() or logout(). It can also be the authenticator already used 
+                 * for an accepted login event.
+                 * 
+                 * @param Authenticator $authenticator The authenticator.
+                 */
+                public function setAuthenticator($authenticator)
+                {
+                        $this->authenticator = $authenticator;
+                }
+
+                /**
+                 * Switch current active authenticator to the one associated with the given key.
+                 * 
+                 * This function is equivalent to:
+                 * <code>
+                 * $auth = $stack->authenticator($key);         // Find authenticator by key.
+                 * $stack->setAuthenticator($auth->current());  // Set active authenticator.
+                 * </code>
+                 * 
+                 * @param string $key The key for the authenticator.
+                 */
+                public function activate($key)
+                {
+                        $this->setAuthenticator($this->find($key)->current());
+                }
+
+                /**
+                 * Get iterator for named chain.
+                 * 
+                 * Returns an iterator to all sub chains with a matching key. In
+                 * most cases, all chains have a unique key so its safe to call
+                 * $this->chains($key)->current().
+                 * 
+                 * @param string $key The chain key.
+                 * @param bool $recursive In depth including sub chains.
+                 * @return AuthenticatorChain|ChainFilterIterator
+                 */
+                public function chain($key, $recursive = true)
+                {
+                        if ($recursive) {
+                                $search = new AuthenticatorSearch($this->chain);
+                                return $search->chain($key);
+                        } else {
+                                $search = new AuthenticatorFilter($this->chain);
+                                return $search->chain($key);
                         }
                 }
-                return $this->authenticator->authenticated();
-        }
 
-        /**
-         * Get username from current accepted authenticator.
-         * @return string 
-         */
-        public function getUser()
-        {
-                return $this->authenticator->getUser();
-        }
+                /**
+                 * Get iterator for named authenticator.
+                 * 
+                 * Returns an iterator to all authenticators with a matching key. In
+                 * most cases, all authenticators have a unique key so its safe to call
+                 * $this->chains($key)->current().
+                 * 
+                 * @param string $key The chain key.
+                 * @param bool $recursive In depth including sub chains.
+                 * @return AuthenticatorBase|AuthenticatorFilterIterator
+                 */
+                public function authenticator($key, $recursive = true)
+                {
+                        if ($recursive) {
+                                $search = new AuthenticatorSearch($this->chain);
+                                return $search->authenticator($key);
+                        } else {
+                                $search = new AuthenticatorFilter($this->chain);
+                                return $search->authenticator($key);
+                        }
+                }
 
-        /**
-         * Login using currently selected authenticator.
-         * @throws Exception
-         */
-        public function login()
-        {
-                $this->authenticator->login();
-        }
+                /**
+                 * Get all authenticators in this stack.
+                 * @return AuthenticatorFilterIterator
+                 */
+                private function authenticators()
+                {
+                        return (new AuthenticatorSearch($this->chain))->authenticators();
+                }
 
-        /**
-         * Logout using currently selected authenticator.
-         */
-        public function logout()
-        {
-                $this->authenticator->logout();
+                /**
+                 * Check if any authenticator in the stack accepts the caller as a
+                 * logged in user. Throws exception if user is not authenticated using
+                 * a required authenticator.
+                 * 
+                 * @return bool
+                 * @throws AuthenticatorRequiredException
+                 */
+                public function authenticated()
+                {
+                        if (!$this->authenticator->authenticated()) {
+                                foreach ($this->authenticators() as $authenticator) {
+                                        if ($authenticator->authenticated()) {
+                                                if ($authenticator->control === Authenticator::sufficient) {
+                                                        $this->authenticator = $authenticator;
+                                                }
+                                        } else {
+                                                if ($authenticator->control === AuthenticatorDecorator::required) {
+                                                        throw new AuthenticatorRequiredException($authenticator->authenticator);
+                                                }
+                                        }
+                                }
+                        }
+                        return $this->authenticator->authenticated();
+                }
+
+                /**
+                 * Get username from current accepted authenticator.
+                 * @return string 
+                 */
+                public function getUser()
+                {
+                        return $this->authenticator->getUser();
+                }
+
+                /**
+                 * Login using currently selected authenticator.
+                 * @throws Exception
+                 */
+                public function login()
+                {
+                        $this->authenticator->login();
+                }
+
+                /**
+                 * Logout using currently selected authenticator.
+                 */
+                public function logout()
+                {
+                        $this->authenticator->logout();
+                }
+
         }
 
 }
