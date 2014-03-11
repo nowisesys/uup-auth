@@ -17,10 +17,11 @@
     },
     "autoload": {
         "psr-0": {
-            "UUP\\Authentication\\": "source/Authentication"
+            "UUP\\": "source"
         },
         "classmap": [
-            "source/UUP/Authentication/Stack/Filter/PredicateFilterIterator.php"
+            "source/UUP/Authentication/Stack/Filter/PredicateFilterIterator.php",
+            "source/UUP/Authentication/Stack/Filter/PropertyFilterIterator.php"            
         ]
     }
 }
