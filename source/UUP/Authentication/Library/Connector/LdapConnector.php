@@ -18,7 +18,8 @@
 
 namespace UUP\Authentication\Library\Connector;
 
-use UUP\Authentication\Exception;
+use UUP\Authentication\Exception,
+    UUP\Authentication\Validator\CredentialValidator;
 
 /**
  * The LDAP connector class. 
