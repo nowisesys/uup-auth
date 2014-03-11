@@ -59,7 +59,7 @@ interface PredicateFilterValidator
  * 
  *       protected static function check($obj, $prop, $value) 
  *       {
- *               return isset($obj->$prop) && $obj->$prop = $value;
+ *               return isset($obj->$prop) && ($obj->$prop == $value);
  *       }
  * }
  * 
