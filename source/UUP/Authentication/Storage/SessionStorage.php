@@ -196,7 +196,7 @@ class SessionStorage implements Storage
                 }
 
                 session_start();
-                session_regenerate_id();
+                session_regenerate_id(true);
                 session_write_close();
         }
 
