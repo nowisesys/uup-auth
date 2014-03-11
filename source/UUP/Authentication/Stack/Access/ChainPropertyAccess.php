@@ -55,7 +55,7 @@ class ChainPropertyAccess
 
         public function __get($name)
         {
-                return new ChainPropertyAccess($this->chain->want($name));
+                return new self($this->chain->want($name));
         }
 
         public function __set($name, $value)

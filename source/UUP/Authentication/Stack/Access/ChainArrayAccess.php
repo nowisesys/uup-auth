@@ -60,7 +60,7 @@ class ChainArrayAccess implements \ArrayAccess
 
         public function offsetGet($offset)
         {
-                return new ChainArrayAccess($this->chain->want($offset));
+                return new self($this->chain->want($offset));
         }
 
         public function offsetSet($offset, $value)

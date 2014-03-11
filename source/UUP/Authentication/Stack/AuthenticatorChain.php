@@ -69,7 +69,7 @@ class AuthenticatorChain implements \IteratorAggregate
         public function insert($key, $object)
         {
                 if (is_array($object)) {
-                        $this->chain[$key] = new AuthenticatorChain($object);
+                        $this->chain[$key] = new self($object);
                 } else {
                         $this->chain[$key] = $object;
                 }
@@ -143,7 +143,7 @@ class AuthenticatorChain implements \IteratorAggregate
          */
         public function create($key)
         {
-                return $this->insert($key, new AuthenticatorChain());
+                return $this->insert($key, new self());
         }
 
         /**
