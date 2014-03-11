@@ -54,7 +54,8 @@ namespace UUP\Authentication {
 
 namespace UUP\Authentication\Stack {
 
-        use UUP\Authentication\Authenticator,
+        use UUP\Authentication,
+            UUP\Authentication\Authenticator,
             UUP\Authentication\Exception;
 
         /**
@@ -137,7 +138,7 @@ namespace UUP\Authentication\Stack {
                 public function __construct($chains = array())
                 {
                         parent::__construct($chains);
-                        $this->authenticator = new NullAuthenticator();
+                        $this->authenticator = new Authentication\NullAuthenticator();
                 }
 
                 /**
@@ -247,7 +248,7 @@ namespace UUP\Authentication\Stack {
                                                         $this->authenticator = $authenticator;
                                                 }
                                         } else {
-                                                if ($authenticator->control === AuthenticatorDecorator::required) {
+                                                if ($authenticator->control === Authenticator::required) {
                                                         throw new AuthenticatorRequiredException($authenticator->authenticator);
                                                 }
                                         }
