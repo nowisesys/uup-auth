@@ -202,14 +202,14 @@ class SessionStorage implements Storage
 
         private function sanitize($data)
         {
-                if ($data->addr != $_SERVER['REMOTE_ADDR']) {
-                        throw new Exception("Remote address don't match session data.");
+                if (isset($data->addr) && $data->addr != $_SERVER['REMOTE_ADDR']) {
+                        throw new Exception("Remote address don't match session data (" . $data->addr . ").");
                 }
         }
 
         private static function name($name)
         {
-                return isset($name) ? $name : strtolower(basename(__FILE__) . __LINE__);                
+                return isset($name) ? $name : strtolower(basename(__FILE__) . __LINE__);
         }
 
 }
