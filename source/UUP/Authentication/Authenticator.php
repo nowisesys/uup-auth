@@ -27,6 +27,18 @@ namespace UUP\Authentication;
  */
 interface Authenticator
 {
+        /**
+         * Not used.
+         */
+        const optional = 1;
+        /**
+         * This authenticator is sufficient for successful authentication.
+         */
+        const sufficient = 2;
+        /**
+         * This authenticator is required for successful authentication. 
+         */
+        const required = 3;
 
         /**
          * Perform login for this authenticator.
