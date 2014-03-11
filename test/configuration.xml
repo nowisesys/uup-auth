@@ -28,4 +28,5 @@ limitations under the License.
 <phpunit
     colors="false" 
     bootstrap="bootstrap.php"
+    excludeGroup="ignore"
 />
