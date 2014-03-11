@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace UUP\Authentication\Connector;
+namespace UUP\Authentication\Library\Connector;
 
 use UUP\Authentication\Exception;
 

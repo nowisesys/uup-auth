@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-namespace UUP\Authentication;
+namespace UUP\Authentication\Library\Authenticator;
 
-use UUP\Authentication\Validator\Validator;
-use UUP\Authentication\Storage\Storage;
+use UUP\Authentication\Validator\Validator,
+    UUP\Authentication\Storage\Storage;
 
 /**
  * Trait for HTTP authenticators. 
