@@ -18,8 +18,8 @@
 
 namespace UUP\Authentication\Validator;
 
-use UUP\Authentication\Exception;
-use UUP\Authentication\Connector\LdapConnector;
+use UUP\Authentication\Exception,
+    UUP\Authentication\Library\Connector\LdapConnector;
 
 /**
  * Validate against LDAP using a tree search. 

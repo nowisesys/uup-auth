@@ -18,6 +18,8 @@
 
 namespace UUP\Authentication;
 
+use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
+
 /**
  * Authenticator for hostname. 
  * 
@@ -28,7 +30,7 @@ namespace UUP\Authentication;
  * @package UUP
  * @subpackage Authentication
  */
-class HostnameAuthenticator implements Authenticator
+class HostnameAuthenticator extends AuthenticatorBase
 {
 
         const localhost = 'localhost';

@@ -18,6 +18,8 @@
 
 namespace UUP\Authentication;
 
+use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
+
 require_once 'CAS.php';
 
 /**
@@ -27,7 +29,7 @@ require_once 'CAS.php';
  * @package UUP
  * @subpackage Authentication
  */
-class CasAuthenticator implements Authenticator
+class CasAuthenticator extends AuthenticatorBase
 {
 
         private $host;

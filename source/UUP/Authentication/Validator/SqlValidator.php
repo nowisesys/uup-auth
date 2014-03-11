@@ -18,8 +18,6 @@
 
 namespace UUP\Authentication\Validator;
 
-use UUP\Authentication\Storage\SqlConnector;
-
 /**
  * Validate usera agains an SQL database table.
  *
@@ -30,7 +28,7 @@ use UUP\Authentication\Storage\SqlConnector;
 class SqlValidator extends CredentialValidator
 {
 
-        use \UUP\Authentication\Connector\SqlConnector {
+        use \UUP\Authentication\Library\Connector\SqlConnector {
                 initialize as private;
         }
 

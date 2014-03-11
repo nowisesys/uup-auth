@@ -30,7 +30,7 @@ use UUP\Authentication\Exception;
 class SqlStorage implements Storage
 {
 
-        use \UUP\Authentication\Connector\SqlConnector {
+        use \UUP\Authentication\Library\Connector\SqlConnector {
                 initialize as private;
         }
 

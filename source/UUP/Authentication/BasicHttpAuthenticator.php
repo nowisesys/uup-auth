@@ -18,6 +18,8 @@
 
 namespace UUP\Authentication;
 
+use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
+
 /**
  * Basic HTTP (WWW-Authenticate) authenticator.
  *
@@ -25,10 +27,10 @@ namespace UUP\Authentication;
  * @package UUP
  * @subpackage Authentication
  */
-class BasicHttpAuthenticator implements Authenticator
+class BasicHttpAuthenticator extends AuthenticatorBase
 {
 
-        use HttpAuthenticator;
+        use Library\Authenticator\HttpAuthenticator;
 
         /**
          * Constructor.

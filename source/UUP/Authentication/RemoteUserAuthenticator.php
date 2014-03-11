@@ -18,6 +18,8 @@
 
 namespace UUP\Authentication;
 
+use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
+
 /**
  * This is a generic authenticator for enterprise level authentication that 
  * is handled outside of PHP by a Apache module or a frontend web proxy. 
@@ -49,7 +51,7 @@ namespace UUP\Authentication;
  * 
  * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
  */
-class RemoteUserAuthenticator implements Authenticator
+class RemoteUserAuthenticator extends AuthenticatorBase
 {
 
         const login = 'login';
