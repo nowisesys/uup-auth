@@ -86,12 +86,11 @@ use UUP\Authentication\Stack\AuthenticatorStack,
                                     ->control(Authenticator::sufficient)
                                     ->name('CAS')
                                     ->description('CAS server login');
-                                $chain['auth']['ldap'] = (new LdapAuthenticator('https://ldap.example.com'))
+                                $chain['auth']['ldap'] = (new LdapAuthenticator('ldaps://ldap.example.com'))
                                     ->visible(true)
                                     ->control(Authenticator::sufficient)
                                     ->name('LDAP')
                                     ->description('LDAP authentication');
-
                                 // 
                                 // Add some login restrictions:
                                 // 
@@ -102,17 +101,31 @@ use UUP\Authentication\Stack\AuthenticatorStack,
                                 parent::__construct($chain);
                         }
 
+                        public function getName()
+                        {
+                                return $this->getAuthenticator()->name;
+                        }
+
                 }
 
                 try {
                         $authenticator = new Authentication();
+
                         if ($authenticator->authenticated()) {
-                                printf("<p>Logged on as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getUser());
+                                printf("<p>Logged on to %s as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getName(), $authenticator->getUser());
                         } else {
-                                printf("<p><a href=\"?login\">Login</a>\n");
+                                printf("<form action=\"\" method=\"GET\">\n");
+                                printf("<select name=\"login\">\n");
+                                foreach ($authenticator->authenticators(true) as $key => $obj) {
+                                        printf("<option value=\"%s\" title=\"%s\">%s</option>\n", $key, $obj->description, $obj->name);
+                                }
+                                printf("</select>\n");
+                                printf("<input type=\"submit\" value=\"Login\">\n");
+                                printf("</form>\n");
                         }
 
                         if (isset($_GET['login'])) {
+                                $authenticator->activate($_GET['login']);
                                 $authenticator->login();
                         }
                         if (isset($_GET['logout'])) {
