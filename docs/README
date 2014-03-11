@@ -2,33 +2,78 @@
     UUP-AUTH - Authentication stack for PHP
 =============================================================================
 
-The uup-auth library provides an authentication stack that cleanly separates 
-the credential obtainer frontend from the validator and storage backend. 
+The uup-auth package provides a library of authenticators classes (used for 
+obtaining credentials) and validators for performing the authentication. 
+These classes can be mixed with different storage classes to create various 
+session handling strategies.
 
-All frontend authenticators is declared in the UUP\Authentication namespace.
+** Authenticators:
 
-A simple web application will only use a single authenticator, but multiple 
-authenticators can be combined to support multiple authentication sources (an
-authenticator stack). The AuthenticatorStack class was designed to support
-such an stack.
+   These classes are the frontend against the browser and responsible for 
+   authentication, possibly by delegating the actual authentication to an 
+   validation backend class.
 
-This example uses the basic HTTP authenticator for obtaining the user credentials.
-Authentication is performed by the PAM-modules validator (on Linux) and logon
-session is stored in a SQL-database:
+** Validators:
 
-    use UUP\Authentication\BasicHttpAuthenticator;
-    use UUP\Authentication\Validator\PamValidator;
-    use UUP\Authentication\Storage\SqlStorage;
+   Supports authentication against an external user account source. These are 
+   the supported backends:
 
-    $authenticator = new BasicHttpAuthenticator(
-        new PamValidator(), new SqlStorage($pdo), "My Realm"
-    );
+    * LDAP or Active Directory (bind or search).
+    * PAM modules.
+    * Shadow password file.
+    * SQL databases (using PDO).
 
-    // ... authentication is required:
+** Storage:
 
-    if(!$authenticator->authenticated()) {
-        $authenticator->login();    // trigger logon
-    }
+   The storage classes is used for persisting authentication across browser
+    requests. These are the supported methods for session management:
+
+    * File system
+    * Shared memory (using the sysvshm or shmop extension).
+    * PHP session.
+    * SQL databases (using PDO).
+    
+
+This table lists some common authentication cases (types) and how they can be
+combined together: 
+
+    Type:       | Storage:  | Validator:    | Class:
+    ------------+-----------+---------------+-----------------------------------
+    HTTP Basic  |   Yes     |   Yes         | BasicHttpAuthenticator
+    HTTP Digest |   Yes     |   Yes         | DigestHttpAuthenticator
+    CAS         |   No      |   No          | CasAuthenticator
+    Kerberos    |   No      |   No          | RemoteUserAuthenticator
+    Shibboleth  |   No      |   No          | RemoteUserAuthenticator
+    Address     |   No      |   No          | AddressAuthenticator
+    Hostname    |   No      |   No          | HostnameAuthenticator
+    ------------+-----------+---------------+-----------------------------------
+
+** Stack:
+
+The authentication stack (AuthenticatorStack) provides uniform authentication
+handling against multiple authenticators (i.e. LDAP and Kerberos). By mixing
+various authenticators its possible to create authentication schemes like
+this:
+
+    1. Accept Kerberos and LDAP login from the coorporate network (10.0.2.0/24).
+    2. Require CAS-login from outside world.
+
+$stack = new AuthenticatorStack();
+$local = $stack->add(new 
+    array(
+        "local" => array(
+            "krb5" => new Authenticator(
+        )
+    )
+);
+$stack->add("local"
+
+allows multiple authenticators to
+be combined together to support multiple authentication methods (i.e. LDAP and
+Kerberos)
+
+
+
 
 
 Use the class AuthenticatorStack to support authentication against multiple account 
