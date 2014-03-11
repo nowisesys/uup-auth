@@ -131,6 +131,7 @@ namespace UUP\Authentication {
                         if (isset($address)) {
                                 if (is_array($address)) {
                                         $this->address = array_merge($this->address, $address);
+                                        $this->address = array_unique($this->address);
                                 } elseif (is_string($address)) {
                                         $this->address[] = $address;
                                 } else {
