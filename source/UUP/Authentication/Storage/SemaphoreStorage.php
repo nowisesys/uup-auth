@@ -44,12 +44,12 @@ class SemaphoreStorage implements Storage
          * @param int $perm The permission bits.
          * @throws Exception
          */
-        public function __construct($key = 0, $size = null, $perm = 0644)
+        public function __construct($key = 0, $size = null, $perm = 0666)
         {
                 if (!extension_loaded('sysvshm')) {
                         throw new Exception("The sysvshm extension is not loaded.");
                 }
-
+                
                 $this->key = $key != 0 ? $key : self::genkey();
                 $this->size = $size;
                 $this->perm = $perm;
@@ -69,29 +69,22 @@ class SemaphoreStorage implements Storage
 
         public function exist($user)
         {
-                return shm_has_var($this->id, self::hash($user)) === true;
+                return shm_has_var($this->id, self::hash($user));
         }
 
         public function insert($user)
         {
-                return shm_put_var($this->id, self::hash($user), $user);
+                shm_put_var($this->id, self::hash($user), $user);
         }
 
         public function remove($user)
         {
-                return shm_remove_var($this->id, self::hash($user));
+                shm_remove_var($this->id, self::hash($user));
         }
 
         private function open()
         {
-                if (isset($this->size)) {
-                        $this->id = shm_attach($this->key, $this->size, $this->perm);
-                } else {
-                        $this->id = shm_attach($this->key);
-                }
-                if ($this->id === false) {
-                        throw new Exception("Failed create shared memory segment");
-                }
+                $this->id = shm_attach($this->key, $this->perm, $this->size);
         }
 
         private function close()
@@ -115,16 +108,12 @@ class SemaphoreStorage implements Storage
 
         private function usage()
         {
-                if (shm_has_var($this->id, self::key_usage)) {
-                        return shm_get_var($this->id, self::key_usage);
-                } else {
-                        return 0;
-                }
+                return shm_get_var($this->id, self::key_usage);
         }
 
         private static function genkey()
         {
-                return ftok(__FILE__, "b");
+                return ftok(__FILE__, "a");
         }
 
         private static function hash($str)
