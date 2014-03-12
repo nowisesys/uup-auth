@@ -56,54 +56,27 @@ namespace UUP\Authentication\Stack\Access;
  * @package UUP
  * @subpackage Authentication
  */
-class ChainArrayAccess implements \ArrayAccess
+class ChainArrayAccess extends ChainAccessBase implements \ArrayAccess
 {
-
-        /**
-         * @var AuthenticatorChain 
-         */
-        private $chain;
-
-        /**
-         * Constructor.
-         * @param AuthenticatorChain $chain The authenticator chain object.
-         */
-        public function __construct($chain)
-        {
-                $this->chain = $chain;
-        }
-
-        public function __call($name, $arguments)
-        {
-                if (method_exists($this->chain, $name)) {
-                        $this->chain->$name($arguments[0]);     // only single argument supported
-                }
-        }
 
         public function offsetExists($offset)
         {
-                return $this->chain->exist($offset);
+                return parent::exist($offset);
         }
 
         public function offsetGet($offset)
         {
-                return new self($this->chain->want($offset));
+                return new self(parent::get($offset));
         }
 
         public function offsetSet($offset, $value)
         {
-                if (property_exists($this->chain, $offset)) {
-                        $this->chain->$offset = $value; // $chain[$offset] = $value;
-                } elseif (method_exists($this->chain, $offset)) {
-                        $this->chain->$offset($value);  // call method using array subscript
-                } else {
-                        $this->chain->insert($offset, $value);
-                }
+                parent::set($offset, $value);
         }
 
         public function offsetUnset($offset)
         {
-                $this->chain->remove($offset);
+                parent::remove($offset);
         }
 
 }

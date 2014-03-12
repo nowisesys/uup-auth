@@ -56,54 +56,27 @@ namespace UUP\Authentication\Stack\Access;
  * @package UUP
  * @subpackage Authentication
  */
-class ChainPropertyAccess
+class ChainPropertyAccess extends ChainAccessBase
 {
-
-        /**
-         * @var AuthenticatorChain 
-         */
-        private $chain;
-
-        /**
-         * Constructor.
-         * @param AuthenticatorChain $chain The authenticator chain object.
-         */
-        public function __construct($chain)
-        {
-                $this->chain = $chain;
-        }
-
-        public function __call($name, $arguments)
-        {
-                if (method_exists($this->chain, $name)) {
-                        $this->chain->$name($arguments[0]);     // only single argument supported
-                }
-        }
 
         public function __get($name)
         {
-                return new self($this->chain->want($name));
+                return new self(parent::get($name));
         }
 
         public function __set($name, $value)
         {
-                if (property_exists($this->chain, $name)) {
-                        $this->chain->$name = $value; // $chain[$offset] = $value;
-                } elseif (method_exists($this->chain, $name)) {
-                        $this->chain->$name($value);  // call method using array subscript
-                } else {
-                        $this->chain->insert($name, $value);
-                }
+                parent::set($name, $value);
         }
 
         public function __isset($name)
         {
-                return $this->chain->exist($name);
+                return parent::exist($name);
         }
 
         public function __unset($name)
         {
-                $this->chain->remove($name);
+                parent::remove($name);
         }
 
 }
