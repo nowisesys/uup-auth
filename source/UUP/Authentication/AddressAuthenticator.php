@@ -23,7 +23,7 @@ namespace UUP\Authentication {
             UUP\Authentication\Exception;
 
         /**
-         * Authenticator for IP-address. 
+         * IP-address authenticator. 
          * 
          * Authenticate caller by comparing the remote callers IP-address against the 
          * list if IP-address filters in this object. The remote caller is considered 

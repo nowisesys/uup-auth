@@ -23,7 +23,7 @@ use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
 require_once 'CAS.php';
 
 /**
- * Authenticator for CAS.
+ * CAS (Central Authentication Service) authenticator.
  * 
  * <b>Warning:</b> This class should be used after any other authenticator that 
  * uses session data because it tries to decode session data it has not created

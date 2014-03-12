@@ -21,7 +21,7 @@ namespace UUP\Authentication;
 use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
 
 /**
- * Authenticator for hostname. 
+ * Hostname authenticator. 
  * 
  * The remote caller is considered as authenticated if a reverse lookup of 
  * IP-address in DNS matches the supplied hostname.

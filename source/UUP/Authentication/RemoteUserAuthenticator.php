@@ -21,6 +21,8 @@ namespace UUP\Authentication;
 use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
 
 /**
+ * Remote user environment variable authenticator.
+ * 
  * This is a generic authenticator for enterprise level authentication that 
  * is handled outside of PHP by a Apache module or a frontend web proxy. 
  * 
