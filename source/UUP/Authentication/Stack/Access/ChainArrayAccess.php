@@ -32,6 +32,26 @@ namespace UUP\Authentication\Stack\Access;
  *   ...
  * </code>
  * 
+ * Properties in the authenticator class can be set using array subscript. If
+ * a method exist with the subscript name, then it invoked if the named property
+ * is missing:
+ * <code>
+ * $array = new ChainArrayAccess($chain);
+ * $array['auth1'] = $auth1;
+ *   ...
+ * // call $auth1->visible = true or $auth->visible(true);
+ * $array['auth1']['visible'] = true; 
+ * </code>
+ * 
+ * Object methods can be invoked direct using array subscript. Methods calls 
+ * are currently limited to single argument signatures:
+ * <code>
+ * $array = new ChainArrayAccess($chain);
+ * $array['auth1'] = $auth1;
+ *   ...
+ * $array['auth1']->visible(true);      // $auth1->visible(true)
+ * </code>
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Authentication
@@ -53,6 +73,13 @@ class ChainArrayAccess implements \ArrayAccess
                 $this->chain = $chain;
         }
 
+        public function __call($name, $arguments)
+        {
+                if (method_exists($this->chain, $name)) {
+                        $this->chain->$name($arguments[0]);     // only single argument supported
+                }
+        }
+
         public function offsetExists($offset)
         {
                 return $this->chain->exist($offset);
@@ -65,7 +92,13 @@ class ChainArrayAccess implements \ArrayAccess
 
         public function offsetSet($offset, $value)
         {
-                $this->chain->insert($offset, $value);
+                if (property_exists($this->chain, $offset)) {
+                        $this->chain->$offset = $value; // $chain[$offset] = $value;
+                } elseif (method_exists($this->chain, $offset)) {
+                        $this->chain->$offset($value);  // call method using array subscript
+                } else {
+                        $this->chain->insert($offset, $value);
+                }
         }
 
         public function offsetUnset($offset)
