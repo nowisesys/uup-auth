@@ -24,11 +24,11 @@ namespace UUP\Authentication\Stack\Access;
  * New chains are automatic created whenever a new multi-dimensional array
  * index is used:
  * <code>
- * $array = new ChainArrayAccess($chain);
- * $array['auth1'] = new *Authenticator(...);
- * $array['auth2'] = new *Authenticator(...);
+ * $chain = new ChainArrayAccess(...);
+ * $chain['auth1'] = new *Authenticator(...);
+ * $chain['auth2'] = new *Authenticator(...);
  *   ...
- * $array['chain1']['authN'] = new *Authenticator(...); // <- Added in new chain
+ * $chain['chain1']['authN'] = new *Authenticator(...); // <- Added in new chain
  *   ...
  * </code>
  * 
@@ -36,20 +36,20 @@ namespace UUP\Authentication\Stack\Access;
  * a method exist with the subscript name, then it invoked if the named property
  * is missing:
  * <code>
- * $array = new ChainArrayAccess($chain);
- * $array['auth1'] = $auth1;
+ * $chain = new ChainArrayAccess(...);
+ * $chain['auth1'] = $auth1;
  *   ...
  * // call $auth1->visible = true or $auth->visible(true);
- * $array['auth1']['visible'] = true; 
+ * $chain['auth1']['visible'] = true; 
  * </code>
  * 
  * Object methods can be invoked direct using array subscript. Methods calls 
  * are currently limited to single argument signatures:
  * <code>
- * $array = new ChainArrayAccess($chain);
- * $array['auth1'] = $auth1;
+ * $chain = new ChainArrayAccess(...);
+ * $chain['auth1'] = $auth1;
  *   ...
- * $array['auth1']->visible(true);      // $auth1->visible(true)
+ * $chain['auth1']->visible(true);      // call $auth1->visible(true)
  * </code>
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
