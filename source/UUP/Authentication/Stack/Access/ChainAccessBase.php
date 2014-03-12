@@ -51,7 +51,7 @@ class ChainAccessBase
 
         protected function exist($name)
         {
-                $this->chain->exist($name);
+                return $this->chain->exist($name);
         }
 
         protected function get($name)
@@ -72,7 +72,7 @@ class ChainAccessBase
 
         protected function remove($name)
         {
-                $this->chain->remove($offset);
+                $this->chain->remove($name);
         }
 
 }
