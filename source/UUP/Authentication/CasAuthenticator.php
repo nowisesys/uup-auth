@@ -29,6 +29,8 @@ require_once 'CAS.php';
  * uses session data because it tries to decode session data it has not created
  * by itself.
  * 
+ * @property-write string $return The redirect URL on logout.
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Authentication
@@ -40,6 +42,7 @@ class CasAuthenticator extends AuthenticatorBase
         private $port;
         private $path;
         private $client;
+        private $params = array();
 
         public function __construct($host, $port = 443, $path = "/cas")
         {
@@ -47,6 +50,13 @@ class CasAuthenticator extends AuthenticatorBase
                 $this->port = $port;
                 $this->path = $path;
                 $this->initialize();
+        }
+
+        public function __set($name, $value)
+        {
+                if ($name == 'return') {
+                        $this->params['service'] = (string) $value;
+                }
         }
 
         public function authenticated()
@@ -70,7 +80,7 @@ class CasAuthenticator extends AuthenticatorBase
         public function logout()
         {
                 $this->invoke();
-                $this->client->logout();
+                $this->client->logout($this->params);
                 $this->leave();
         }
 
