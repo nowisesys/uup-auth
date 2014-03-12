@@ -25,6 +25,10 @@ require_once 'CAS.php';
 /**
  * Authenticator for CAS.
  * 
+ * <b>Warning:</b> This class should be used after any other authenticator that 
+ * uses session data because it tries to decode session data it has not created
+ * by itself.
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Authentication
@@ -47,7 +51,10 @@ class CasAuthenticator extends AuthenticatorBase
 
         public function authenticated()
         {
-                return $this->client->isAuthenticated();
+                $this->invoke();
+                $result = $this->client->isAuthenticated();
+                $this->leave();
+                return $result;
         }
 
         public function getUser()
@@ -62,13 +69,31 @@ class CasAuthenticator extends AuthenticatorBase
 
         public function logout()
         {
+                $this->invoke();
                 $this->client->logout();
+                $this->leave();
         }
 
         private function initialize()
         {
                 $this->client = new \CAS_Client(CAS_VERSION_2_0, false, $this->host, $this->port, $this->path);
                 $this->client->setNoCasServerValidation();
+        }
+
+        private function invoke()
+        {
+                if (session_status() == PHP_SESSION_NONE &&
+                    session_status() != PHP_SESSION_DISABLED) {
+                        session_start();
+                }
+        }
+
+        private function leave()
+        {
+                if (session_status() == PHP_SESSION_ACTIVE &&
+                    session_status() != PHP_SESSION_DISABLED) {
+                        session_write_close();
+                }
         }
 
 }
