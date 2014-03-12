@@ -39,7 +39,7 @@ namespace UUP\Authentication\Stack\Access;
  * $chain = new ChainArrayAccess(...);
  * $chain['auth1'] = $auth1;
  *   ...
- * // call $auth1->visible = true or $auth->visible(true);
+ * // call $auth1->visible = true or $auth1->visible(true);
  * $chain['auth1']['visible'] = true; 
  * </code>
  * 
