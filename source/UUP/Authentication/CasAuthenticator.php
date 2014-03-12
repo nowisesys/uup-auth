@@ -35,6 +35,7 @@ class CasAuthenticator extends AuthenticatorBase
         private $host;
         private $port;
         private $path;
+        private $client;
 
         public function __construct($host, $port = 443, $path = "/cas")
         {
@@ -46,28 +47,28 @@ class CasAuthenticator extends AuthenticatorBase
 
         public function authenticated()
         {
-                return \phpCAS::isAuthenticated();
+                return $this->client->isAuthenticated();
         }
 
         public function getUser()
         {
-                return \phpCAS::getUser();
+                return $this->client->getUser();
         }
 
         public function login()
         {
-                \phpCAS::forceAuthentication();
+                $this->client->forceAuthentication();
         }
 
         public function logout()
         {
-                \phpCAS::logout();
+                $this->client->logout();
         }
 
         private function initialize()
         {
-                \phpCAS::client(CAS_VERSION_2_0, $this->host, $this->port, $this->path);
-                \phpCAS::setNoCasServerValidation();
+                $this->client = new \CAS_Client(CAS_VERSION_2_0, false, $this->host, $this->port, $this->path);
+                $this->client->setNoCasServerValidation();
         }
 
 }
