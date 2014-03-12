@@ -24,12 +24,32 @@ namespace UUP\Authentication\Stack\Access;
  * New chains are automatic created whenever a new level of indirection
  * is entered:
  * <code>
- * $object = new ChainArrayAccess($chain);
- * $object->auth1 = new *Authenticator(...);
- * $object->auth2 = new *Authenticator(...);
+ * $chain = new ChainPropertyAccess(...);
+ * $chain->auth1 = new *Authenticator(...);
+ * $chain->auth2 = new *Authenticator(...);
  *   ...
- * $object->chain1->authN = new *Authenticator(...); // <- Added in new chain
+ * $chain->chain1->authN = new *Authenticator(...); // <- Added in new chain
  *   ...
+ * </code>
+ * 
+ * Properties in the authenticator class can be set using property access. If
+ * a method exist with the same name, then it invoked if the given property
+ * is missing:
+ * <code>
+ * $chain = new ChainPropertyAccess(...);
+ * $chain->auth1 = $auth1;
+ *   ...
+ * // call $auth1->visible = true or $auth->visible(true);
+ * $chain->auth1->visible = true; 
+ * </code>
+ * 
+ * Object methods can be invoked direct using property names. Methods calls 
+ * are currently limited to single argument signatures:
+ * <code>
+ * $chain = new ChainPropertyAccess(...);
+ * $chain->auth1 = $auth1;
+ *   ...
+ * $chain->auth1->visible(true);      // call $auth1->visible(true)
  * </code>
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
@@ -53,6 +73,13 @@ class ChainPropertyAccess
                 $this->chain = $chain;
         }
 
+        public function __call($name, $arguments)
+        {
+                if (method_exists($this->chain, $name)) {
+                        $this->chain->$name($arguments[0]);     // only single argument supported
+                }
+        }
+
         public function __get($name)
         {
                 return new self($this->chain->want($name));
@@ -60,7 +87,13 @@ class ChainPropertyAccess
 
         public function __set($name, $value)
         {
-                $this->chain->insert($name, $value);
+                if (property_exists($this->chain, $name)) {
+                        $this->chain->$name = $value; // $chain[$offset] = $value;
+                } elseif (method_exists($this->chain, $name)) {
+                        $this->chain->$name($value);  // call method using array subscript
+                } else {
+                        $this->chain->insert($name, $value);
+                }
         }
 
         public function __isset($name)
