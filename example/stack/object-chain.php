@@ -29,18 +29,21 @@ limitations under the License.
                 //  caller can select the authentication method from the list of visible 
                 //  authenticators. Hidden authenticators can be used for enforcing access
                 //  restrictions.
+                //  
+                //  This example uses the object interface for setting up the chain of
+                //  authenticators.
                 // ==========================================================================
 
-                require_once __DIR__ . '/../vendor/autoload.php';
+                require_once __DIR__ . '/../../vendor/autoload.php';
 
-use UUP\Authentication\Stack\AuthenticatorStack,
-    UUP\Authentication\Authenticator,
-    UUP\Authentication\AddressAuthenticator,
-    UUP\Authentication\BasicHttpAuthenticator,
-    UUP\Authentication\CasAuthenticator,
-    UUP\Authentication\Validator\PamValidator,
-    UUP\Authentication\Validator\LdapBindValidator,
-    UUP\Authentication\Storage\SessionStorage;
+                use UUP\Authentication\Stack\AuthenticatorStack,
+                    UUP\Authentication\Authenticator,
+                    UUP\Authentication\AddressAuthenticator,
+                    UUP\Authentication\BasicHttpAuthenticator,
+                    UUP\Authentication\CasAuthenticator,
+                    UUP\Authentication\Validator\PamValidator,
+                    UUP\Authentication\Validator\LdapBindValidator,
+                    UUP\Authentication\Storage\SessionStorage;
 
                 class LdapAuthenticator extends BasicHttpAuthenticator
                 {
