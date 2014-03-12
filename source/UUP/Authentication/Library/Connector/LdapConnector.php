@@ -77,7 +77,7 @@ abstract class LdapConnector extends CredentialValidator
         {
                 if (!ldap_bind($this->handle, $user, $pass)) {
                         ldap_close($this->handle);
-                        throw new Exception(sprintf("Failed bind as '%s'"), $user);
+                        throw new Exception(sprintf("Failed bind as '%s' to %s:%d", $user, $this->server, $this->port));
                 } else {
                         ldap_unbind($this->handle);
                 }
