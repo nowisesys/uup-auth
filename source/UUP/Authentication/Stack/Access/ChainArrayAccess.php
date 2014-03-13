@@ -66,7 +66,7 @@ class ChainArrayAccess extends ChainAccessBase implements \ArrayAccess
 
         public function offsetGet($offset)
         {
-                return new self(parent::get($offset));
+                return parent::get($offset, __CLASS__);
         }
 
         public function offsetSet($offset, $value)

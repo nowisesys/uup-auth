@@ -61,7 +61,7 @@ class ChainPropertyAccess extends ChainAccessBase
 
         public function __get($name)
         {
-                return new self(parent::get($name));
+                return parent::get($name, __CLASS__);
         }
 
         public function __set($name, $value)

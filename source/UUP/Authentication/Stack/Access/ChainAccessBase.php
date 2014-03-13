@@ -19,6 +19,7 @@
 namespace UUP\Authentication\Stack\Access;
 
 use UUP\Authentication\Stack\AuthenticatorChain,
+    UUP\Authentication\Library\Authenticator\AuthenticatorBase,
     UUP\Authentication\Exception;
 
 /**
@@ -65,11 +66,24 @@ class ChainAccessBase
         /**
          * Get authenticator or chain matching $name.
          * @param string $name
+         * @param string $class The calling class.
          * @return Authenticator|AuthenticatorChain
          */
-        protected function get($name)
+        protected function get($name, $class)
         {
-                return $this->chain->want($name);
+                if ($this->chain instanceof AuthenticatorChain) {
+                        return new $class($this->chain->want($name));
+                } elseif ($this->chain instanceof AuthenticatorBase) {
+                        return $this->chain->$name;     // use magic accessor
+                } elseif (property_exists($this->chain, $name)) {
+                        return $this->chain->$name;     // public property
+                } elseif (method_exists($this->chain, $name)) {
+                        return $this->chain->$name();   // use function call
+                } elseif (($func = sprintf("get%s", ucfirst($name))) && method_exists($this->chain, $func)) {
+                        return $this->chain->$func();   // java style getName()
+                } else {
+                        throw new Exception(sprintf('Failed get property %s on non-chain object (%s)', $name, get_class($this->chain)));
+                }
         }
 
         /**
