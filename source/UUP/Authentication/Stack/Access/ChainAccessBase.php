@@ -36,14 +36,20 @@ class ChainAccessBase
          * @var AuthenticatorChain 
          */
         private $chain;
+        /**
+         * @var bool 
+         */
+        private $throw;
 
         /**
          * Constructor.
          * @param AuthenticatorChain $chain The authenticator chain object.
+         * @param bool $throw Throw exception if get()/set() fail to read/write properties.
          */
-        public function __construct($chain)
+        public function __construct($chain, $throw = false)
         {
                 $this->chain = $chain;
+                $this->throw = $throw;
         }
 
         public function __call($name, $arguments)
@@ -81,7 +87,7 @@ class ChainAccessBase
                         return $this->chain->$name();   // use function call
                 } elseif (($func = sprintf("get%s", ucfirst($name))) && method_exists($this->chain, $func)) {
                         return $this->chain->$func();   // java style getName()
-                } else {
+                } elseif ($this->throw) {
                         throw new Exception(sprintf('Failed get property %s on non-chain object (%s)', $name, get_class($this->chain)));
                 }
         }
@@ -115,7 +121,7 @@ class ChainAccessBase
                         $this->chain->$name($value);            // call member method
                 } elseif ($this->chain instanceof AuthenticatorChain) {
                         $this->chain->insert($name, $value);    // insert in chain (relaxed)
-                } elseif (($this->chain->$name = $value) && ($this->chain->$name !== $value)) {
+                } elseif ($this->throw && ($this->chain->$name = $value) && ($this->chain->$name !== $value)) {
                         // Logic error that is hard to detect and will cause data loss.
                         throw new Exception(sprintf('Failed set property %s on immutable non-chain object (%s)', $name, get_class($this->chain)));
                 }

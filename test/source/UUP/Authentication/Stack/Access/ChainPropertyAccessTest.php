@@ -57,7 +57,6 @@ class ChainPropertyAccessTest extends \PHPUnit_Framework_TestCase
 
         /**
          * @covers UUP\Authentication\Stack\Access\ChainPropertyAccess::__set
-         * @expectedException UUP\Authentication\Exception
          */
         public function test__set()
         {

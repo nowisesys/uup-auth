@@ -72,7 +72,6 @@ class ChainArrayAccessTest extends \PHPUnit_Framework_TestCase
 
         /**
          * @covers UUP\Authentication\Stack\Access\ChainArrayAccess::offsetSet
-         * @expectedException UUP\Authentication\Exception
          */
         public function testOffsetSet()
         {
