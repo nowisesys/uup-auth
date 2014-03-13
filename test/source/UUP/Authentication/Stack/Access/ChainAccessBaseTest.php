@@ -27,9 +27,9 @@ class ChainAccessBaseImpl extends ChainAccessBase
                 return parent::exist($name);
         }
 
-        public function get($name)
+        public function get($name, $class = __CLASS__)
         {
-                return parent::get($name);
+                return parent::get($name, $class);
         }
 
         public function set($name, $value)
@@ -88,8 +88,7 @@ class ChainAccessBaseTest extends \PHPUnit_Framework_TestCase
         {
                 $obj1 = $this->chain->get('obj1');
                 $this->assertNotNull($obj1);
-                $this->assertTrue($obj1 instanceof ChainAccessObject);
-                $this->assertTrue($obj1 === $this->chain->object);
+                $this->assertTrue($obj1 instanceof ChainAccessBase);
         }
 
         /**
@@ -104,10 +103,7 @@ class ChainAccessBaseTest extends \PHPUnit_Framework_TestCase
                 $objc = $this->chain->get('obj2');
 
                 $this->assertNotNull($objc);
-                $this->assertTrue($objc instanceof ChainAccessObject);
-                $this->assertTrue($objc === $obj2);
-                $this->assertTrue($objc !== $obj1);
-                $this->assertTrue($objc !== $this->chain->object);
+                $this->assertTrue($objc instanceof ChainAccessBase);
         }
 
         /**
@@ -121,7 +117,8 @@ class ChainAccessBaseTest extends \PHPUnit_Framework_TestCase
                 // 
                 $this->chain->remove('obj1');
                 $obj1 = $this->chain->get('obj1');
-                $this->assertTrue($obj1 instanceof AuthenticatorChain);
+                print_r($obj1);
+                $this->assertTrue($obj1 instanceof ChainAccessBase);
         }
 
 }
