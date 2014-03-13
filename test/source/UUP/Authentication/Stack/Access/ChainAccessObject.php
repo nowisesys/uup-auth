@@ -18,11 +18,13 @@
 
 namespace UUP\Authentication\Stack\Access;
 
+use UUP\Authentication\Authenticator;
+
 /**
  * Simple class for testing chain access.
  * @property int $prop
  */
-class ChainAccessObject
+class ChainAccessObject implements Authenticator
 {
 
         private $prop;
@@ -45,6 +47,26 @@ class ChainAccessObject
         public function func($value)
         {
                 $this->func = $value;
+        }
+
+        public function authenticated()
+        {
+                
+        }
+
+        public function getUser()
+        {
+                
+        }
+
+        public function login()
+        {
+                
+        }
+
+        public function logout()
+        {
+                
         }
 
 }
