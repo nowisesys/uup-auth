@@ -52,6 +52,12 @@ namespace UUP\Authentication\Stack\Access;
  * $chain['auth1']->visible(true);      // call $auth1->visible(true)
  * </code>
  * 
+ * An object or chain can be accessed direct using the special '@' subscript:
+ * <code>
+ * $chain['auth1']['@'];    // Get unwrapped auth1 object.
+ * $chain['chain1']['@'];   // Get chain as array.
+ * </code>
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Authentication

@@ -77,6 +77,17 @@ class ChainAccessBase
          */
         protected function get($name, $class)
         {
+                // 
+                // Object or array access: $chain->obj->_ or $chain['obj']['@']:
+                // 
+                if ($name == '@' || $name == '_') {
+                        if ($this->chain instanceof AuthenticatorBase) {
+                                return $this->chain;
+                        } else {
+                                return $this->chain->getArrayCopy();
+                        }
+                }
+
                 if ($this->chain instanceof AuthenticatorChain) {
                         return new $class($this->chain->want($name));
                 } elseif ($this->chain instanceof AuthenticatorBase) {
