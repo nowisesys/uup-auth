@@ -25,26 +25,26 @@ namespace UUP\Authentication\Stack\Access;
 class ChainAccessObject
 {
 
-        public $mprop;
-        public $mfunc;
+        private $prop;
+        private $func;
 
         public function __get($name)
         {
                 if ($name == 'prop') {
-                        return $this->mprop;
+                        return $this->prop;
                 }
         }
 
         public function __set($name, $value)
         {
                 if ($name == 'prop') {
-                        $this->mprop = $value;
+                        $this->prop = $value;
                 }
         }
 
         public function func($value)
         {
-                $this->mfunc = $value;
+                $this->func = $value;
         }
 
 }
