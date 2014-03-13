@@ -89,7 +89,7 @@ class ChainAccessBase
                 }
 
                 if ($this->chain instanceof AuthenticatorChain) {
-                        return new $class($this->chain->want($name));
+                        return new $class($this->chain->want($name), $this->throw);
                 } elseif ($this->chain instanceof Authenticator) {
                         return $this->chain->$name;     // use magic accessor
                 } elseif (property_exists($this->chain, $name)) {
