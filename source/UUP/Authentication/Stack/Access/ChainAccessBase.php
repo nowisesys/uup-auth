@@ -19,7 +19,7 @@
 namespace UUP\Authentication\Stack\Access;
 
 use UUP\Authentication\Stack\AuthenticatorChain,
-    UUP\Authentication\Library\Authenticator\AuthenticatorBase,
+    UUP\Authentication\Authenticator,
     UUP\Authentication\Exception;
 
 /**
@@ -81,7 +81,7 @@ class ChainAccessBase
                 // Object or array access: $chain->obj->_ or $chain['obj']['@']:
                 // 
                 if ($name == '@' || $name == '_') {
-                        if ($this->chain instanceof AuthenticatorBase) {
+                        if ($this->chain instanceof Authenticator) {
                                 return $this->chain;
                         } else {
                                 return $this->chain->getArrayCopy();
@@ -90,7 +90,7 @@ class ChainAccessBase
 
                 if ($this->chain instanceof AuthenticatorChain) {
                         return new $class($this->chain->want($name));
-                } elseif ($this->chain instanceof AuthenticatorBase) {
+                } elseif ($this->chain instanceof Authenticator) {
                         return $this->chain->$name;     // use magic accessor
                 } elseif (property_exists($this->chain, $name)) {
                         return $this->chain->$name;     // public property
