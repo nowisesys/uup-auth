@@ -2,106 +2,23 @@
     UUP-AUTH - Authentication stack for PHP
 =============================================================================
 
-The uup-auth package provides a library of authenticators classes (used for 
-obtaining credentials) and validators for performing the authentication. 
-These classes can be mixed with different storage classes to create various 
-session handling strategies.
+The uup-auth package provides a library for stacking authenticators together
+to support multiple authentication method in a uniform way. 
 
-** Authenticators:
+Bundled are also authenticators for performing access restriction (i.e. on 
+time of day or the ip-address/hostname). All authenticators in the stack can
+be set as required or sufficient to control how that authenticator applies.
 
-   These classes are the frontend against the browser and responsible for 
-   authentication, possibly by delegating the actual authentication to an 
-   validation backend class.
+    * See the example directory for working code.
+    * See API docs on http://it.bmc.uu.se/andlov/php/proj/uup/uup-auth
 
-** Validators:
+The library is modular. The authenticators are the frontend (credentials
+obtainers) that might use a validator as authentication source (for example
+LDAP). The authenticator can be combined with a storage object to support
+logon sessions. 
 
-   Supports authentication against an external user account source. These are 
-   the supported backends:
-
-    * LDAP or Active Directory (bind or search).
-    * PAM modules.
-    * Shadow password file.
-    * SQL databases (using PDO).
-
-** Storage:
-
-   The storage classes is used for persisting authentication across browser
-    requests. These are the supported methods for session management:
-
-    * File system
-    * Shared memory (using the sysvshm or shmop extension).
-    * PHP session.
-    * SQL databases (using PDO).
-    
-
-This table lists some common authentication cases (types) and how they can be
-combined together: 
-
-    Type:       | Storage:  | Validator:    | Class:
-    ------------+-----------+---------------+-----------------------------------
-    HTTP Basic  |   Yes     |   Yes         | BasicHttpAuthenticator
-    HTTP Digest |   Yes     |   Yes         | DigestHttpAuthenticator
-    CAS         |   No      |   No          | CasAuthenticator
-    Kerberos    |   No      |   No          | RemoteUserAuthenticator
-    Shibboleth  |   No      |   No          | RemoteUserAuthenticator
-    Address     |   No      |   No          | AddressAuthenticator
-    Hostname    |   No      |   No          | HostnameAuthenticator
-    ------------+-----------+---------------+-----------------------------------
-
-** Stack:
-
-The authentication stack (AuthenticatorStack) provides uniform authentication
-handling against multiple authenticators (i.e. LDAP and Kerberos). By mixing
-various authenticators its possible to create authentication schemes like
-this:
-
-    1. Accept Kerberos and LDAP login from the coorporate network (10.0.2.0/24).
-    2. Require CAS-login from outside world.
-
-$stack = new AuthenticatorStack();
-$local = $stack->add(new 
-    array(
-        "local" => array(
-            "krb5" => new Authenticator(
-        )
-    )
-);
-$stack->add("local"
-
-allows multiple authenticators to
-be combined together to support multiple authentication methods (i.e. LDAP and
-Kerberos)
-
-
-
-
-
-Use the class AuthenticatorStack to support authentication against multiple account 
-sources. Each authenticator added to the stack can share a common storage or use 
-their own.
-
-    use UUP\Authentication\AuthenticatorStack;
-
-    $authstack = new AuthenticatorStack();
-    $authstack->add(...);
-
-        // Add any authenticators...
-
-    if(!$authstack->authenticated()) {
-        // No authenticator accepted caller as logged in, redirect to login page...
-    }
-
-When using an authentication stack, the login page usually let the caller select 
-the prefered login method (a specific authenticator). On return to login page, 
-the script check for selected authenticator in request parameters and validates 
-the user:
-
-    switch($request->login->method) {
-        case "pam":
-            $pamauth->login();
-            $authstack->setAuthenticator();
-            break;
-        // ....
-    }
+Authenticators can be used in a stack or standalone (single login method). If
+configuring a stack, use one of the access classes for easy access to chains
+and authenticators.
 
 // Anders Lövgren, 2014-02-26
