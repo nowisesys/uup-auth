@@ -13,9 +13,13 @@ class ChainPropertyAccessTest extends \PHPUnit_Framework_TestCase
 {
 
         /**
+         * @var AuthenticatorChain
+         */
+        protected $chains;
+        /**
          * @var ChainArrayAccess
          */
-        protected $chain;
+        protected $access;
         /**
          * @var ChainAccessObject
          */
@@ -28,9 +32,8 @@ class ChainPropertyAccessTest extends \PHPUnit_Framework_TestCase
         protected function setUp()
         {
                 $this->object = new ChainAccessObject();
-                $this->chain = new ChainPropertyAccess(
-                    new AuthenticatorChain(array('obj1' => $this->object)
-                ));
+                $this->chains = new AuthenticatorChain(array('obj1' => $this->object));
+                $this->access = new ChainPropertyAccess($this->chains, true);
         }
 
         /**
@@ -47,12 +50,12 @@ class ChainPropertyAccessTest extends \PHPUnit_Framework_TestCase
          */
         public function test__get()
         {
-                $this->assertNotNull($this->chain->obj1);
-                $this->assertNotNull($this->chain->obj2);     // created "on demand"
-                $this->assertNotNull($this->chain->obj2->sub);
+                $this->assertNotNull($this->access->obj1);
+                $this->assertNotNull($this->access->obj2);     // created "on demand"
+                $this->assertNotNull($this->access->obj2->sub);
 
-                $this->assertTrue($this->chain->obj1 instanceof ChainPropertyAccess);
-                $this->assertTrue($this->chain->obj2 instanceof ChainPropertyAccess);
+                $this->assertTrue($this->access->obj1 instanceof ChainPropertyAccess);
+                $this->assertTrue($this->access->obj2 instanceof ChainPropertyAccess);
         }
 
         /**
@@ -60,16 +63,15 @@ class ChainPropertyAccessTest extends \PHPUnit_Framework_TestCase
          */
         public function test__set()
         {
-                $this->chain->obj1->prop = 3;       // use property
-                $this->assertTrue($this->chain->obj1->prop == $this->object->prop);
-                $this->chain->obj1->func = 2;       // use function
-                $this->assertTrue($this->chain->obj1->func == $this->object->func);
-                $this->chain->obj1->name = "xxx";   // throws
+                $this->access->obj1->prop = 3;       // use property
+                $this->assertTrue($this->access->obj1->prop == $this->object->prop);
+                $this->access->obj1->func = 2;       // use function
+                $this->assertTrue($this->access->obj1->func == $this->object->func);
 
-                $this->chain->obj2 = new ChainAccessObject();
-                $this->chain->obj2->prop = 5;
-                $this->assertTrue($this->chain->obj2->prop == 5);
-                $this->assertTrue($this->chain->obj1->prop == $this->object->prop);
+                $this->access->obj2 = new ChainAccessObject();
+                $this->access->obj2->prop = 5;
+                $this->assertTrue($this->access->obj2->prop == 5);
+                $this->assertTrue($this->access->obj1->prop == $this->object->prop);
         }
 
         /**
@@ -77,8 +79,8 @@ class ChainPropertyAccessTest extends \PHPUnit_Framework_TestCase
          */
         public function test__isset()
         {
-                $this->assertTrue(isset($this->chain->obj1));
-                $this->assertFalse(isset($this->chain->obj2));
+                $this->assertTrue(isset($this->access->obj1));
+                $this->assertFalse(isset($this->access->obj2));
         }
 
         /**
@@ -86,9 +88,18 @@ class ChainPropertyAccessTest extends \PHPUnit_Framework_TestCase
          */
         public function test__unset()
         {
-                $this->assertTrue(isset($this->chain->obj1));
-                unset($this->chain->obj1);
-                $this->assertFalse(isset($this->chain->obj1));
+                $this->assertTrue(isset($this->access->obj1));
+                unset($this->access->obj1);
+                $this->assertFalse(isset($this->access->obj1));
+        }
+
+        /**
+         * @expectedException Exception
+         */
+        public function testThrows()
+        {
+                // throws: Failed set property name on immutable non-chain object
+                $this->access->obj1->name = "xxx";
         }
 
 }
