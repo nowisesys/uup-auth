@@ -27,7 +27,7 @@ limitations under the License.
                 //  Example for HTTP Basic Authentication
                 //  
                 //  This example use an SQLite database as account source (for SQL validator)
-                //  and session storage. The credentials for aauthentication is obtained
+                //  and session storage. The credentials for authentication is obtained
                 //  using HTTP basic authentication.
                 // ==========================================================================
                 require_once __DIR__ . '/../vendor/autoload.php';

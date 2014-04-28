@@ -22,7 +22,7 @@ namespace UUP\Authentication\Stack;
  * Chain of authenticators and sub chains.
  * 
  * This class represents a single authenticator chain that contains authenticator
- * objects, and possibly other authenticator sub chains if building hierachic
+ * objects, and possibly other authenticator sub chains if building hierarchic
  * trees of authenticator objects, see documentation for append.
  * 
  * This class provides access to and manipulation of authenticators and child 

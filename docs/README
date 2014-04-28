@@ -7,7 +7,8 @@ to support multiple authentication method in a uniform way.
 
 Bundled are also authenticators for performing access restriction (i.e. on 
 time of day or the ip-address/hostname). All authenticators in the stack can
-be set as required or sufficient to control how that authenticator applies.
+be set as required or sufficient to enforce logon policy (i.e. require CAS-logon
+from outside of LAN while supporting Kerberos logon from inside).
 
     * See the example directory for working code.
     * See API docs on http://it.bmc.uu.se/andlov/php/proj/uup/uup-auth
