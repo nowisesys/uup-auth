@@ -83,7 +83,7 @@ limitations under the License.
                                 $chain->auth->pam = new SystemAuthentication();
                                 $chain->auth->pam->visible = true;
                                 $chain->auth->pam->control = Authenticator::sufficient;
-                                $chain->auth->pam->name('System');
+                                $chain->auth->pam->name = 'System';
                                 $chain->auth->pam->description = 'Login using local system account.';
 
                                 $chain->auth->cas = new CasAuthenticator('cas.example.com');
