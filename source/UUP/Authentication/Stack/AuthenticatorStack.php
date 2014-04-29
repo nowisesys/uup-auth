@@ -213,14 +213,17 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator
         {
                 if (!$this->authenticator->authenticated()) {
                         foreach ($this->authenticators() as $authenticator) {
-                                if ($authenticator->authenticated()) {
-                                        if ($authenticator->control === Authenticator::sufficient) {
-                                                $this->authenticator = $authenticator;
-                                        }
-                                } else {
-                                        if ($authenticator->control === Authenticator::required) {
+                                if ($authenticator->control === Authenticator::required) {
+                                        if (!$authenticator->authenticated()) {
                                                 throw new AuthenticatorRequiredException($authenticator->authenticator);
                                         }
+                                }
+                        }
+                        foreach ($this->authenticators() as $authenticator) {
+                                if ($authenticator->control === Authenticator::sufficient &&
+                                    $authenticator->authenticated()) {
+                                        $this->authenticator = $authenticator;
+                                        break;
                                 }
                         }
                 }
@@ -250,7 +253,9 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator
          */
         public function logout()
         {
-                $this->authenticator->logout();
+                if ($this->authenticated()) {
+                        $this->authenticator->logout();
+                }
         }
 
 }
