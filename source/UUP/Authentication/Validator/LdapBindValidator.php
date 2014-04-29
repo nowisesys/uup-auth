@@ -52,6 +52,9 @@ class LdapBindValidator extends LdapConnector
 
         public function authenticate()
         {
+                if (!isset($this->user) || strlen($this->user) == 0) {
+                        return false;
+                }
                 try {
                         $this->bind($this->user, $this->pass);
                         return true;

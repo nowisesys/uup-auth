@@ -100,6 +100,10 @@ class LdapSearchValidator extends LdapConnector
 
         public function authenticate()
         {
+                if (!isset($this->user) || strlen($this->user) == 0) {
+                        return false;
+                }
+                
                 $filter = sprintf($this->filter, $this->user, $this->pass);
 
                 if (!($result = ldap_search($this->handle, $this->basedn, $filter))) {
