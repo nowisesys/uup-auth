@@ -115,6 +115,14 @@ limitations under the License.
 
                 try {
                         $authenticator = new Authentication();
+                        
+                        if (isset($_GET['login'])) {
+                                $authenticator->activate($_GET['login']);
+                                $authenticator->login();
+                        }
+                        if (isset($_GET['logout'])) {
+                                $authenticator->logout();
+                        }
 
                         if ($authenticator->authenticated()) {
                                 printf("<p>Logged on to %s as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getName(), $authenticator->getUser());
@@ -127,14 +135,6 @@ limitations under the License.
                                 printf("</select>\n");
                                 printf("<input type=\"submit\" value=\"Login\">\n");
                                 printf("</form>\n");
-                        }
-                        
-                        if (isset($_GET['login'])) {
-                                $authenticator->activate($_GET['login']);
-                                $authenticator->login();
-                        }
-                        if (isset($_GET['logout'])) {
-                                $authenticator->logout();
                         }
                 } catch (\Exception $exception) {
                         printf("Exception: %s", $exception);
