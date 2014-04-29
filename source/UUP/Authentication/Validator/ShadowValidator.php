@@ -67,6 +67,9 @@ class ShadowValidator extends CredentialValidator
 
         public function authenticate()
         {
+                if (!isset($this->user) || strlen($this->user) == 0) {
+                        return false;
+                }
                 if (($pass = $this->password()) != null) {
                         return crypt($this->pass, $pass) == $pass;
                 } else {
