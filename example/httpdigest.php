@@ -56,7 +56,7 @@ limitations under the License.
                                 $this->exec("DROP TABLE IF EXISTS users");
                                 $this->exec("CREATE TABLE sessions(user varchar(10), logon TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)");
                                 $this->exec("CREATE TABLE users(user varchar(10), pass varchar(10))");
-                                $this->exec("INSERT INTO users(user, pass) VALUES('admin', 'admin')");                                
+                                $this->exec("INSERT INTO users(user, pass) VALUES('admin', 'admin')");
                         }
 
                 }
@@ -65,10 +65,9 @@ limitations under the License.
                         $sqlite = sprintf("sqlite:/%s/%s.sql", sys_get_temp_dir(), basename(__FILE__));
                         $objpdo = new \PDO($sqlite, null, null);
 
-                        $storage = new DataStorage($objpdo);
                         $validator = new DataValidator($objpdo);
-                        
-                        $authenticator = new DigestHttpAuthenticator($validator, $storage, "HTTP Digest Authentication Example");
+
+                        $authenticator = new DigestHttpAuthenticator($validator, "HTTP Digest Authentication Example");
 //                        $authenticator->redirect = basename(__FILE__);
                         $authenticator->message = "Logon cancelled by caller";
 
@@ -79,6 +78,7 @@ limitations under the License.
                                 $authenticator->logout();
                         }
                         if (isset($_GET['create'])) {
+                                $storage = new DataStorage($objpdo);
                                 $storage->setup();
                         }
 
@@ -87,9 +87,6 @@ limitations under the License.
                         } else {
                                 printf("<p><a href=\"?login\">Login</a>\n");
                         }
-
-                        print_r($_REQUEST);
-                        print_r($_SERVER);
 
                         printf("<p>Use 'admin'/'admin' as username and password.</p>\n");
                 } catch (\Exception $exception) {

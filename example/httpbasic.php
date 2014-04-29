@@ -22,7 +22,6 @@ limitations under the License.
         <body>
                 <h1>HTTP Basic Authentication</h1>
                 <?php
-                
                 // ==========================================================================
                 //  Example for HTTP Basic Authentication
                 //  
@@ -45,18 +44,17 @@ limitations under the License.
                                 $this->exec("DROP TABLE IF EXISTS users");
                                 $this->exec("CREATE TABLE sessions(user varchar(10), logon TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL)");
                                 $this->exec("CREATE TABLE users(user varchar(10), pass varchar(10))");
-                                $this->exec("INSERT INTO users(user, pass) VALUES('admin', 'admin')");                                
+                                $this->exec("INSERT INTO users(user, pass) VALUES('admin', 'admin')");
                         }
 
                 }
-                
+
                 try {
                         $sqlite = sprintf("sqlite:/%s/%s.sql", sys_get_temp_dir(), basename(__FILE__));
                         $objpdo = new \PDO($sqlite, null, null);
 
-                        $storage = new DataStorage($objpdo);
                         $validator = new SqlValidator($objpdo);
-                        $authenticator = new BasicHttpAuthenticator($validator, $storage, "HTTP Basic Authentication Example");
+                        $authenticator = new BasicHttpAuthenticator($validator, "HTTP Basic Authentication Example");
                         $authenticator->message = "Logon cancelled by caller";
 //                        $authenticator->redirect = basename(__FILE__);
 
@@ -67,6 +65,7 @@ limitations under the License.
                                 $authenticator->logout();
                         }
                         if (isset($_GET['create'])) {
+                                $storage = new DataStorage($objpdo);
                                 $storage->setup();
                         }
 

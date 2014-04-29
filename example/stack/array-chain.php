@@ -43,8 +43,7 @@ limitations under the License.
                     UUP\Authentication\BasicHttpAuthenticator,
                     UUP\Authentication\CasAuthenticator,
                     UUP\Authentication\Validator\PamValidator,
-                    UUP\Authentication\Validator\LdapBindValidator,
-                    UUP\Authentication\Storage\SessionStorage;
+                    UUP\Authentication\Validator\LdapBindValidator;
 
                 class LdapAuthenticator extends BasicHttpAuthenticator
                 {
@@ -52,7 +51,7 @@ limitations under the License.
                         public function __construct($host, $port = 636)
                         {
                                 parent::__construct(
-                                    new LdapBindValidator($host, $port), new SessionStorage('ldap', false), 'LDAP Authentication'
+                                    new LdapBindValidator($host, $port), 'LDAP Authentication'
                                 );
                         }
 
@@ -64,7 +63,7 @@ limitations under the License.
                         public function __construct()
                         {
                                 parent::__construct(
-                                    new PamValidator(), new SessionStorage('pam', false), 'System Authentication'
+                                    new PamValidator(), 'System Authentication'
                                 );
                         }
 
@@ -117,6 +116,14 @@ limitations under the License.
                 try {
                         $authenticator = new Authentication();
 
+                        if (isset($_GET['login'])) {
+                                $authenticator->activate($_GET['login']);
+                                $authenticator->login();
+                        }
+                        if (isset($_GET['logout'])) {
+                                $authenticator->logout();
+                        }
+
                         if ($authenticator->authenticated()) {
                                 printf("<p>Logged on to %s as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getName(), $authenticator->getUser());
                         } else {
@@ -128,14 +135,6 @@ limitations under the License.
                                 printf("</select>\n");
                                 printf("<input type=\"submit\" value=\"Login\">\n");
                                 printf("</form>\n");
-                        }
-
-                        if (isset($_GET['login'])) {
-                                $authenticator->activate($_GET['login']);
-                                $authenticator->login();
-                        }
-                        if (isset($_GET['logout'])) {
-                                $authenticator->logout();
                         }
                 } catch (\Exception $exception) {
                         printf("Exception: %s", $exception);

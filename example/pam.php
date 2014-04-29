@@ -22,7 +22,6 @@ limitations under the License.
         <body>
                 <h1>PAM Authentication Example</h1>
                 <?php
-                
                 // ==========================================================================
                 //  PAM module auhentication.
                 //  
@@ -34,19 +33,19 @@ limitations under the License.
                 //  In addition to install the PAM extension, the authentication sources 
                 //  must be readable. For local system account authentication this usually
                 //  implies that /etc/shadow should be readable by the user account the
-                //  web server is running as.
+                //  web server is running as:
+                //  
+                //  bash$> setfacl -m u:apache:r /etc/shadow
                 // ==========================================================================
 
                 require_once __DIR__ . '/../vendor/autoload.php';
 
-                use UUP\Authentication\Storage\SharedMemoryStorage;
                 use UUP\Authentication\Validator\PamValidator;
                 use UUP\Authentication\BasicHttpAuthenticator;
 
                 try {
                         $validator = new PamValidator();
-                        $storage = new SharedMemoryStorage();
-                        $authenticator = new BasicHttpAuthenticator($validator, $storage, "PAM Authentication Example");
+                        $authenticator = new BasicHttpAuthenticator($validator, "PAM Authentication Example");
                         $authenticator->message = "Logon cancelled by caller";
 //                        $authenticator->redirect = basename(__FILE__);
                         $validator->errlog = true;
@@ -68,6 +67,7 @@ limitations under the License.
                         printf("<p>Use a system user account for login.</p>\n");
                 } catch (\Exception $exception) {
                         printf("Exception: %s", $exception);
+                        $authenticator->logout();
                 }
 
                 ?>

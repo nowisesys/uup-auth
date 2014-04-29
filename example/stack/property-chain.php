@@ -43,8 +43,7 @@ limitations under the License.
                     UUP\Authentication\BasicHttpAuthenticator,
                     UUP\Authentication\CasAuthenticator,
                     UUP\Authentication\Validator\PamValidator,
-                    UUP\Authentication\Validator\LdapBindValidator,
-                    UUP\Authentication\Storage\SessionStorage;
+                    UUP\Authentication\Validator\LdapBindValidator;
 
                 class LdapAuthenticator extends BasicHttpAuthenticator
                 {
@@ -52,7 +51,7 @@ limitations under the License.
                         public function __construct($host, $port = 636)
                         {
                                 parent::__construct(
-                                    new LdapBindValidator($host, $port), new SessionStorage('ldap', false), 'LDAP Authentication'
+                                    new LdapBindValidator($host, $port), 'LDAP Authentication'
                                 );
                         }
 
@@ -64,7 +63,7 @@ limitations under the License.
                         public function __construct()
                         {
                                 parent::__construct(
-                                    new PamValidator(), new SessionStorage('pam', false), 'System Authentication'
+                                    new PamValidator(), 'System Authentication'
                                 );
                         }
 
