@@ -19,8 +19,7 @@
 
 namespace UUP\Authentication\Library\Authenticator;
 
-use UUP\Authentication\Validator\Validator,
-    UUP\Authentication\Storage\Storage;
+use UUP\Authentication\Validator\Validator;
 
 /**
  * Trait for HTTP authenticators. 
@@ -55,10 +54,6 @@ trait HttpAuthenticator
          */
         private $validator;
         /**
-         * @var Storage 
-         */
-        private $storage;
-        /**
          * @var string The authentication realm.
          */
         private $realm;
@@ -75,13 +70,11 @@ trait HttpAuthenticator
          * Configure the property bag for this trait.
          * 
          * @param Validator $validator The validator callback object.
-         * @param Storage $storage The storage backend object.
          * @param string $realm The authentication realm.
          */
-        private function config($validator, $storage, $realm)
+        private function config($validator, $realm)
         {
                 $this->validator = $validator;
-                $this->storage = $storage;
                 $this->realm = $realm;
         }
 
@@ -99,7 +92,12 @@ trait HttpAuthenticator
 
         public function authenticated()
         {
-                return $this->storage->exist($this->user);
+                try {
+                        return $this->validator->authenticate();
+                } catch (\Exception $exception) {
+                        error_log($exception->getMessage());
+                        $this->unauthorized();
+                }
         }
 
         public function getUser()
@@ -109,18 +107,20 @@ trait HttpAuthenticator
 
         public function login()
         {
-                if (strlen($this->user) == 0) {
+                try {
+                        if (strlen($this->user) == 0) {
+                                $this->unauthorized();
+                        } elseif (!$this->validator->authenticate()) {
+                                $this->unauthorized();
+                        }
+                } catch (\Exception $exception) {
+                        error_log($exception->getMessage());
                         $this->unauthorized();
-                } elseif (!$this->validator->authenticate()) {
-                        $this->unauthorized();
-                } else {
-                        $this->storage->insert($this->user);
                 }
         }
 
         public function logout()
         {
-                $this->storage->remove($this->user);
                 $this->unauthorized();
         }
 

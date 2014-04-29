@@ -142,7 +142,9 @@ namespace UUP\Authentication\Library\Authenticator {
 namespace UUP\Authentication {
 
         use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
-            UUP\Authentication\Validator\PasswordProvider;
+            UUP\Authentication\Validator\PasswordProvider,
+            UUP\Authentication\Library\Authenticator\DigestHttpMessage,
+            UUP\Authentication\Library\Authenticator\DigestHttpResponse;
 
         /**
          * Digest HTTP (WWW-Authenticate) authenticator.
@@ -161,16 +163,19 @@ namespace UUP\Authentication {
                 /**
                  * Constructor.
                  * 
-                 * The supplied Validator object must implement the PasswordProvider interface.
+                 * The supplied Validator object must implement the PasswordProvider 
+                 * interface to support retrieval of password in clear text in the
+                 * server side. This is a inherent requirement due to how the digest
+                 * authentication method works.
+                 * 
                  * @param Validator $validator The validator callback object.
-                 * @param Storage $storage The storage backend object.
                  * @param string $realm The authentication realm.
                  * @param array $required Restriction on required digest parts.
                  * @see PasswordProvider
                  */
-                public function __construct($validator, $storage, $realm, $required = array('nonce' => 1, 'nc' => 1, 'cnonce' => 1, 'qop' => 1, 'username' => 1, 'uri' => 1, 'response' => 1, 'algorithm' => 0))
+                public function __construct($validator, $realm, $required = array('nonce' => 1, 'nc' => 1, 'cnonce' => 1, 'qop' => 1, 'username' => 1, 'uri' => 1, 'response' => 1, 'algorithm' => 0))
                 {
-                        $this->config($validator, $storage, $realm);
+                        $this->config($validator, $realm);
                         $this->initialize($required);
                 }
 
@@ -185,21 +190,27 @@ namespace UUP\Authentication {
                                         $digest = substr($_SERVER['HTTP_AUTHORIZATION'], 7);
                                 }
                         }
-                        if (isset($digest)) {
-                                // 
-                                // Kind of messy. Authentication is done in two steps:
-                                // 
-                                // 1. Authenticate the digest message.
-                                // 2. Authenticate the user/pass against the selected validator.
-                                // 
-                                $message = new DigestHttpMessage($digest, $required);
-                                $response = new DigestHttpResponse($this->validator);
-                                if ($response->validate($message, $this->realm)) {
-                                        $user = $message->username;
-                                        $pass = $this->validator->getPassword($user);
-                                        $this->validator->setCredentials($user, $pass);
-                                        $this->user = $message->username;
-                                }
+                        if (!isset($digest)) {
+                                return;         // No digest message to authenticate
+                        }
+
+                        // 
+                        // This is were things start to get messy. The authentication
+                        // is done in two distinct steps:
+                        // 
+                        //   1. Authenticate the digest message itself.
+                        //   2. Authenticate the username/password against the validator.
+                        // 
+                        // The second step is performed when calling the authenticated()
+                        // method. The account validation is defered until later to make 
+                        // this code behave well with session authentication.
+                        // 
+                        $message = new DigestHttpMessage($digest, $required);
+                        $response = new DigestHttpResponse($this->validator);
+                        if ($response->validate($message, $this->realm)) {
+                                $this->user = $message->username;
+                                $this->pass = $this->validator->getPassword($this->user);
+                                $this->validator->setCredentials($this->user, $this->pass);
                         }
                 }
 
