@@ -83,6 +83,9 @@ class PamValidator extends CredentialValidator
 
         public function authenticate()
         {
+                if (!isset($this->user) || strlen($this->user) == 0) {
+                        return false;
+                }
                 if (pam_auth($this->user, $this->pass, $this->errmsg, false)) {
                         return true;
                 } else {
