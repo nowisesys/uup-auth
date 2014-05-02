@@ -26,7 +26,7 @@ limitations under the License.
                 //  Simple test of session storage.
                 // ==========================================================================
 
-                require_once __DIR__ . '/../vendor/autoload.php';
+                require_once __DIR__ . '/../../vendor/autoload.php';
 
                 use UUP\Authentication\Storage\SessionStorage;
 
@@ -36,8 +36,6 @@ limitations under the License.
                 try {
 
                         $session = new SessionStorage($name, false, false);
-
-                        printf("<h1>Session Storage Test</h1>\n");
 
                         if (isset($_REQUEST['remove'])) {
                                 $session->remove($user);
