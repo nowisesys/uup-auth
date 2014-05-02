@@ -98,8 +98,8 @@ class SessionStorage implements Storage
         /**
          * Constructor.
          * @param string $name The session data name.
-         * @param bool $require_https_connection Enforce session over HTTPS.
-         * @param bool $require_matching_ipaddr Require callers IP-address to match IP-address saved in session data.
+         * @param bool $https Enforce session over HTTPS.
+         * @param bool $match Require callers IP-address to match IP-address saved in session data.
          * @throws Exception
          */
         public function __construct($name = null, $https = true, $match = true)
