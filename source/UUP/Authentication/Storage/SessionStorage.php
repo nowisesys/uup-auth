@@ -170,7 +170,7 @@ class SessionStorage implements Storage
          * Get session data.
          * @return SessionData
          */
-        private function read()
+        public function read()
         {
                 session_start();
                 $data = isset($_SESSION[$this->name]) ? $_SESSION[$this->name] : new SessionData();
