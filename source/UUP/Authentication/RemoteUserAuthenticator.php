@@ -60,7 +60,6 @@ class RemoteUserAuthenticator extends AuthenticatorBase
         const logout = 'logout';
 
         protected $options;
-        private $redirto = 'HTTP_REFERER';
         private $subject = 'REMOTE_USER';
         private $handler;
         private $return;
