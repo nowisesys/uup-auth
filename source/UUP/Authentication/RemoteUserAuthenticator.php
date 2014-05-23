@@ -48,7 +48,7 @@ use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
  * );
  * </code>
  * 
- * @property-write string $return The redirect URL on login/logout.
+ * @property string $return The redirect URL on login/logout.
  * @property-write string $subject Override the subject (authenticated user) mapping.
  * 
  * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
@@ -59,7 +59,7 @@ class RemoteUserAuthenticator extends AuthenticatorBase
         const login = 'login';
         const logout = 'logout';
 
-        private $options;
+        protected $options;
         private $redirto = 'HTTP_REFERER';
         private $subject = 'REMOTE_USER';
         private $handler;
@@ -72,6 +72,22 @@ class RemoteUserAuthenticator extends AuthenticatorBase
         public function __construct($options)
         {
                 $this->options = $options;
+                
+                if (empty($this->return)) {
+                        $this->return = filter_input(INPUT_SERVER, 'HTTP_REFERER');
+                }
+                if (empty($this->return)) {
+                        $this->return = filter_input(INPUT_SERVER, 'REQUEST_URI');
+                }
+        }
+
+        public function __get($name)
+        {
+                if ($name == 'return') {
+                        return $this->return;
+                } else {
+                        return parent::__get($name);
+                }
         }
 
         public function __set($name, $value)
@@ -108,9 +124,6 @@ class RemoteUserAuthenticator extends AuthenticatorBase
         {
                 if (!isset($this->handler)) {
                         $this->handler = $this->options[$method];
-                }
-                if (!isset($this->return)) {
-                        $this->return = $_SERVER[$this->redirto];
                 }
 
                 header(sprintf("Location: %s", self::destination($this->handler, $this->return)));
