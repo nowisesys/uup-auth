@@ -100,7 +100,7 @@ trait HttpAuthenticator
                 }
         }
 
-        public function getUser()
+        public function getSubject()
         {
                 return $this->user;
         }

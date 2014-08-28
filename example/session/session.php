@@ -57,7 +57,7 @@ limitations under the License.
                         }
 
                         if ($session->accepted()) {
-                                printf("<p>Logged on as %s | <a href=\"?logout\">Logout</a>\n", $session->getUser());
+                                printf("<p>Logged on as %s | <a href=\"?logout\">Logout</a>\n", $session->getSubject());
                         } else {
                                 printf("<p><a href=\"?login\">Login</a>\n");
                         }

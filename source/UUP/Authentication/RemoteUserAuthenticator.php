@@ -104,7 +104,7 @@ class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, A
                 return isset($_SERVER[$this->subject]);
         }
 
-        public function getUser()
+        public function getSubject()
         {
                 return $_SERVER[$this->subject];
         }

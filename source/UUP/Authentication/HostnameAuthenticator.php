@@ -61,7 +61,7 @@ class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Aut
                 return gethostbyaddr($_SERVER['REMOTE_ADDR']) == $this->accept;
         }
 
-        public function getUser()
+        public function getSubject()
         {
                 return $this->accept;
         }

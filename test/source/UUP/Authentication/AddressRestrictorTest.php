@@ -530,7 +530,7 @@ class AddressRestrictorTest extends \PHPUnit_Framework_TestCase
          */
         public function testGetUser()
         {
-                $this->assertTrue($this->object->getUser() == $_SERVER['REMOTE_ADDR']);
+                $this->assertTrue($this->object->getSubject() == $_SERVER['REMOTE_ADDR']);
         }
 
 }

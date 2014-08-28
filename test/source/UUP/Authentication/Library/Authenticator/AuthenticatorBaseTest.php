@@ -13,7 +13,7 @@ class DummyAuthenticator extends AuthenticatorBase implements Authenticator, Res
                 
         }
 
-        public function getUser()
+        public function getSubject()
         {
                 
         }

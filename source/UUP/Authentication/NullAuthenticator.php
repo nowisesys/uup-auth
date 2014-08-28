@@ -38,7 +38,7 @@ class NullAuthenticator implements Restrictor, Authenticator
                 return false;
         }
 
-        public function getUser()
+        public function getSubject()
         {
                 return "";
         }

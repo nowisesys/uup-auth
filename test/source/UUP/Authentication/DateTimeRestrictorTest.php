@@ -65,7 +65,7 @@ class DateTimeRestrictorTest extends \PHPUnit_Framework_TestCase
          */
         public function testGetUser()
         {
-                $this->assertTrue(is_string($this->cdt->getUser()));
+                $this->assertTrue(is_string($this->cdt->getSubject()));
         }
 
 }

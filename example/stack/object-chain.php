@@ -122,7 +122,7 @@ limitations under the License.
                         }
 
                         if ($authenticator->accepted()) {
-                                printf("<p>Logged on to %s as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getName(), $authenticator->getUser());
+                                printf("<p>Logged on to %s as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getName(), $authenticator->getSubject());
                         } else {
                                 printf("<form action=\"\" method=\"GET\">\n");
                                 printf("<select name=\"login\">\n");

@@ -35,8 +35,8 @@ interface Restrictor
         function accepted();
 
         /**
-         * Get logged on username.
+         * Get subject (e.g. logged on user).
          * @return string
          */
-        function getUser();
+        function getSubject();
 }

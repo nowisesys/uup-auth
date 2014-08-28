@@ -39,7 +39,7 @@ limitations under the License.
                 $authenticator = new HostnameAuthenticator();
                 // $authenticator->setHostname('hostname');
                 printf("<p>\n");
-                printf("Name: %s<br>\n", $authenticator->getUser());
+                printf("Name: %s<br>\n", $authenticator->getSubject());
                 printf("Authenticated: %s<br>\n", $authenticator->accepted() ? "yes" : "no");
                 printf("</p>\n");
 

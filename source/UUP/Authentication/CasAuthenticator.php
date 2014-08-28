@@ -67,9 +67,9 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                 return $result;
         }
 
-        public function getUser()
+        public function getSubject()
         {
-                return $this->client->getUser();
+                return $this->client->getSubject();
         }
 
         public function login()

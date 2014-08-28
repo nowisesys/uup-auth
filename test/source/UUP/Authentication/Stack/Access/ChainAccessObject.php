@@ -55,7 +55,7 @@ class ChainAccessObject implements Authenticator, Restrictor
                 
         }
 
-        public function getUser()
+        public function getSubject()
         {
                 
         }

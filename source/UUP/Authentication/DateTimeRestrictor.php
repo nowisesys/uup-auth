@@ -101,7 +101,7 @@ class DateTimeRestrictor extends AuthenticatorBase implements Restrictor
                 return ($this->stime <= time()) && (time() <= $this->etime);
         }
 
-        public function getUser()
+        public function getSubject()
         {
                 return strftime("%x %X", time());
         }

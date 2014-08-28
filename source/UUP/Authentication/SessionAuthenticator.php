@@ -59,30 +59,30 @@ class SessionAuthenticator extends AuthenticatorBase implements Restrictor, Auth
 
         public function accepted()
         {
-                if ($this->storage->exist($this->authenticator->getUser())) {
+                if ($this->storage->exist($this->authenticator->getSubject())) {
                         return true;
                 } elseif ($this->authenticator->accepted()) {
-                        $this->storage->insert($this->authenticator->getUser());
+                        $this->storage->insert($this->authenticator->getSubject());
                         return true;
                 } else {
                         return false;
                 }
         }
 
-        public function getUser()
+        public function getSubject()
         {
-                return $this->authenticator->getUser();
+                return $this->authenticator->getSubject();
         }
 
         public function login()
         {
                 $this->authenticator->login();
-                $this->storage->insert($this->authenticator->getUser());
+                $this->storage->insert($this->authenticator->getSubject());
         }
 
         public function logout()
         {
-                $this->storage->remove($this->authenticator->getUser());
+                $this->storage->remove($this->authenticator->getSubject());
                 $this->authenticator->logout();
         }
 

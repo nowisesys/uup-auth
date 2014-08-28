@@ -235,9 +235,9 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
          * Get username from current accepted authenticator.
          * @return string 
          */
-        public function getUser()
+        public function getSubject()
         {
-                return $this->authenticator->getUser();
+                return $this->authenticator->getSubject();
         }
 
         /**

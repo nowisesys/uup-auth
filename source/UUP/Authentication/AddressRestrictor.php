@@ -227,10 +227,10 @@ namespace UUP\Authentication {
 
                 public function accepted()
                 {
-                        return $this->match($this->getUser());
+                        return $this->match($this->getSubject());
                 }
 
-                public function getUser()
+                public function getSubject()
                 {
                         return $_SERVER['REMOTE_ADDR'];
                 }
