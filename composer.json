@@ -1,6 +1,6 @@
 {
     "name": "bmc/uup-auth",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Flexible authentication stack supporting multiple credential obtaining methods and account validation backends.",
     "type": "library",
     "keywords": ["authentication", "auth", "uup", "bmc"],
