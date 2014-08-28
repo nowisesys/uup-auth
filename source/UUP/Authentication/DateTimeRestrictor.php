@@ -21,7 +21,7 @@ namespace UUP\Authentication;
 use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
 
 /**
- * DateTime authenticator.
+ * DateTime restrictor.
  * 
  * This class is intended to be used for access restriction based on start and
  * end time. It could be used as a required authenticator in an authenticator
@@ -29,7 +29,7 @@ use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
  * 
  * Example for restriction to a daily recurring interval when access is allowed:
  * <code>
- * class DateTimeRestrictor extends DateTimeAuthenticator
+ * class AccessRestrictor extends DateTimeRestrictor
  * {
  * 
  *      public function authenticate()
@@ -50,8 +50,8 @@ use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
  * $stime = mktime(8, 30, 0);   // start time
  * $etime = mktime(16, 0, 0);   // end time
  * 
- * $authenticator = new DateTimeRestrictor($stime, $etime);
- * $authenticator->authenticate();      // kill script outside of access time period.
+ * $restrictor = new AccessRestrictor($stime, $etime);
+ * $restrictor->authenticate();      // kill script outside of access time period.
  * </code>
  * 
  * @property-read int $start The start time (UNIX timestamp).
@@ -61,7 +61,7 @@ use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
  * @package UUP
  * @subpackage Authentication
  */
-class DateTimeAuthenticator extends AuthenticatorBase
+class DateTimeRestrictor extends AuthenticatorBase implements Restrictor
 {
 
         /**
@@ -104,16 +104,6 @@ class DateTimeAuthenticator extends AuthenticatorBase
         public function getUser()
         {
                 return strftime("%x %X", time());
-        }
-
-        public function login()
-        {
-                // ignore
-        }
-
-        public function logout()
-        {
-                // ignore
         }
 
 }
