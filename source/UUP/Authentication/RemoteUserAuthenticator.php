@@ -99,7 +99,7 @@ class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, A
                 }
         }
 
-        public function authenticated()
+        public function accepted()
         {
                 return isset($_SERVER[$this->subject]);
         }

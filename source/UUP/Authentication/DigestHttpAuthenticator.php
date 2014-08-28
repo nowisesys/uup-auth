@@ -201,7 +201,7 @@ namespace UUP\Authentication {
                         //   1. Authenticate the digest message itself.
                         //   2. Authenticate the username/password against the validator.
                         // 
-                        // The second step is performed when calling the authenticated()
+                        // The second step is performed when calling the accepted()
                         // method. The account validation is defered until later to make 
                         // this code behave well with session authentication.
                         // 

@@ -96,7 +96,7 @@ class DateTimeRestrictor extends AuthenticatorBase implements Restrictor
                 }
         }
 
-        public function authenticated()
+        public function accepted()
         {
                 return ($this->stime <= time()) && (time() <= $this->etime);
         }

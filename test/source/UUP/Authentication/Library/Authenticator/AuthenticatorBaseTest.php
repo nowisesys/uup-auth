@@ -2,12 +2,13 @@
 
 namespace UUP\Authentication\Library\Authenticator;
 
-use UUP\Authentication\Authenticator;
+use UUP\Authentication\Authenticator,
+    UUP\Authentication\Restrictor;
 
-class DummyAuthenticator extends AuthenticatorBase
+class DummyAuthenticator extends AuthenticatorBase implements Authenticator, Restrictor
 {
 
-        public function authenticated()
+        public function accepted()
         {
                 
         }

@@ -56,7 +56,7 @@ limitations under the License.
                                 $session->logout();
                         }
 
-                        if ($session->authenticated()) {
+                        if ($session->accepted()) {
                                 printf("<p>Logged on as %s | <a href=\"?logout\">Logout</a>\n", $session->getUser());
                         } else {
                                 printf("<p><a href=\"?login\">Login</a>\n");

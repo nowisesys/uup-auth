@@ -41,14 +41,14 @@ class HostnameAuthenticatorTest extends \PHPUnit_Framework_TestCase
         }
 
         /**
-         * @covers UUP\Authentication\HostnameAuthenticator::authenticated
+         * @covers UUP\Authentication\HostnameAuthenticator::accepted
          */
-        public function testAuthenticated()
+        public function testAccepted()
         {
                 $hostname = 'www.example.com';
-                $this->assertEquals($this->object->authenticated(), true);
+                $this->assertEquals($this->object->accepted(), true);
                 $this->object->setHostname($hostname);
-                $this->assertEquals($this->object->authenticated(), false);
+                $this->assertEquals($this->object->accepted(), false);
         }
 
         /**

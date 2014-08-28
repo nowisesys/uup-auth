@@ -18,13 +18,14 @@
 
 namespace UUP\Authentication\Stack\Access;
 
-use UUP\Authentication\Authenticator;
+use UUP\Authentication\Authenticator,
+    UUP\Authentication\Restrictor;
 
 /**
  * Simple class for testing chain access.
  * @property int $prop
  */
-class ChainAccessObject implements Authenticator
+class ChainAccessObject implements Authenticator, Restrictor
 {
 
         private $prop;
@@ -49,7 +50,7 @@ class ChainAccessObject implements Authenticator
                 $this->func = $value;
         }
 
-        public function authenticated()
+        public function accepted()
         {
                 
         }

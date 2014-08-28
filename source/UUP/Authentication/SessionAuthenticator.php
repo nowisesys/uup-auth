@@ -38,7 +38,7 @@ class SessionAuthenticator extends AuthenticatorBase implements Restrictor, Auth
 {
 
         /**
-         * @var Authenticator 
+         * @var Authenticator|Restrictor 
          */
         private $authenticator;
         /**
@@ -57,11 +57,11 @@ class SessionAuthenticator extends AuthenticatorBase implements Restrictor, Auth
                 $this->storage = $storage;
         }
 
-        public function authenticated()
+        public function accepted()
         {
                 if ($this->storage->exist($this->authenticator->getUser())) {
                         return true;
-                } elseif ($this->authenticator->authenticated()) {
+                } elseif ($this->authenticator->accepted()) {
                         $this->storage->insert($this->authenticator->getUser());
                         return true;
                 } else {

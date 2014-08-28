@@ -23,7 +23,7 @@ use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
 /**
  * Hostname authenticator. 
  * 
- * The remote caller is considered as authenticated if a reverse lookup of 
+ * The remote host is considered as authenticated if a reverse lookup of 
  * IP-address in DNS matches the supplied hostname.
  *
  * @author Anders Lövgren (QNET/BMC CompDept)
@@ -56,7 +56,7 @@ class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Aut
                 $this->accept = $accept;
         }
 
-        public function authenticated()
+        public function accepted()
         {
                 return gethostbyaddr($_SERVER['REMOTE_ADDR']) == $this->accept;
         }

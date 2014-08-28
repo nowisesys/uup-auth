@@ -44,7 +44,7 @@ limitations under the License.
                 // $authenticator->clear();
                 printf("<p>\n");
                 printf("IP-Address: %s<br>\n", $authenticator->getUser());
-                printf("Authenticated: %s<br>\n", $authenticator->authenticated() ? "yes" : "no");
+                printf("Authenticated: %s<br>\n", $authenticator->accepted() ? "yes" : "no");
                 printf("</p>\n");
 
                 ?>

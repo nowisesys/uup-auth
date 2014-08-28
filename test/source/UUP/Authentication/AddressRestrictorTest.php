@@ -138,18 +138,18 @@ class AddressRestrictorTest extends \PHPUnit_Framework_TestCase
         }
 
         /**
-         * @covers UUP\Authentication\AddressRestrictor::authenticated
+         * @covers UUP\Authentication\AddressRestrictor::accepted
          */
-        public function testAuthenticated()
+        public function testAccepted()
         {
-                $this->assertTrue($this->object->authenticated());
+                $this->assertTrue($this->object->accepted());
                 $this->object->clear();
-                $this->assertFalse($this->object->authenticated());
+                $this->assertFalse($this->object->accepted());
                 $address = '192.168.1.2';
                 $this->object->add($address);
-                $this->assertFalse($this->object->authenticated());
+                $this->assertFalse($this->object->accepted());
                 $_SERVER['REMOTE_ADDR'] = $address;
-                $this->assertTrue($this->object->authenticated());
+                $this->assertTrue($this->object->accepted());
         }
 
         /**

@@ -90,7 +90,7 @@ trait HttpAuthenticator
                 }
         }
 
-        public function authenticated()
+        public function accepted()
         {
                 try {
                         return $this->validator->authenticate();

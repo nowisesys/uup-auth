@@ -21,10 +21,10 @@ namespace UUP\Authentication;
 /**
  * Null authenticator.
  * 
- * An authenticator that never accepts login and always return false from
- * authenticated(). This class is meant to be used for nuking login by adding it 
- * to the authenticator stack and setting it as required. Usage case might be if
- * the system is taken down for service.
+ * An authenticator that never accepts login and always return false from 
+ * accepted(). This class is meant to be used for nuking login by adding it 
+ * to the authenticator stack and setting it as required. Usage case might 
+ * be if the system is taken down for service.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -33,7 +33,7 @@ namespace UUP\Authentication;
 class NullAuthenticator implements Restrictor, Authenticator
 {
 
-        public function authenticated()
+        public function accepted()
         {
                 return false;
         }

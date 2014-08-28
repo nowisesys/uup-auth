@@ -69,7 +69,7 @@ limitations under the License.
                                 $storage->setup();
                         }
 
-                        if ($authenticator->authenticated()) {
+                        if ($authenticator->accepted()) {
                                 printf("<p>Logged on as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getUser());
                         } else {
                                 printf("<p><a href=\"?login\">Login</a>\n");

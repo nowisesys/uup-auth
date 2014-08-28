@@ -59,7 +59,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                 }
         }
 
-        public function authenticated()
+        public function accepted()
         {
                 $this->invoke();
                 $result = $this->client->isAuthenticated();

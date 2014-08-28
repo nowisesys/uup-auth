@@ -42,7 +42,7 @@ namespace UUP\Authentication {
          * <code>
          * $reserved = new AddressRestrictor('192.168.0.0/16');
          * $reserved->add(array('10.0.0.0/8', '172.16.0.0/12', '169.254.0.0/16');
-         * if(!$reserved->authenticated()) {
+         * if(!$reserved->accepted()) {
          *      die("Sorry, only reserved IPv4 addresses are allowed to access this page!");
          * }
          * </code>
@@ -225,7 +225,7 @@ namespace UUP\Authentication {
                         return false;
                 }
 
-                public function authenticated()
+                public function accepted()
                 {
                         return $this->match($this->getUser());
                 }

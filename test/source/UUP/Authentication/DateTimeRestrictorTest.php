@@ -51,13 +51,13 @@ class DateTimeRestrictorTest extends \PHPUnit_Framework_TestCase
         }
 
         /**
-         * @covers UUP\Authentication\DateTimeRestrictor::authenticated
+         * @covers UUP\Authentication\DateTimeRestrictor::accepted
          */
-        public function testAuthenticated()
+        public function testAccepted()
         {
-                $this->assertTrue($this->cdt->authenticated());
-                $this->assertFalse($this->pdt->authenticated());
-                $this->assertFalse($this->fdt->authenticated());
+                $this->assertTrue($this->cdt->accepted());
+                $this->assertFalse($this->pdt->accepted());
+                $this->assertFalse($this->fdt->accepted());
         }
 
         /**

@@ -19,6 +19,7 @@
 namespace UUP\Authentication\Stack;
 
 use UUP\Authentication\Authenticator,
+    UUP\Authentication\Restrictor,
     UUP\Authentication\NullAuthenticator,
     UUP\Authentication\Exception,
     UUP\Authentication\Stack\Filter\VisibilityFilterIterator;
@@ -42,7 +43,7 @@ use UUP\Authentication\Authenticator,
  * 
  *      public function logoff()
  *      {
- *              if($this->stack->authenticated()) {
+ *              if($this->stack->accepted()) {
  *                      $this->stack->logoff();       // Using current selected authenticator.
  *              }
  *      }
@@ -79,7 +80,7 @@ use UUP\Authentication\Authenticator,
  * // Login required on some other page:
  * // 
  * 
- * if(!$stack->authenticated()) {
+ * if(!$stack->accepted()) {
  *      header("location: /logon");     // Redirect to logon page
  * }
  * </code>
@@ -88,11 +89,11 @@ use UUP\Authentication\Authenticator,
  * @package UUP
  * @subpackage Authentication
  */
-class AuthenticatorStack extends AuthenticatorChain implements Authenticator
+class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Restrictor
 {
 
         /**
-         * @var Authenticator Current active authenticator.
+         * @var Authenticator|Restrictor Current active authenticator.
          */
         private $authenticator;
 
@@ -209,25 +210,25 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator
          * @return bool
          * @throws AuthenticatorRequiredException
          */
-        public function authenticated()
+        public function accepted()
         {
-                if (!$this->authenticator->authenticated()) {
+                if (!$this->authenticator->accepted()) {
                         foreach ($this->authenticators() as $authenticator) {
                                 if ($authenticator->control === Authenticator::required) {
-                                        if (!$authenticator->authenticated()) {
+                                        if (!$authenticator->accepted()) {
                                                 throw new AuthenticatorRequiredException($authenticator->authenticator);
                                         }
                                 }
                         }
                         foreach ($this->authenticators() as $authenticator) {
                                 if ($authenticator->control === Authenticator::sufficient &&
-                                    $authenticator->authenticated()) {
+                                    $authenticator->accepted()) {
                                         $this->authenticator = $authenticator;
                                         break;
                                 }
                         }
                 }
-                return $this->authenticator->authenticated();
+                return $this->authenticator->accepted();
         }
 
         /**
@@ -253,7 +254,7 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator
          */
         public function logout()
         {
-                if ($this->authenticated()) {
+                if ($this->accepted()) {
                         $this->authenticator->logout();
                 }
         }

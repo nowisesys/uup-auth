@@ -121,7 +121,7 @@ limitations under the License.
                                 $authenticator->logout();
                         }
 
-                        if ($authenticator->authenticated()) {
+                        if ($authenticator->accepted()) {
                                 printf("<p>Logged on to %s as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getName(), $authenticator->getUser());
                         } else {
                                 printf("<form action=\"\" method=\"GET\">\n");

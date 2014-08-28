@@ -115,7 +115,7 @@ class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, A
                 }
         }
 
-        public function authenticated()
+        public function accepted()
         {
                 $user = $this->session->read()->user;
                 return $this->session->exist($user);

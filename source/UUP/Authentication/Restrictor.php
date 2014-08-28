@@ -29,10 +29,10 @@ namespace UUP\Authentication;
 interface Restrictor
 {
         /**
-         * Check if caller is already authenticated.
+         * Check that restriction subject is satisfied (e.g. user is logged in).
          * @return bool
          */
-        function authenticated();
+        function accepted();
 
         /**
          * Get logged on username.
