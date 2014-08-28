@@ -18,7 +18,7 @@
 
 namespace UUP\Authentication\Library\Authenticator;
 
-use UUP\Authentication\Authenticator;
+use UUP\Authentication\Authenticator\Authenticator;
 
 /**
  * The base class for all authenticators.

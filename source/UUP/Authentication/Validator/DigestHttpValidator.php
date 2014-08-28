@@ -18,7 +18,7 @@
 
 namespace UUP\Authentication\Validator;
 
-use UUP\Authentication\DigestHttpMessage;
+use UUP\Authentication\Authenticator\DigestHttpMessage;
 
 /**
  * Validator for Digest HTTP message.

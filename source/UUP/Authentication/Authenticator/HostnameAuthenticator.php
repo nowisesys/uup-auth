@@ -16,9 +16,10 @@
  * limitations under the License.
  */
 
-namespace UUP\Authentication;
+namespace UUP\Authentication\Authenticator;
 
-use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
+use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
+    UUP\Authentication\Restrictor\Restrictor;
 
 /**
  * Hostname authenticator. 

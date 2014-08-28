@@ -37,10 +37,10 @@ limitations under the License.
                 require_once __DIR__ . '/../../vendor/autoload.php';
 
                 use UUP\Authentication\Stack\AuthenticatorStack,
-                    UUP\Authentication\Authenticator,
-                    UUP\Authentication\AddressRestrictor,
-                    UUP\Authentication\BasicHttpAuthenticator,
-                    UUP\Authentication\CasAuthenticator,
+                    UUP\Authentication\Authenticator\Authenticator,
+                    UUP\Authentication\Authenticator\BasicHttpAuthenticator,
+                    UUP\Authentication\Authenticator\CasAuthenticator,
+                    UUP\Authentication\Restrictor\AddressRestrictor,
                     UUP\Authentication\Validator\PamValidator,
                     UUP\Authentication\Validator\LdapBindValidator;
 

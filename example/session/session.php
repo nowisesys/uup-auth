@@ -41,8 +41,8 @@ limitations under the License.
 
                 use UUP\Authentication\Validator\ShadowValidator,
                     UUP\Authentication\Storage\SessionStorage,
-                    UUP\Authentication\BasicHttpAuthenticator,
-                    UUP\Authentication\SessionAuthenticator;
+                    UUP\Authentication\Authenticator\BasicHttpAuthenticator,
+                    UUP\Authentication\Authenticator\SessionAuthenticator;
 
                 try {
                         $auth = new BasicHttpAuthenticator(new ShadowValidator(), "Session Authenticator Example");

@@ -2,7 +2,7 @@
 
 namespace UUP\Authentication\Stack;
 
-use UUP\Authentication\HostnameAuthenticator;
+use UUP\Authentication\Authenticator\HostnameAuthenticator;
 
 require_once __DIR__ . '/AuthenticatorObjectTree.php';
 

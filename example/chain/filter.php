@@ -29,7 +29,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 use UUP\Authentication\Stack\AuthenticatorChain,
     UUP\Authentication\Stack\AuthenticatorFilter,
-    UUP\Authentication\HostnameAuthenticator;
+    UUP\Authentication\Authenticator\HostnameAuthenticator;
 
 class ExampleChain extends AuthenticatorChain
 {

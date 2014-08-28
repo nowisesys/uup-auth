@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-namespace UUP\Authentication;
+namespace UUP\Authentication\Restrictor;
 
 /**
  * The interface for all restrictor classes.

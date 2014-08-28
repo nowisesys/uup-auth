@@ -31,7 +31,7 @@ limitations under the License.
 
                 require_once __DIR__ . '/../vendor/autoload.php';
 
-                use UUP\Authentication\RemoteUserAuthenticator;
+                use UUP\Authentication\Authenticator\RemoteUserAuthenticator;
 
                 try {
                         $authenticator = new RemoteUserAuthenticator(

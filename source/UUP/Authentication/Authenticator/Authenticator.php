@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace UUP\Authentication;
+namespace UUP\Authentication\Authenticator;
 
 /**
  * The interface for all authenticator classes.

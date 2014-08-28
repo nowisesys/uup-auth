@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-namespace UUP\Authentication {
+namespace UUP\Authentication\Restrictor {
 
         use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
             UUP\Authentication\Library\Authenticator\AddressProperties,

@@ -18,7 +18,7 @@
 
 namespace UUP\Authentication\Stack\Filter;
 
-use UUP\Authentication\Authenticator;
+use UUP\Authentication\Restrictor\Restrictor;
 
 /**
  * Filter on object instances implementing the Authenticator interface.
@@ -32,7 +32,7 @@ class AuthenticatorFilterIterator extends \FilterIterator
 
         public function accept()
         {
-                return $this->current() instanceof Authenticator;
+                return $this->current() instanceof Restrictor;
         }
 
 }

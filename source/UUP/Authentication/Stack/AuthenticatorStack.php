@@ -18,9 +18,9 @@
 
 namespace UUP\Authentication\Stack;
 
-use UUP\Authentication\Authenticator,
-    UUP\Authentication\Restrictor,
-    UUP\Authentication\NullAuthenticator,
+use UUP\Authentication\Authenticator\Authenticator,
+    UUP\Authentication\Restrictor\Restrictor,
+    UUP\Authentication\Authenticator\NullAuthenticator,
     UUP\Authentication\Exception,
     UUP\Authentication\Stack\Filter\VisibilityFilterIterator;
 

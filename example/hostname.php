@@ -34,7 +34,7 @@ limitations under the License.
                 
                 require_once __DIR__ . '/../vendor/autoload.php';
 
-                use UUP\Authentication\HostnameAuthenticator;
+                use UUP\Authentication\Authenticator\HostnameAuthenticator;
 
                 $authenticator = new HostnameAuthenticator();
                 // $authenticator->setHostname('hostname');

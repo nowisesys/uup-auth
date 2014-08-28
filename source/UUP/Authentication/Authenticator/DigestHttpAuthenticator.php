@@ -139,7 +139,7 @@ namespace UUP\Authentication\Library\Authenticator {
 
 }
 
-namespace UUP\Authentication {
+namespace UUP\Authentication\Authenticator {
 
         use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
             UUP\Authentication\Validator\PasswordProvider,

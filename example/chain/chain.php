@@ -27,7 +27,7 @@ if (!isset($_SERVER['argv'])) {
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use UUP\Authentication\Stack\AuthenticatorChain,
-    UUP\Authentication\HostnameAuthenticator;
+    UUP\Authentication\Authenticator\HostnameAuthenticator;
 
 class ExampleChain extends AuthenticatorChain
 {

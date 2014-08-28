@@ -37,7 +37,7 @@ limitations under the License.
                 
                 require_once __DIR__ . '/../vendor/autoload.php';
 
-                use UUP\Authentication\AddressRestrictor;
+                use UUP\Authentication\Restrictor\AddressRestrictor;
 
                 $authenticator = new AddressRestrictor();
                 // $authenticator->add('192.168.45.67');

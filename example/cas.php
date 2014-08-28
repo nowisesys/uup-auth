@@ -31,7 +31,7 @@ limitations under the License.
 
                 require_once __DIR__ . '/../vendor/autoload.php';
 
-                use UUP\Authentication\CasAuthenticator;
+                use UUP\Authentication\Authenticator\CasAuthenticator;
 
                 $host = "cas.example.com";
                 $port = 443;

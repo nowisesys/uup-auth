@@ -18,8 +18,8 @@
 
 namespace UUP\Authentication\Stack\Access;
 
-use UUP\Authentication\Authenticator,
-    UUP\Authentication\Restrictor;
+use UUP\Authentication\Authenticator\Authenticator,
+    UUP\Authentication\Restrictor\Restrictor;
 
 /**
  * Simple class for testing chain access.

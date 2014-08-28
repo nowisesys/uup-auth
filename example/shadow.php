@@ -32,7 +32,7 @@ limitations under the License.
                 require_once __DIR__ . '/../vendor/autoload.php';
 
                 use UUP\Authentication\Validator\ShadowValidator;
-                use UUP\Authentication\BasicHttpAuthenticator;
+                use UUP\Authentication\Authenticator\BasicHttpAuthenticator;
 
                 try {
                         $validator = new ShadowValidator();

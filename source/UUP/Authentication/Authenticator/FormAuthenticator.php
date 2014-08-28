@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-namespace UUP\Authentication;
+namespace UUP\Authentication\Authenticator;
 
-use UUP\Authentication\RemoteUserAuthenticator,
+use UUP\Authentication\Authenticator\RemoteUserAuthenticator,
     UUP\Authentication\Storage\SessionStorage;
 
 /**

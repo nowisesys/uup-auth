@@ -28,10 +28,10 @@ limitations under the License.
 
                 require_once __DIR__ . '/../vendor/autoload.php';
 
-use UUP\Authentication\Validator\ShadowValidator;
-use UUP\Authentication\FormAuthenticator;
+                use UUP\Authentication\Validator\ShadowValidator;
+                use UUP\Authentication\Authenticator\FormAuthenticator;
 
-try {
+                try {
                         $validator = new ShadowValidator();
                         $authenticator = new FormAuthenticator($validator, array(
                                 'login' => '?showform',

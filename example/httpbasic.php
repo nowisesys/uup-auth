@@ -31,7 +31,7 @@ limitations under the License.
                 // ==========================================================================
                 require_once __DIR__ . '/../vendor/autoload.php';
 
-                use UUP\Authentication\BasicHttpAuthenticator;
+                use UUP\Authentication\Authenticator\BasicHttpAuthenticator;
                 use UUP\Authentication\Storage\SqlStorage;
                 use UUP\Authentication\Validator\SqlValidator;
 

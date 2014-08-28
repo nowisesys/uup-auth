@@ -2,7 +2,7 @@
 
 namespace UUP\Authentication\Stack;
 
-use UUP\Authentication\HostnameAuthenticator;
+use UUP\Authentication\Authenticator\HostnameAuthenticator;
 
 /**
  * @property-read array $chain Chain array accessor.
