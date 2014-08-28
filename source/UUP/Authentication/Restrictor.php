@@ -1,7 +1,8 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) Error: on line 5, column 33 in Templates/Licenses/license-apache20.txt
+  The string doesn't match the expected date/time format. The string to parse was: "Aug 28, 2014". The expected format was: "yyyy-MMM-dd". Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,35 +20,23 @@
 namespace UUP\Authentication;
 
 /**
- * The interface for all authenticator classes.
+ * The interface for all restrictor classes.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Authentication
  */
-interface Authenticator
+interface Restrictor
 {
         /**
-         * Not used.
+         * Check if caller is already authenticated.
+         * @return bool
          */
-        const optional = 1;
-        /**
-         * This authenticator is sufficient for successful authentication.
-         */
-        const sufficient = 2;
-        /**
-         * This authenticator is required for successful authentication. 
-         */
-        const required = 3;
+        function authenticated();
 
         /**
-         * Perform login for this authenticator.
+         * Get logged on username.
+         * @return string
          */
-        function login();
-
-        /**
-         * Perform logout for this authenticator.
-         */
-        function logout();
-
+        function getUser();
 }

@@ -40,7 +40,7 @@ use UUP\Authentication\Authenticator;
  * @package UUP
  * @subpackage Authentication
  */
-abstract class AuthenticatorBase implements Authenticator
+abstract class AuthenticatorBase
 {
 
         private $ctrl;
@@ -112,7 +112,7 @@ abstract class AuthenticatorBase implements Authenticator
          */
         public function sufficient()
         {
-                return $this->ctrl == self::sufficient;
+                return $this->ctrl == Authenticator::sufficient;
         }
 
         /**
@@ -121,7 +121,7 @@ abstract class AuthenticatorBase implements Authenticator
          */
         public function required()
         {
-                return $this->ctrl == self::required;
+                return $this->ctrl == Authenticator::required;
         }
 
 }
