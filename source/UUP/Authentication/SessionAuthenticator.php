@@ -34,7 +34,7 @@ use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
  * @package UUP
  * @subpackage Authentication
  */
-class SessionAuthenticator extends AuthenticatorBase
+class SessionAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
 {
 
         /**

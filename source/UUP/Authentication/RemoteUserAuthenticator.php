@@ -53,7 +53,7 @@ use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
  * 
  * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
  */
-class RemoteUserAuthenticator extends AuthenticatorBase
+class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
 {
 
         const login = 'login';

@@ -30,7 +30,7 @@ namespace UUP\Authentication;
  * @package UUP
  * @subpackage Authentication
  */
-class NullAuthenticator implements Authenticator
+class NullAuthenticator implements Restrictor, Authenticator
 {
 
         public function authenticated()

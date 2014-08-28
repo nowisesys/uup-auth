@@ -27,7 +27,7 @@ use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
  * @package UUP
  * @subpackage Authentication
  */
-class BasicHttpAuthenticator extends AuthenticatorBase
+class BasicHttpAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
 {
 
         use Library\Authenticator\HttpAuthenticator;

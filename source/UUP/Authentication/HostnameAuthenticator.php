@@ -30,7 +30,7 @@ use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
  * @package UUP
  * @subpackage Authentication
  */
-class HostnameAuthenticator extends AuthenticatorBase
+class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
 {
 
         const localhost = 'localhost';

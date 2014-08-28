@@ -68,7 +68,7 @@ use UUP\Authentication\RemoteUserAuthenticator,
  * @package UUP
  * @subpackage Authentication
  */
-class FormAuthenticator extends RemoteUserAuthenticator
+class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, Authenticator
 {
 
         private static $defaults = array(

@@ -35,7 +35,7 @@ require_once 'CAS.php';
  * @package UUP
  * @subpackage Authentication
  */
-class CasAuthenticator extends AuthenticatorBase
+class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
 {
 
         private $host;

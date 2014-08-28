@@ -153,7 +153,7 @@ namespace UUP\Authentication {
          * @package UUP
          * @subpackage Authentication
          */
-        class DigestHttpAuthenticator extends AuthenticatorBase
+        class DigestHttpAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
         {
 
                 use Library\Authenticator\HttpAuthenticator;
