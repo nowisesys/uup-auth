@@ -38,7 +38,7 @@ limitations under the License.
 
                 use UUP\Authentication\Stack\AuthenticatorStack,
                     UUP\Authentication\Authenticator,
-                    UUP\Authentication\AddressAuthenticator,
+                    UUP\Authentication\AddressRestrictor,
                     UUP\Authentication\BasicHttpAuthenticator,
                     UUP\Authentication\CasAuthenticator,
                     UUP\Authentication\Validator\PamValidator,
@@ -96,7 +96,7 @@ limitations under the License.
                                 // 
                                 // Add some login restrictions:
                                 // 
-                                $chain['access']['addr'] = (new AddressAuthenticator(array('::1', '127.0.0.1', '192.168.0.0/16')))
+                                $chain['access']['addr'] = (new AddressRestrictor(array('::1', '127.0.0.1', '192.168.0.0/16')))
                                     ->visible(false)
                                     ->control(Authenticator::required);
 

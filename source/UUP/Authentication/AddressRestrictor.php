@@ -23,11 +23,11 @@ namespace UUP\Authentication {
             UUP\Authentication\Exception;
 
         /**
-         * IP-address authenticator. 
+         * IP-address restriction. 
          * 
-         * Authenticate caller by comparing the remote callers IP-address against the 
+         * Authorize caller by comparing the remote callers IP-address against the 
          * list if IP-address filters in this object. The remote caller is considered 
-         * to be authenticated if one of the filter matches.
+         * to be authorized if one of the filter matches.
          * 
          * The IP-address argument (for constructor, add(), set() or remove()) can either
          * be a single IP-address (string) or multiple IP-addresses using an array. 
@@ -40,7 +40,7 @@ namespace UUP\Authentication {
          * filters, including those for localhost can be removed by calling clear().
          * 
          * <code>
-         * $reserved = new AddressAuthenticator('192.168.0.0/16');
+         * $reserved = new AddressRestrictor('192.168.0.0/16');
          * $reserved->add(array('10.0.0.0/8', '172.16.0.0/12', '169.254.0.0/16');
          * if(!$reserved->authenticated()) {
          *      die("Sorry, only reserved IPv4 addresses are allowed to access this page!");
@@ -52,7 +52,7 @@ namespace UUP\Authentication {
          * @package UUP
          * @subpackage Authentication
          */
-        class AddressAuthenticator extends AuthenticatorBase
+        class AddressRestrictor extends AuthenticatorBase implements Restrictor
         {
 
                 const localhost_ipv4 = '127.0.0.1';
@@ -233,16 +233,6 @@ namespace UUP\Authentication {
                 public function getUser()
                 {
                         return $_SERVER['REMOTE_ADDR'];
-                }
-
-                public function login()
-                {
-                        // ignore
-                }
-
-                public function logout()
-                {
-                        // ignore                
                 }
 
                 // 

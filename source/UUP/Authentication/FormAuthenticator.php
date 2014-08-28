@@ -25,7 +25,9 @@ use UUP\Authentication\RemoteUserAuthenticator,
  * HTML form authenticator.
  * 
  * This class authenticates a user based on request parameters. The request 
- * parameters can i.e. be obtained from a submitted form. 
+ * parameters can i.e. be obtained from a submitted form. Notice that this 
+ * class is kind of generic, it could also be used to provide authentication
+ * for simple GET requests.
  * 
  * These are the default options unless overridden by the options argument
  * for the constructor:

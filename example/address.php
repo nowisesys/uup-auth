@@ -17,29 +17,29 @@ limitations under the License.
 <html>
         <head>
                 <meta charset="UTF-8">
-                <title>IP-Address Authentication</title>
+                <title>IP-Address Restriction</title>
         </head>
         <body>
-                <h1>IP-Address Authentication</h1>
+                <h1>IP-Address Restriction</h1>
                 <?php
                 
                 // ==========================================================================
-                //  IP-address authentication.
+                //  IP-address restriction.
                 //  
-                //  This example demonstrate how to use the AddressAuthenticator class to
+                //  This example demonstrate how to use the AddressRestrictor class to
                 //  authenticate remote computers based on their IP-address. More computers
                 //  can be added calling $authenticator->add(...).
                 //  
-                //  The AddressAuthenticator class can be used for implementing fine-grained
+                //  The AddressRestrictor class can be used for implementing fine-grained
                 //  access control within the application by dynamic modify the list of
                 //  accepted hosts and networks.
                 // ==========================================================================
                 
                 require_once __DIR__ . '/../vendor/autoload.php';
 
-                use UUP\Authentication\AddressAuthenticator;
+                use UUP\Authentication\AddressRestrictor;
 
-                $authenticator = new AddressAuthenticator();
+                $authenticator = new AddressRestrictor();
                 // $authenticator->add('192.168.45.67');
                 // $authenticator->clear();
                 printf("<p>\n");
