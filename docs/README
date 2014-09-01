@@ -11,7 +11,7 @@ be set as required or sufficient to enforce logon policy (i.e. require CAS-logon
 from outside of LAN while supporting Kerberos logon from inside).
 
     * See the example directory for working code.
-    * See API docs on http://it.bmc.uu.se/andlov/php/proj/uup/uup-auth
+    * See API docs on http://it.bmc.uu.se/andlov/php/proj/bmc/uup-auth
 
 The library is modular. The authenticators are the frontend (credentials
 obtainers) that might use a validator as authentication source (for example
