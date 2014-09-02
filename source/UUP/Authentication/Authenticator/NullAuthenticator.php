@@ -18,6 +18,8 @@
 
 namespace UUP\Authentication\Authenticator;
 
+use UUP\Authentication\Restrictor\Restrictor;
+
 /**
  * Null authenticator.
  * 

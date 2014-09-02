@@ -144,7 +144,8 @@ namespace UUP\Authentication\Authenticator {
         use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
             UUP\Authentication\Validator\PasswordProvider,
             UUP\Authentication\Library\Authenticator\DigestHttpMessage,
-            UUP\Authentication\Library\Authenticator\DigestHttpResponse;
+            UUP\Authentication\Library\Authenticator\DigestHttpResponse,
+            UUP\Authentication\Restrictor\Restrictor;
 
         /**
          * Digest HTTP (WWW-Authenticate) authenticator.

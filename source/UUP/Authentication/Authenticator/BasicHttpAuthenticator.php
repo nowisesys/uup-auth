@@ -18,7 +18,8 @@
 
 namespace UUP\Authentication\Authenticator;
 
-use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
+use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
+    UUP\Authentication\Restrictor\Restrictor;
 
 /**
  * Basic HTTP (WWW-Authenticate) authenticator.

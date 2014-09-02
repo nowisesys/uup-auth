@@ -19,7 +19,8 @@
 namespace UUP\Authentication\Authenticator;
 
 use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
-    UUP\Authentication\Storage\Storage;
+    UUP\Authentication\Storage\Storage,
+    UUP\Authentication\Restrictor\Restrictor;
 
 /**
  * Session authenticator.

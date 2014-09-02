@@ -18,7 +18,8 @@
 
 namespace UUP\Authentication\Authenticator;
 
-use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
+use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
+    UUP\Authentication\Restrictor\Restrictor;
 
 /**
  * Remote user environment variable authenticator.
@@ -71,7 +72,7 @@ class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, A
         public function __construct($options)
         {
                 $this->options = $options;
-                
+
                 if (empty($this->return)) {
                         $this->return = filter_input(INPUT_SERVER, 'HTTP_REFERER');
                 }

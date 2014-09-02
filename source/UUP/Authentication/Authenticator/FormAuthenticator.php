@@ -19,7 +19,8 @@
 namespace UUP\Authentication\Authenticator;
 
 use UUP\Authentication\Authenticator\RemoteUserAuthenticator,
-    UUP\Authentication\Storage\SessionStorage;
+    UUP\Authentication\Storage\SessionStorage,
+    UUP\Authentication\Restrictor\Restrictor;
 
 /**
  * HTML form authenticator.
