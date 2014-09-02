@@ -94,6 +94,7 @@ class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor
         private $user;
         private $pass;
         private $accepted;
+        private $methods = array(INPUT_POST, INPUT_GET);
 
         /**
          * Constructor.
@@ -142,6 +143,15 @@ class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor
                 // Ignore
         }
 
+        /**
+         * Set accepted input methods (INPUT_XXX).
+         * @param array $methods The accepted input methods, e.g. INPUT_POST.
+         */
+        public function setMethods($methods)
+        {
+                $this->methods = $methods;
+        }
+        
         private function authenticate()
         {
                 $this->validator->setCredentials($this->user, $this->pass);
@@ -153,7 +163,7 @@ class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor
         private function initialize()
         {
                 foreach (array('name', 'user', 'pass') as $name) {
-                        foreach (array(INPUT_POST, INPUT_GET) as $type) {
+                        foreach ($this->methods as $type) {
                                 if (empty($this->$name)) {
                                         $this->$name = filter_input($type, $this->options[$name], FILTER_SANITIZE_STRING);
                                 }
