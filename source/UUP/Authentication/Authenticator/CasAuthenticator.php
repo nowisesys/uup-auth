@@ -39,10 +39,13 @@ require_once 'CAS.php';
 class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
 {
 
+        /**
+         * @var \CAS_Client
+         */
+        private $client;
         private $host;
         private $port;
         private $path;
-        private $client;
         private $params = array();
 
         public function __construct($host, $port = 443, $path = "/cas")
@@ -70,7 +73,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
 
         public function getSubject()
         {
-                return $this->client->getSubject();
+                return $this->client->getUser();
         }
 
         public function login()
