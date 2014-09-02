@@ -26,7 +26,9 @@ limitations under the License.
                 //  Kerberos authentication using RemoteUserAuthenticator class. 
                 //  
                 //  Notice that the web server has to be configured and the kerberos_auth.conf 
-                //  (or equivalent) has to define the login/logout endpoints URLs.
+                //  (or equivalent) has to define the login/logout endpoints URLs. 
+                //  
+                //  See e.g. mod_auth_kerb: http://modauthkerb.sourceforge.net/
                 // ==========================================================================
 
                 require_once __DIR__ . '/../vendor/autoload.php';
