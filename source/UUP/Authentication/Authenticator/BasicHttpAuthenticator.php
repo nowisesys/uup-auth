@@ -31,7 +31,7 @@ use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
 class BasicHttpAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
 {
 
-        use Library\Authenticator\HttpAuthenticator;
+        use \UUP\Authentication\Library\Authenticator\HttpAuthenticator;
 
         /**
          * Constructor.

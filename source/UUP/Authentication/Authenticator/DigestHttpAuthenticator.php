@@ -157,7 +157,7 @@ namespace UUP\Authentication\Authenticator {
         class DigestHttpAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
         {
 
-                use Library\Authenticator\HttpAuthenticator;
+                use \UUP\Authentication\Library\Authenticator\HttpAuthenticator;
 
                 private $nonce;
 
