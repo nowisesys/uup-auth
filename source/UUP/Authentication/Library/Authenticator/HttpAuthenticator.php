@@ -92,12 +92,7 @@ trait HttpAuthenticator
 
         public function accepted()
         {
-                try {
-                        return $this->validator->authenticate();
-                } catch (\Exception $exception) {
-                        error_log($exception->getMessage());
-                        $this->unauthorized();
-                }
+                return $this->validator->authenticate();
         }
 
         public function getSubject()
