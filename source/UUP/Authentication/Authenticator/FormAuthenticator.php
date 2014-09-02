@@ -48,7 +48,6 @@ use UUP\Authentication\Authenticator\RemoteUserAuthenticator,
  * <code>
  * $auth = new FormAuthenticator(
  *      new LdapBindValidator('ldaps://ldap.example.com'),
- *      new SessionStorage(),
  *      array('login' => '/login/ldap', 'name' => 'authldap')
  * );
  * </code>
@@ -59,7 +58,8 @@ use UUP\Authentication\Authenticator\RemoteUserAuthenticator,
  * in response to a form submit.
  * 
  * To overcome this limitation, the FormAuthenticator uses a SessionStorage 
- * object to persist the authenticated username between requests. 
+ * object to persist the authenticated username between requests. The session
+ * storage can be overridden by passing a third argument to the constructor.
  * 
  * @property-read string $name Unique form name, i.e. from hidden field or submit button.
  * @property-read string $user The username request parameter name.
@@ -88,14 +88,15 @@ class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, A
          * Constructor.
          * @param Validator $validator The validator callback object.
          * @param array $options
+         * @param Storage $session The session storage.
          */
-        public function __construct($validator, $options = array())
+        public function __construct($validator, $options = array(), $session = null)
         {
                 parent::__construct(array_merge(self::$defaults, $options));
 
-                $this->initialize();
                 $this->validator = $validator;
-                $this->session = new SessionStorage($this->options['name'], false);
+                $this->session = $session;
+                $this->initialize();
 
                 if (!empty($this->name) && !empty($this->user) && !empty($this->pass)) {
                         $this->authenticate();
@@ -143,6 +144,9 @@ class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, A
 
         private function initialize()
         {
+                if (!isset($this->session)) {
+                        $this->session = new SessionStorage($this->options['name'], false);
+                }
                 foreach (array('name', 'user', 'pass') as $name) {
                         foreach (array(INPUT_POST, INPUT_GET) as $type) {
                                 if (empty($this->$name)) {
