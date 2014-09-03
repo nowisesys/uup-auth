@@ -21,7 +21,7 @@ namespace UUP\Authentication\Authenticator;
 use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
     UUP\Authentication\Restrictor\Restrictor;
 
-require_once 'CAS.php';
+require_once __DIR__ . '/../../../../vendor/jasig/phpcas/CAS.php';
 
 /**
  * CAS (Central Authentication Service) authenticator.
