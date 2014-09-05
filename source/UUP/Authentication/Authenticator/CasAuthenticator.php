@@ -21,8 +21,6 @@ namespace UUP\Authentication\Authenticator;
 use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
     UUP\Authentication\Restrictor\Restrictor;
 
-require_once __DIR__ . '/../../../../vendor/jasig/phpcas/CAS.php';
-
 /**
  * CAS (Central Authentication Service) authenticator.
  * 
@@ -90,6 +88,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
 
         private function initialize()
         {
+                $this->requires('jasig/phpcas/CAS.php');
                 $this->client = new \CAS_Client(CAS_VERSION_2_0, false, $this->host, $this->port, $this->path);
                 $this->client->setNoCasServerValidation();
         }
@@ -107,6 +106,19 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                 if (session_status() == PHP_SESSION_ACTIVE &&
                     session_status() != PHP_SESSION_DISABLED) {
                         session_write_close();
+                }
+        }
+
+        private function requires($file)
+        {
+                $locations = array(
+                        __DIR__ . '/../../../../../../',        // deployed
+                        __DIR__ . '/../../../../vendor/'        // package
+                );
+                foreach ($locations as $location) {
+                        if (file_exists($location . $file)) {
+                                require_once $location . $file;
+                        }
                 }
         }
 
