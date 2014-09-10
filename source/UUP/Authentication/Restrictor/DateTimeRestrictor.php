@@ -18,6 +18,7 @@
 
 namespace UUP\Authentication\Restrictor;
 
+use UUP\Authentication\Authenticator\Authenticator;
 use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
 
 /**
@@ -82,6 +83,8 @@ class DateTimeRestrictor extends AuthenticatorBase implements Restrictor
         {
                 $this->stime = $stime;
                 $this->etime = $etime;
+                $this->visible(false);
+                $this->control(Authenticator::required);
         }
 
         public function __get($name)

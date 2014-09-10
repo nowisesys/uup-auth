@@ -18,9 +18,10 @@
 
 namespace UUP\Authentication\Restrictor {
 
-        use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
-            UUP\Authentication\Library\Authenticator\AddressProperties,
-            UUP\Authentication\Exception;
+        use UUP\Authentication\Authenticator\Authenticator;
+use UUP\Authentication\Exception;
+use UUP\Authentication\Library\Authenticator\AddressProperties;
+use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
 
         /**
          * IP-address restriction. 
@@ -71,12 +72,16 @@ namespace UUP\Authentication\Restrictor {
                 {
                         $this->reset();
                         $this->add($address);
+                        $this->visible(false);
+                        $this->control(Authenticator::required);
                 }
 
                 public function __get($name)
                 {
                         if ($name == 'addresses') {
                                 return $this->address;
+                        } else {
+                                return parent::__get($name);
                         }
                 }
 
