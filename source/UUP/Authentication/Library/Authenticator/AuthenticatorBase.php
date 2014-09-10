@@ -43,22 +43,28 @@ use UUP\Authentication\Authenticator\Authenticator;
 abstract class AuthenticatorBase
 {
 
-        private $ctrl;
-        private $name;
-        private $desc;
-        private $visible = true;
+        private $_name;
+        private $_desc;
+        private $_visible;
+        private $_control;
+
+        public function __construct()
+        {
+                $this->_visible = true;
+                $this->_control = Authenticator::sufficient;
+        }
 
         public function __get($name)
         {
                 switch ($name) {
                         case 'control':
-                                return $this->ctrl;
+                                return $this->_control;
                         case 'name':
-                                return $this->name;
+                                return $this->_name;
                         case 'description':
-                                return $this->desc;
+                                return $this->_desc;
                         case 'visible':
-                                return $this->visible;
+                                return $this->_visible;
                 }
         }
 
@@ -69,7 +75,7 @@ abstract class AuthenticatorBase
          */
         public function control($ctrl)
         {
-                $this->ctrl = (int) $ctrl;
+                $this->_control = (int) $ctrl;
                 return $this;
         }
 
@@ -80,7 +86,7 @@ abstract class AuthenticatorBase
          */
         public function name($text)
         {
-                $this->name = (string) $text;
+                $this->_name = (string) $text;
                 return $this;
         }
 
@@ -91,7 +97,7 @@ abstract class AuthenticatorBase
          */
         public function description($text)
         {
-                $this->desc = (string) $text;
+                $this->_desc = (string) $text;
                 return $this;
         }
 
@@ -102,7 +108,7 @@ abstract class AuthenticatorBase
          */
         public function visible($value)
         {
-                $this->visible = (bool) $value;
+                $this->_visible = (bool) $value;
                 return $this;
         }
 
@@ -112,7 +118,7 @@ abstract class AuthenticatorBase
          */
         public function sufficient()
         {
-                return $this->ctrl == Authenticator::sufficient;
+                return $this->_control == Authenticator::sufficient;
         }
 
         /**
@@ -121,7 +127,7 @@ abstract class AuthenticatorBase
          */
         public function required()
         {
-                return $this->ctrl == Authenticator::required;
+                return $this->_control == Authenticator::required;
         }
 
 }
