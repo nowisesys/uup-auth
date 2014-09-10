@@ -46,6 +46,7 @@ class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Aut
         public function __construct($accept = self::localhost)
         {
                 $this->accept = $accept;
+                $this->visible(false);
         }
 
         /**
