@@ -59,6 +59,7 @@ class LdapBindValidator extends LdapConnector
                         $this->bind($this->user, $this->pass);
                         return true;
                 } catch (Exception $e) {
+                        error_log(sprintf("%s in %s on line %d", $e->getMessage(), __METHOD__, __LINE__));
                         return false;
                 }
         }
