@@ -60,7 +60,7 @@ abstract class LdapConnector extends CredentialValidator
                         throw new Exception(sprintf("Failed connect to ''%s:%d''", $this->server, $this->port));
                 }
                 foreach ($this->options as $option => $value) {
-                        if (!ldap_set_option($this->server, $option, $value)) {
+                        if (!ldap_set_option($this->handle, $option, $value)) {
                                 ldap_close($this->handle);
                                 throw new Exception("Failed set option.");
                         }
