@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@
 
 namespace UUP\Authentication\Stack\Access;
 
-use UUP\Authentication\Authenticator\Authenticator,
-    UUP\Authentication\Restrictor\Restrictor;
+use UUP\Authentication\Authenticator\Authenticator;
+use UUP\Authentication\Restrictor\Restrictor;
 
 /**
  * Simple class for testing chain access.

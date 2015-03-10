@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
  */
 
 namespace UUP\Authentication\Library\Authenticator {
-
+        
         use UUP\Authentication\Validator\DigestHttpValidator;
-
+        
         /**
          * Represent an Digest HTTP message.
          * 
@@ -141,11 +141,12 @@ namespace UUP\Authentication\Library\Authenticator {
 
 namespace UUP\Authentication\Authenticator {
 
-        use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
-            UUP\Authentication\Validator\PasswordProvider,
-            UUP\Authentication\Library\Authenticator\DigestHttpMessage,
-            UUP\Authentication\Library\Authenticator\DigestHttpResponse,
-            UUP\Authentication\Restrictor\Restrictor;
+        use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
+        use UUP\Authentication\Library\Authenticator\DigestHttpMessage;
+        use UUP\Authentication\Library\Authenticator\DigestHttpResponse;
+        use UUP\Authentication\Restrictor\Restrictor;
+        use UUP\Authentication\Validator\PasswordProvider;
+        use UUP\Authentication\Validator\Validator;
 
         /**
          * Digest HTTP (WWW-Authenticate) authenticator.

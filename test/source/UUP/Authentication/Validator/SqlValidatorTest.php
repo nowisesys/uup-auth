@@ -2,6 +2,10 @@
 
 namespace UUP\Authentication\Validator;
 
+use PDO;
+use UUP\Authentication\Validator\SqlValidator;
+use UUP\Authentication\Validator\SqlValidatorHelper;
+
 class SqlValidatorHelper extends SqlValidator
 {
 
@@ -10,7 +14,7 @@ class SqlValidatorHelper extends SqlValidator
 
         public function __construct()
         {
-                parent::__construct(new \PDO('sqlite::memory:', null, null, array(\PDO::ERRMODE_EXCEPTION => true, \PDO::ATTR_PERSISTENT => true)));
+                parent::__construct(new PDO('sqlite::memory:', null, null, array(PDO::ERRMODE_EXCEPTION => true, PDO::ATTR_PERSISTENT => true)));
 
                 $this->create();
                 $this->add(self::user, self::pass);

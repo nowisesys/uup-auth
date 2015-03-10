@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,11 @@
 
 namespace UUP\Authentication\Authenticator;
 
-use UUP\Authentication\Authenticator\RemoteUserAuthenticator,
-    UUP\Authentication\Restrictor\Restrictor;
+use UUP\Authentication\Authenticator\Authenticator;
+use UUP\Authentication\Authenticator\RemoteUserAuthenticator;
+use UUP\Authentication\Restrictor\Restrictor;
+use UUP\Authentication\Storage\Storage;
+use UUP\Authentication\Validator\Validator;
 
 /**
  * HTML POST/GET authenticator.
@@ -151,7 +154,7 @@ class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor
         {
                 $this->methods = $methods;
         }
-        
+
         private function authenticate()
         {
                 $this->validator->setCredentials($this->user, $this->pass);

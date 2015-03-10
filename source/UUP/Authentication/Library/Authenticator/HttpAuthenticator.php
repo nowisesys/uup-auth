@@ -108,7 +108,7 @@ trait HttpAuthenticator
                         } elseif (!$this->validator->authenticate()) {
                                 $this->unauthorized();
                         }
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                         error_log($exception->getMessage());
                         $this->unauthorized();
                 }

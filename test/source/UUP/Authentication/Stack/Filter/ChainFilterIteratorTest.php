@@ -2,7 +2,11 @@
 
 namespace UUP\Authentication\Stack\Filter;
 
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 use UUP\Authentication\Stack\AuthenticatorChain;
+use UUP\Authentication\Stack\Filter\ChainFilterIterator;
+use UUP\Authentication\Stack\Filter\FilterIteratorTestBase;
 
 require_once 'FilterIteratorTestBase.php';
 
@@ -40,13 +44,13 @@ class ChainFilterIteratorTest extends FilterIteratorTestBase
          */
         public function testAccept()
         {
-                $iterator = new \RecursiveArrayIterator(array());
-                $this->object = new \RecursiveIteratorIterator($iterator, \RecursiveIteratorIterator::CHILD_FIRST);
+                $iterator = new RecursiveArrayIterator(array());
+                $this->object = new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST);
                 $this->result = new ChainFilterIterator($this->object);
                 $this->assertFalse($this->result->hasChildren());
 
-                $iterator = new \RecursiveArrayIterator(self::$data);
-                $this->object = new \RecursiveIteratorIterator($iterator, \RecursiveIteratorIterator::CHILD_FIRST);
+                $iterator = new RecursiveArrayIterator(self::$data);
+                $this->object = new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST);
                 $this->result = new ChainFilterIterator($this->object);
                 $this->assertTrue($this->result->hasChildren());
 

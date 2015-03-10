@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,10 @@
 
 namespace UUP\Authentication\Authenticator;
 
-use UUP\Authentication\Library\Authenticator\AuthenticatorBase,
-    UUP\Authentication\Restrictor\Restrictor;
+use CAS_Client;
+use UUP\Authentication\Authenticator\Authenticator;
+use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
+use UUP\Authentication\Restrictor\Restrictor;
 
 /**
  * CAS (Central Authentication Service) authenticator.
@@ -38,7 +40,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
 {
 
         /**
-         * @var \CAS_Client
+         * @var CAS_Client
          */
         private $client;
         private $host;
@@ -89,7 +91,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
         private function initialize()
         {
                 $this->requires('jasig/phpcas/CAS.php');
-                $this->client = new \CAS_Client(CAS_VERSION_2_0, false, $this->host, $this->port, $this->path);
+                $this->client = new CAS_Client(CAS_VERSION_2_0, false, $this->host, $this->port, $this->path);
                 $this->client->setNoCasServerValidation();
         }
 
@@ -112,7 +114,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
         private function requires($file)
         {
                 $locations = array(
-                        __DIR__ . '/../../../../../../',        // deployed
+                        __DIR__ . '/../../../../../../', // deployed
                         __DIR__ . '/../../../../vendor/'        // package
                 );
                 foreach ($locations as $location) {

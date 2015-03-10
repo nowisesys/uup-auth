@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,13 @@
  */
 
 namespace UUP\Authentication\Stack;
+
+use ArrayIterator;
+use IteratorAggregate;
+use UUP\Authentication\Authenticator\Authenticator;
+use UUP\Authentication\Stack\AuthenticatorChain;
+use UUP\Authentication\Stack\AuthenticatorFilter;
+use UUP\Authentication\Stack\AuthenticatorSearch;
 
 /**
  * Chain of authenticators and sub chains.
@@ -39,7 +46,7 @@ namespace UUP\Authentication\Stack;
  * @see AuthenticatorFilter
  * @see AuthenticatorSearch
  */
-class AuthenticatorChain implements \IteratorAggregate
+class AuthenticatorChain implements IteratorAggregate
 {
 
         protected $chain = array();
@@ -211,7 +218,7 @@ class AuthenticatorChain implements \IteratorAggregate
 
         public function getIterator()
         {
-                return new \ArrayIterator($this->chain);
+                return new ArrayIterator($this->chain);
         }
 
         public function getArrayCopy()

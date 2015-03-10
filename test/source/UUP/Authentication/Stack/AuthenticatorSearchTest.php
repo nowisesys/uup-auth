@@ -2,7 +2,11 @@
 
 namespace UUP\Authentication\Stack;
 
+use ArrayIterator;
 use UUP\Authentication\Authenticator\HostnameAuthenticator;
+use UUP\Authentication\Stack\AuthenticatorFilter;
+use UUP\Authentication\Stack\AuthenticatorSearch;
+use UUP\Authentication\Stack\AuthenticatorTree;
 
 require_once __DIR__ . '/AuthenticatorObjectTree.php';
 
@@ -131,7 +135,7 @@ class AuthenticatorSearchTest extends \PHPUnit_Framework_TestCase
         public function testGetIterator()
         {
                 $this->assertNotNull($this->filter->getIterator());
-                $this->assertTrue($this->filter->getIterator() instanceof \ArrayIterator);
+                $this->assertTrue($this->filter->getIterator() instanceof ArrayIterator);
         }
 
 }

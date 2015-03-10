@@ -2,6 +2,9 @@
 
 namespace UUP\Authentication\Stack\Access;
 
+use UUP\Authentication\Stack\Access\ChainAccessBase;
+use UUP\Authentication\Stack\Access\ChainAccessBaseImpl;
+use UUP\Authentication\Stack\Access\ChainAccessObject;
 use UUP\Authentication\Stack\AuthenticatorChain;
 
 require_once __DIR__ . '/ChainAccessObject.php';

@@ -2,6 +2,11 @@
 
 namespace UUP\Authentication\Stack\Filter;
 
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
+use UUP\Authentication\Stack\Filter\ArrayKeyFilterIterator;
+use UUP\Authentication\Stack\Filter\FilterIteratorTestBase;
+
 require_once 'FilterIteratorTestBase.php';
 
 class ArrayKeyFilterIteratorTest extends FilterIteratorTestBase
@@ -54,13 +59,13 @@ class ArrayKeyFilterIteratorTest extends FilterIteratorTestBase
          */
         private function check($name)
         {
-                $iterator = new \RecursiveArrayIterator(array());
-                $this->object = new \RecursiveIteratorIterator($iterator, \RecursiveIteratorIterator::CHILD_FIRST);
+                $iterator = new RecursiveArrayIterator(array());
+                $this->object = new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST);
                 $this->result = new ArrayKeyFilterIterator($this->object, $name);
                 $this->assertFalse($this->result->hasChildren());
 
-                $iterator = new \RecursiveArrayIterator(self::$data);
-                $this->object = new \RecursiveIteratorIterator($iterator, \RecursiveIteratorIterator::CHILD_FIRST);
+                $iterator = new RecursiveArrayIterator(self::$data);
+                $this->object = new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST);
                 $this->result = new ArrayKeyFilterIterator($this->object, $name);
                 $this->assertTrue($this->result->hasChildren());
                 foreach ($this->result as $key => $val) {

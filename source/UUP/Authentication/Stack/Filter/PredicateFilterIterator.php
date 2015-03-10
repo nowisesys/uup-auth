@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,10 @@
 
 namespace UUP\Authentication\Stack\Filter;
 
+use FilterIterator;
+use Iterator;
+use UUP\Authentication\Stack\Filter\PredicateFilterValidator;
+
 /**
  * Interface for predicate based iterator filtering. 
  * 
@@ -31,7 +35,7 @@ namespace UUP\Authentication\Stack\Filter;
 interface PredicateFilterValidator
 {
 
-        function validate(\Iterator $iterator);
+        function validate(Iterator $iterator);
 }
 
 /**
@@ -76,12 +80,12 @@ interface PredicateFilterValidator
  * @package UUP
  * @subpackage Authentication
  */
-class PredicateFilterIterator extends \FilterIterator
+class PredicateFilterIterator extends FilterIterator
 {
 
         private $predicate;
 
-        public function __construct(\Iterator $iterator, PredicateFilterValidator $predicate)
+        public function __construct(Iterator $iterator, PredicateFilterValidator $predicate)
         {
                 $this->predicate = $predicate;
                 parent::__construct($iterator);

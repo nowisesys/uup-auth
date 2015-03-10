@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,15 @@
 
 namespace UUP\Authentication\Stack;
 
-use UUP\Authentication\Exception,
-    UUP\Authentication\Stack\AuthenticatorChain,
-    UUP\Authentication\Stack\Filter\AuthenticatorFilterIterator,
-    UUP\Authentication\Stack\Filter\ChainFilterIterator,
-    UUP\Authentication\Stack\Filter\ArrayKeyFilterIterator;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
+use UUP\Authentication\Authenticator\Authenticator;
+use UUP\Authentication\Exception;
+use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
+use UUP\Authentication\Stack\AuthenticatorChain;
+use UUP\Authentication\Stack\Filter\ArrayKeyFilterIterator;
+use UUP\Authentication\Stack\Filter\AuthenticatorFilterIterator;
+use UUP\Authentication\Stack\Filter\ChainFilterIterator;
 
 /**
  * Authenticator object and chain filtering class.
@@ -107,8 +111,8 @@ class AuthenticatorFilter
                 return self::forward(
                         new ChainFilterIterator(
                         new ArrayKeyFilterIterator(
-                        new \RecursiveIteratorIterator(
-                        new \RecursiveArrayIterator($this->chain), \RecursiveIteratorIterator::SELF_FIRST
+                        new RecursiveIteratorIterator(
+                        new RecursiveArrayIterator($this->chain), RecursiveIteratorIterator::SELF_FIRST
                         ), $key)
                 ));
         }
@@ -136,8 +140,8 @@ class AuthenticatorFilter
                 return self::forward(
                         new AuthenticatorFilterIterator(
                         new ArrayKeyFilterIterator(
-                        new \RecursiveIteratorIterator(
-                        new \RecursiveArrayIterator($this->chain), \RecursiveIteratorIterator::SELF_FIRST
+                        new RecursiveIteratorIterator(
+                        new RecursiveArrayIterator($this->chain), RecursiveIteratorIterator::SELF_FIRST
                         ), $key)
                 ));
         }
@@ -150,8 +154,8 @@ class AuthenticatorFilter
         {
                 return self::forward(
                         new ChainFilterIterator(
-                        new \RecursiveIteratorIterator(
-                        new \RecursiveArrayIterator($this->chain), \RecursiveIteratorIterator::SELF_FIRST
+                        new RecursiveIteratorIterator(
+                        new RecursiveArrayIterator($this->chain), RecursiveIteratorIterator::SELF_FIRST
                 )));
         }
 
@@ -163,14 +167,14 @@ class AuthenticatorFilter
         {
                 return self::forward(
                         new AuthenticatorFilterIterator(
-                        new \RecursiveIteratorIterator(
-                        new \RecursiveArrayIterator($this->chain), \RecursiveIteratorIterator::SELF_FIRST
+                        new RecursiveIteratorIterator(
+                        new RecursiveArrayIterator($this->chain), RecursiveIteratorIterator::SELF_FIRST
                 )));
         }
 
         public function getIterator()
         {
-                return new \RecursiveArrayIterator($this->chain);
+                return new RecursiveArrayIterator($this->chain);
         }
 
         private static function forward($iterator)

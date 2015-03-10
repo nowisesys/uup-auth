@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,11 @@
 
 namespace UUP\Authentication\Stack\Filter\Iterator;
 
+use ArrayAccess;
+use ArrayIterator;
+use Iterator;
+use IteratorAggregate;
+
 /**
  * Random access iterator.
  * 
@@ -29,12 +34,12 @@ namespace UUP\Authentication\Stack\Filter\Iterator;
  * @package UUP
  * @subpackage Authentication
  */
-class RandomAccessIterator implements \ArrayAccess, \IteratorAggregate
+class RandomAccessIterator implements ArrayAccess, IteratorAggregate
 {
 
         private $data = array();
 
-        public function __construct(\Iterator $iterator)
+        public function __construct(Iterator $iterator)
         {
                 for ($iterator->rewind(); $iterator->valid(); $iterator->next()) {
                         $this->data[$iterator->key()] = $iterator->current();
@@ -63,7 +68,7 @@ class RandomAccessIterator implements \ArrayAccess, \IteratorAggregate
 
         public function getIterator()
         {
-                return new \ArrayIterator($this->data);
+                return new ArrayIterator($this->data);
         }
 
 }

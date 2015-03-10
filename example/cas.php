@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,43 +15,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <html>
-        <head>
-                <meta charset="UTF-8">
-                <title>CAS Authentication</title>
-        </head>
-        <body>
-                <h1>CAS Authentication</h1>
-                <?php
-                
-                // ==========================================================================
-                //  Example for CAS authentication.
-                //  
-                //  This example uses an external CAS-server for SSO.
-                // ==========================================================================
+    <head>
+        <meta charset="UTF-8">
+        <title>CAS Authentication</title>
+    </head>
+    <body>
+        <h1>CAS Authentication</h1>
+        <?php
+        // ==========================================================================
+        //  Example for CAS authentication.
+        //  
+        //  This example uses an external CAS-server for SSO.
+        // ==========================================================================
 
-                require_once __DIR__ . '/../vendor/autoload.php';
+        require_once __DIR__ . '/../vendor/autoload.php';
 
-                use UUP\Authentication\Authenticator\CasAuthenticator;
+        use UUP\Authentication\Authenticator\CasAuthenticator;
 
-                $host = "cas.example.com";
-                $port = 443;
-                $path = "/cas";
+        $host = "cas.example.com";
+        $port = 443;
+        $path = "/cas";
 
-                $authenticator = new CasAuthenticator($host, $port, $path);
+        $authenticator = new CasAuthenticator($host, $port, $path);
 
-                if ($authenticator->accepted()) {
-                        printf("<p>Logged on as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getSubject());
-                } else {
-                        printf("<p><a href=\"?login\">Login</a>\n");
-                }
+        if ($authenticator->accepted()) {
+                printf("<p>Logged on as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getSubject());
+        } else {
+                printf("<p><a href=\"?login\">Login</a>\n");
+        }
 
-                if (isset($_GET['login'])) {
-                        $authenticator->login();
-                }
-                if (isset($_GET['logout'])) {
-                        $authenticator->logout();
-                }
+        if (isset($_GET['login'])) {
+                $authenticator->login();
+        }
+        if (isset($_GET['logout'])) {
+                $authenticator->logout();
+        }
 
-                ?>
-        </body>
+        ?>
+    </body>
 </html>

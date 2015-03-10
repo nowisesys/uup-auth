@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,10 @@
 
 namespace UUP\Authentication\Storage;
 
+use Serializable;
 use UUP\Authentication\Exception;
+use UUP\Authentication\Storage\CookieData;
+use UUP\Authentication\Storage\Storage;
 
 /**
  * The cookie data. 
@@ -28,7 +31,7 @@ use UUP\Authentication\Exception;
  * @property string $addr The associated IP-address.
  * @property int $expires The expiration timestamp.
  */
-class CookieData implements \Serializable
+class CookieData implements Serializable
 {
 
         private $data;
@@ -172,6 +175,21 @@ class CookieStorage implements Storage
         }
 
         /**
+         * Read cookie data.
+         * @param string $user The expected username.
+         * @return CookieData function read($user)
+          {
+          $data = new CookieData();
+          $temp = filter_input(INPUT_COOKIE, $this->name);
+
+          if (isset($temp)) {
+          $data->unserialize($temp);
+          $this->validate($user, $data);
+          }
+          return $data;
+          }
+
+          /**
          * Compute hash value.
          * @param CookieData $data The cookie data.
          * @return string

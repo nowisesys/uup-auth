@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,34 +15,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <html>
-        <head>
-                <meta charset="UTF-8">
-                <title>Hostname Authentication</title>
-        </head>
-        <body>
-                <h1>Hostname Authentication</h1>
-                <?php
+    <head>
+        <meta charset="UTF-8">
+        <title>Hostname Authentication</title>
+    </head>
+    <body>
+        <h1>Hostname Authentication</h1>
+        <?php
+        // ==========================================================================
+        //  Hostname authentication.
+        //  
+        //  Demonstrate using HostnameAuthenticator class for authentication remote
+        //  peer based on its DNS-name. The HostnameAuthenticator class could be used
+        //  for granting access to priviledged computers without requiring the user
+        //  authentication.
+        // ==========================================================================
 
-                // ==========================================================================
-                //  Hostname authentication.
-                //  
-                //  Demonstrate using HostnameAuthenticator class for authentication remote
-                //  peer based on its DNS-name. The HostnameAuthenticator class could be used
-                //  for granting access to priviledged computers without requiring the user
-                //  authentication.
-                // ==========================================================================
-                
-                require_once __DIR__ . '/../vendor/autoload.php';
+        require_once __DIR__ . '/../vendor/autoload.php';
 
-                use UUP\Authentication\Authenticator\HostnameAuthenticator;
+        use UUP\Authentication\Authenticator\HostnameAuthenticator;
 
-                $authenticator = new HostnameAuthenticator();
-                // $authenticator->setHostname('hostname');
-                printf("<p>\n");
-                printf("Name: %s<br>\n", $authenticator->getSubject());
-                printf("Authenticated: %s<br>\n", $authenticator->accepted() ? "yes" : "no");
-                printf("</p>\n");
+        $authenticator = new HostnameAuthenticator();
+        // $authenticator->setHostname('hostname');
+        printf("<p>\n");
+        printf("Name: %s<br>\n", $authenticator->getSubject());
+        printf("Authenticated: %s<br>\n", $authenticator->accepted() ? "yes" : "no");
+        printf("</p>\n");
 
-                ?>
-        </body>
+        ?>
+    </body>
 </html>

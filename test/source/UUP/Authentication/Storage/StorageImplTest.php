@@ -2,6 +2,8 @@
 
 namespace UUP\Authentication\Storage;
 
+use UUP\Authentication\Storage\Storage;
+
 /**
  * Runs unit test using object implementing the Storage interface.
  *
@@ -47,5 +49,5 @@ class StorageImplTest extends \PHPUnit_Framework_TestCase
                 $this->object->remove($user);
                 $this->assertEquals($this->object->exist($user), false);
         }
-        
+
 }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2014-2015 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 namespace UUP\Authentication\Stack\Filter;
 
+use FilterIterator;
 use UUP\Authentication\Restrictor\Restrictor;
 
 /**
@@ -27,7 +28,7 @@ use UUP\Authentication\Restrictor\Restrictor;
  * @package UUP
  * @subpackage Authentication
  */
-class AuthenticatorFilterIterator extends \FilterIterator
+class AuthenticatorFilterIterator extends FilterIterator
 {
 
         public function accept()

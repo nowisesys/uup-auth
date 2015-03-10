@@ -2,6 +2,9 @@
 
 namespace UUP\Authentication\Storage;
 
+use UUP\Authentication\Storage\SharedMemoryStorage;
+use UUP\Authentication\Storage\StorageImplTest;
+
 require_once 'StorageImplTest.php';
 
 /**

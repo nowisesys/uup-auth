@@ -2,6 +2,10 @@
 
 namespace UUP\Authentication\Storage;
 
+use PDO;
+use UUP\Authentication\Storage\SqlStorage;
+use UUP\Authentication\Storage\StorageImplTest;
+
 require_once 'StorageImplTest.php';
 
 /**
@@ -14,7 +18,7 @@ class SqlStorageTest extends StorageImplTest
 
         public function __construct()
         {
-                $this->pdo = new \PDO('sqlite::memory:', null, null);
+                $this->pdo = new PDO('sqlite::memory:', null, null);
                 $this->sql = sprintf("CREATE TABLE %s(%s varchar(10))", SqlStorage::table, SqlStorage::fuser);
                 $this->pdo->exec($this->sql);
         }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,61 +15,61 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <html>
-        <head>
-                <meta charset="UTF-8">
-                <title>PAM Authentication Example</title>
-        </head>
-        <body>
-                <h1>PAM Authentication Example</h1>
-                <?php
-                // ==========================================================================
-                //  PAM module auhentication.
-                //  
-                //  Demonstrate login using PAM-modules. It's worth noticing that this
-                //  authenticator is *not* limited to system local authentication. With a
-                //  proper setup of the PAM-stack, this authenticator could be used for
-                //  authentication against numerious account sources.
-                //  
-                //  In addition to install the PAM extension, the authentication sources 
-                //  must be readable. For local system account authentication this usually
-                //  implies that /etc/shadow should be readable by the user account the
-                //  web server is running as:
-                //  
-                //  bash$> setfacl -m u:apache:r /etc/shadow
-                // ==========================================================================
+    <head>
+        <meta charset="UTF-8">
+        <title>PAM Authentication Example</title>
+    </head>
+    <body>
+        <h1>PAM Authentication Example</h1>
+        <?php
+        // ==========================================================================
+        //  PAM module auhentication.
+        //  
+        //  Demonstrate login using PAM-modules. It's worth noticing that this
+        //  authenticator is *not* limited to system local authentication. With a
+        //  proper setup of the PAM-stack, this authenticator could be used for
+        //  authentication against numerious account sources.
+        //  
+        //  In addition to install the PAM extension, the authentication sources 
+        //  must be readable. For local system account authentication this usually
+        //  implies that /etc/shadow should be readable by the user account the
+        //  web server is running as:
+        //  
+        //  bash$> setfacl -m u:apache:r /etc/shadow
+        // ==========================================================================
 
-                require_once __DIR__ . '/../vendor/autoload.php';
+        require_once __DIR__ . '/../vendor/autoload.php';
 
-                use UUP\Authentication\Validator\PamValidator;
-                use UUP\Authentication\Authenticator\BasicHttpAuthenticator;
+        use UUP\Authentication\Authenticator\BasicHttpAuthenticator;
+        use UUP\Authentication\Validator\PamValidator;
 
-                try {
-                        $validator = new PamValidator();
-                        $authenticator = new BasicHttpAuthenticator($validator, "PAM Authentication Example");
-                        $authenticator->message = "Logon cancelled by caller";
+        try {
+                $validator = new PamValidator();
+                $authenticator = new BasicHttpAuthenticator($validator, "PAM Authentication Example");
+                $authenticator->message = "Logon cancelled by caller";
 //                        $authenticator->redirect = basename(__FILE__);
-                        $validator->errlog = true;
-                        $validator->throws = false;
+                $validator->errlog = true;
+                $validator->throws = false;
 
-                        if (isset($_GET['login'])) {
-                                $authenticator->login();
-                        }
-                        if (isset($_GET['logout'])) {
-                                $authenticator->logout();
-                        }
-
-                        if ($authenticator->accepted()) {
-                                printf("<p>Logged on as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getSubject());
-                        } else {
-                                printf("<p><a href=\"?login\">Login</a>\n");
-                        }
-
-                        printf("<p>Use a system user account for login.</p>\n");
-                } catch (\Exception $exception) {
-                        printf("Exception: %s", $exception);
+                if (isset($_GET['login'])) {
+                        $authenticator->login();
+                }
+                if (isset($_GET['logout'])) {
                         $authenticator->logout();
                 }
 
-                ?>
-        </body>
+                if ($authenticator->accepted()) {
+                        printf("<p>Logged on as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getSubject());
+                } else {
+                        printf("<p><a href=\"?login\">Login</a>\n");
+                }
+
+                printf("<p>Use a system user account for login.</p>\n");
+        } catch (Exception $exception) {
+                printf("Exception: %s", $exception);
+                $authenticator->logout();
+        }
+
+        ?>
+    </body>
 </html>

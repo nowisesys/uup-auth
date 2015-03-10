@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,10 @@
  */
 
 namespace UUP\Authentication\Validator;
+
+use PDO;
+use UUP\Authentication\Exception;
+use UUP\Authentication\Validator\CredentialValidator;
 
 /**
  * Validate usera agains an SQL database table.

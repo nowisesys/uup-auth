@@ -2,8 +2,10 @@
 
 namespace UUP\Authentication\Library\Authenticator;
 
-use UUP\Authentication\Authenticator\Authenticator,
-    UUP\Authentication\Restrictor\Restrictor;
+use UUP\Authentication\Authenticator\Authenticator;
+use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
+use UUP\Authentication\Library\Authenticator\DummyAuthenticator;
+use UUP\Authentication\Restrictor\Restrictor;
 
 class DummyAuthenticator extends AuthenticatorBase implements Authenticator, Restrictor
 {

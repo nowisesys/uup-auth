@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2014-2015 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ if (!isset($_SERVER['argv'])) {
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use UUP\Authentication\Stack\AuthenticatorChain,
-    UUP\Authentication\Stack\AuthenticatorFilter,
-    UUP\Authentication\Authenticator\HostnameAuthenticator;
+use UUP\Authentication\Authenticator\HostnameAuthenticator;
+use UUP\Authentication\Stack\AuthenticatorChain;
+use UUP\Authentication\Stack\AuthenticatorFilter;
 
 class ExampleChain extends AuthenticatorChain
 {

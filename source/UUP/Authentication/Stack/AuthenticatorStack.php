@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,14 @@
 
 namespace UUP\Authentication\Stack;
 
-use UUP\Authentication\Authenticator\Authenticator,
-    UUP\Authentication\Restrictor\Restrictor,
-    UUP\Authentication\Authenticator\NullAuthenticator,
-    UUP\Authentication\Exception,
-    UUP\Authentication\Stack\Filter\VisibilityFilterIterator;
+use UUP\Authentication\Authenticator\Authenticator;
+use UUP\Authentication\Authenticator\NullAuthenticator;
+use UUP\Authentication\Exception;
+use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
+use UUP\Authentication\Restrictor\Restrictor;
+use UUP\Authentication\Stack\Filter\AuthenticatorFilterIterator;
+use UUP\Authentication\Stack\Filter\ChainFilterIterator;
+use UUP\Authentication\Stack\Filter\VisibilityFilterIterator;
 
 /**
  * The stack of authenticator objects. 

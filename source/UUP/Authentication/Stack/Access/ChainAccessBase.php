@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2014-2015 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@
 
 namespace UUP\Authentication\Stack\Access;
 
-use UUP\Authentication\Stack\AuthenticatorChain,
-    UUP\Authentication\Authenticator\Authenticator,
-    UUP\Authentication\Restrictor\Restrictor,
-    UUP\Authentication\Exception;
+use UUP\Authentication\Authenticator\Authenticator;
+use UUP\Authentication\Exception;
+use UUP\Authentication\Restrictor\Restrictor;
+use UUP\Authentication\Stack\AuthenticatorChain;
 
 /**
  * Base class for chain access implementations.

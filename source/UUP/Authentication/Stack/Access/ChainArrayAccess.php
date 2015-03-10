@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2014-2015 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,9 @@
  */
 
 namespace UUP\Authentication\Stack\Access;
+
+use ArrayAccess;
+use UUP\Authentication\Stack\Access\ChainAccessBase;
 
 /**
  * Provides array access to authenticator chain.
@@ -62,7 +65,7 @@ namespace UUP\Authentication\Stack\Access;
  * @package UUP
  * @subpackage Authentication
  */
-class ChainArrayAccess extends ChainAccessBase implements \ArrayAccess
+class ChainArrayAccess extends ChainAccessBase implements ArrayAccess
 {
 
         public function offsetExists($offset)

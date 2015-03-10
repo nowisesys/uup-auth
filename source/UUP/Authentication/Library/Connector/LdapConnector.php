@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@
 
 namespace UUP\Authentication\Library\Connector;
 
-use UUP\Authentication\Exception,
-    UUP\Authentication\Validator\CredentialValidator;
+use UUP\Authentication\Exception;
+use UUP\Authentication\Validator\CredentialValidator;
 
 /**
  * The LDAP connector class. 

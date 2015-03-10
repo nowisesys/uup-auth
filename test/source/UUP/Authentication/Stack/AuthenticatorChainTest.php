@@ -2,7 +2,10 @@
 
 namespace UUP\Authentication\Stack;
 
+use ArrayIterator;
 use UUP\Authentication\Authenticator\HostnameAuthenticator;
+use UUP\Authentication\Stack\AuthenticatorChain;
+use UUP\Authentication\Stack\AuthenticatorChainAccessor;
 
 /**
  * @property-read array $chain Chain array accessor.
@@ -359,7 +362,7 @@ class AuthenticatorChainTest extends \PHPUnit_Framework_TestCase
         public function testGetIterator()
         {
                 $parent = $this->object;
-                $this->assertTrue($parent->getIterator() instanceof \ArrayIterator);
+                $this->assertTrue($parent->getIterator() instanceof ArrayIterator);
         }
 
         /**

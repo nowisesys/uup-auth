@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,10 @@
 
 namespace UUP\Authentication\Storage;
 
+use Serializable;
 use UUP\Authentication\Exception;
+use UUP\Authentication\Storage\SessionData;
+use UUP\Authentication\Storage\Storage;
 
 /**
  * The session data. 
@@ -30,7 +33,7 @@ use UUP\Authentication\Exception;
  * @property string $addr The associated IP-address.
  * @property int $expires The expiration timestamp.
  */
-class SessionData implements \Serializable
+class SessionData implements Serializable
 {
 
         private $data;

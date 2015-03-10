@@ -28,6 +28,7 @@ namespace UUP\Authentication\Restrictor;
  */
 interface Restrictor
 {
+
         /**
          * Check that restriction subject is satisfied (e.g. user is logged in).
          * @return bool

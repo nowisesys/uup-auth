@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 
 namespace UUP\Authentication\Stack\Filter;
 
-use UUP\Authentication\Stack;
+use UUP\Authentication\Stack\AuthenticatorChain;
 
 /**
  * Description of FilterIteratorBase
@@ -40,13 +40,13 @@ class FilterIteratorTestBase extends \PHPUnit_Framework_TestCase
                                         "key1" => "val4",
                                         "key5" => "val5",
                                         "key6" => array(
-                                                "chain1" => new Stack\AuthenticatorChain()
+                                                "chain1" => new AuthenticatorChain()
                                         ),
                                 ),
                                 "key5"      => array(),
                                 "key6"      => array("val6"),
                                 "key7"      => 3,
-                                "chain2"    => new Stack\AuthenticatorChain(),
+                                "chain2"    => new AuthenticatorChain(),
                                 "key1"      => ""
                         ),
                         "key8" => 4,
