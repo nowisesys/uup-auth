@@ -1,6 +1,6 @@
 {
     "name": "bmc/uup-auth",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "description": "Flexible authentication stack supporting multiple credential obtaining methods and account validation backends.",
     "type": "library",
     "keywords": ["authentication", "auth", "uup", "bmc"],
@@ -22,7 +22,7 @@
         },
         "classmap": [
             "source/UUP/Authentication/Stack/Filter/PredicateFilterIterator.php",
-            "source/UUP/Authentication/Stack/Filter/PropertyFilterIterator.php"            
+            "source/UUP/Authentication/Stack/Filter/PropertyFilterIterator.php"
         ]
     }
 }
