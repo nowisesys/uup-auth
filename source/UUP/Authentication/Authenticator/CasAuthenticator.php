@@ -91,7 +91,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
         private function initialize()
         {
                 $this->requires('jasig/phpcas/CAS.php');
-                $this->client = new CAS_Client(CAS_VERSION_2_0, false, $this->host, $this->port, $this->path);
+                $this->client = new CAS_Client(CAS_VERSION_2_0, false, $this->host, $this->port, $this->path, false);
                 $this->client->setNoCasServerValidation();
         }
 
