@@ -47,6 +47,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
         private $port;
         private $path;
         private $params = array();
+        private $status;
 
         public function __construct($host, $port = 443, $path = "/cas")
         {
@@ -97,6 +98,8 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
 
         private function invoke()
         {
+                $this->status = session_status();
+
                 if (session_status() == PHP_SESSION_NONE &&
                     session_status() != PHP_SESSION_DISABLED) {
                         session_start();
@@ -108,6 +111,10 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                 if (session_status() == PHP_SESSION_ACTIVE &&
                     session_status() != PHP_SESSION_DISABLED) {
                         session_write_close();
+                }
+                if ($this->status == PHP_SESSION_ACTIVE &&
+                    session_status() == PHP_SESSION_NONE) {
+                        session_start();
                 }
         }
 
