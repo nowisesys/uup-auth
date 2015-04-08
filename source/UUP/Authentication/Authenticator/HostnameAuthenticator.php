@@ -37,7 +37,7 @@ class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Aut
 
         const localhost = 'localhost';
 
-        private $accept;
+        protected $accept;
 
         /**
          * Constructor. The hostname to authenticate default to localhost if 
