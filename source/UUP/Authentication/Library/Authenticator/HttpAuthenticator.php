@@ -19,6 +19,7 @@
 
 namespace UUP\Authentication\Library\Authenticator;
 
+use UUP\Authentication\Exception;
 use UUP\Authentication\Validator\Validator;
 
 /**

@@ -307,6 +307,8 @@ namespace UUP\Authentication\Restrictor {
 
 namespace UUP\Authentication\Library\Authenticator {
 
+        use UUP\Authentication\Exception;
+        
         /**
          * Properties for an IPv4 address (single, range or masked). 
          * 
