@@ -482,6 +482,151 @@ class AddressRestrictorTest extends \PHPUnit_Framework_TestCase
                 $this->assertFalse($this->object->match($match));
 
                 // 
+                // Private addresses (RFC 1918).
+                // 
+                $range = '10.0.0.0-10.255.255.255';     // 10.0.0.0/8
+                $this->object->set($range);
+                // Inside:
+                $match = '10.0.0.1';
+                $this->assertTrue($this->object->match($match));
+                $match = '10.255.255.254';
+                $this->assertTrue($this->object->match($match));
+                // Boundary:
+                $match = '10.0.0.0';
+                $this->assertTrue($this->object->match($match));
+                $match = '10.255.255.255';
+                $this->assertTrue($this->object->match($match));
+                // Outside:
+                $match = '9.255.255.255';
+                $this->assertFalse($this->object->match($match));
+                $match = '11.0.0.0';
+                $this->assertFalse($this->object->match($match));
+
+                // 
+                // Private addresses (RFC 1918).
+                // 
+                $range = '172.16.0.0-172.31.255.255';     // 172.16.0.0/12
+                $this->object->set($range);
+                // Inside:
+                $match = '172.16.0.1';
+                $this->assertTrue($this->object->match($match));
+                $match = '172.31.255.254';
+                $this->assertTrue($this->object->match($match));
+                // Boundary:
+                $match = '172.16.0.0';
+                $this->assertTrue($this->object->match($match));
+                $match = '172.31.255.255';
+                $this->assertTrue($this->object->match($match));
+                // Outside:
+                $match = '172.15.255.255';
+                $this->assertFalse($this->object->match($match));
+                $match = '172.32.0.0';
+                $this->assertFalse($this->object->match($match));
+                
+                // 
+                // Private addresses (RFC 1918).
+                // 
+                $range = '192.168.0.0-192.168.255.255';     // 192.168.0.0/16 
+                $this->object->set($range);
+                // Inside:
+                $match = '192.168.0.0';
+                $this->assertTrue($this->object->match($match));
+                $match = '192.168.255.254';
+                $this->assertTrue($this->object->match($match));
+                // Boundary:
+                $match = '192.168.0.0';
+                $this->assertTrue($this->object->match($match));
+                $match = '192.168.255.255';
+                $this->assertTrue($this->object->match($match));
+                // Outside:
+                $match = '192.167.255.255';
+                $this->assertFalse($this->object->match($match));
+                $match = '192.169.0.0';
+                $this->assertFalse($this->object->match($match));
+
+                // 
+                // Link-local addresses (RFC 6890).
+                // 
+                $range = '169.254.0.0/16';
+                $this->object->set($range);
+                // Inside:
+                $match = '169.254.0.1';
+                $this->assertTrue($this->object->match($match));
+                $match = '169.254.255.254';
+                $this->assertTrue($this->object->match($match));
+                // Boundary:
+                $match = '169.254.0.0';
+                $this->assertTrue($this->object->match($match));
+                $match = '169.254.255.255';
+                $this->assertTrue($this->object->match($match));
+                // Outside:
+                $match = '169.253.255.255';
+                $this->assertFalse($this->object->match($match));
+                $match = '169.255.0.0';
+                $this->assertFalse($this->object->match($match));
+
+                // 
+                // IPv4 addresses (Class A).
+                // 
+                $range = '0.0.0.0-127.255.255.255';
+                $this->object->set($range);
+                // Inside:
+                $match = '0.0.0.1';
+                $this->assertTrue($this->object->match($match));
+                $match = '127.255.255.254';
+                $this->assertTrue($this->object->match($match));
+                // Boundary:
+                $match = '0.0.0.0';
+                $this->assertTrue($this->object->match($match));
+                $match = '127.255.255.255';
+                $this->assertTrue($this->object->match($match));
+                // Outside:
+                $match = '128.0.0.0';
+                $this->assertFalse($this->object->match($match));
+
+                // 
+                // IPv4 addresses (Class B).
+                // 
+                $range = '128.0.0.0-191.255.255.255';
+                $this->object->set($range);
+                // Inside:
+                $match = '128.0.0.1';
+                $this->assertTrue($this->object->match($match));
+                $match = '191.255.255.254';
+                $this->assertTrue($this->object->match($match));
+                // Boundary:
+                $match = '128.0.0.0';
+                $this->assertTrue($this->object->match($match));
+                $match = '191.255.255.255';
+                $this->assertTrue($this->object->match($match));
+                // Outside:
+                $match = '127.255.255.255';
+                $this->assertFalse($this->object->match($match));
+                $match = '192.0.0.0';
+                $this->assertFalse($this->object->match($match));
+
+                // 
+                // IPv4 addresses (Class C).
+                // 
+                $range = '192.0.0.0-223.255.255.255';
+                $this->object->set($range);
+                // Inside:
+                $match = '192.0.0.1';
+                $this->assertTrue($this->object->match($match));
+                $match = '223.255.255.254';
+                $this->assertTrue($this->object->match($match));
+                // Boundary:
+                $match = '192.0.0.0';
+                $this->assertTrue($this->object->match($match));
+                $match = '223.255.255.255';
+                $this->assertTrue($this->object->match($match));
+                // Outside:
+                $match = '191.255.255.255';
+                $this->assertFalse($this->object->match($match));
+                $match = '224.0.0.0';
+                $this->assertFalse($this->object->match($match));
+                
+                // 
                 // Multicast (class D).
                 // 
                 $range = '224.0.0.0';

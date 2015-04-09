@@ -308,7 +308,7 @@ namespace UUP\Authentication\Restrictor {
 namespace UUP\Authentication\Library\Authenticator {
 
         use UUP\Authentication\Exception;
-        
+
         /**
          * Properties for an IPv4 address (single, range or masked). 
          * 
@@ -335,11 +335,16 @@ namespace UUP\Authentication\Library\Authenticator {
 
                 const any_mask = "255.255.255.255";
                 const class_bits_mask = 0xF0000000;
-                const class_a = 0x0;
-                const class_b = 0x8;
-                const class_c = 0xC;
-                const class_d = 0xE;
-                const class_e = 0xF;
+                const class_a_bits = 0x0;
+                const class_b_bits = 0x8;
+                const class_c_bits = 0xC;
+                const class_d_bits = 0xE;
+                const class_e_bits = 0xF;
+                const class_a_mask = 0x8;
+                const class_b_mask = 0xC;
+                const class_c_mask = 0xE;
+                const class_d_mask = 0xF;
+                const class_e_mask = 0xF;
 
                 private $input;
 
@@ -379,32 +384,44 @@ namespace UUP\Authentication\Library\Authenticator {
                         $this->address = ip2long($addr);
                         $this->cidr = 32;
                         $this->hosts = 1;
-                        $this->class = ($this->address & self::class_bits_mask) >> 28;
+                        $this->class = ($this->address & self::class_bits_mask) >> 28;  // Leading four bits
+
+                        if (($this->class & self::class_a_mask) == self::class_a_bits) {
+                                $this->class = 'A';
+                        } elseif (($this->class & self::class_b_mask) == self::class_b_bits) {
+                                $this->class = 'B';
+                        } elseif (($this->class & self::class_c_mask) == self::class_c_bits) {
+                                $this->class = 'C';
+                        } elseif (($this->class & self::class_d_mask) == self::class_d_bits) {
+                                $this->class = 'D';
+                        } elseif (($this->class & self::class_e_mask) == self::class_e_bits) {
+                                $this->class = 'E';
+                        }
 
                         switch ($this->class) {
-                                case self::class_a:     // Class A
+                                case 'A':       // Class A
                                         $this->netmask = self::netmask(8);
                                         break;
-                                case self::class_b:     // Class B
+                                case 'B':       // Class B
                                         $this->netmask = self::netmask(16);
                                         break;
-                                case self::class_c:     // Class C
+                                case 'C':       // Class C
                                         $this->netmask = self::netmask(24);
                                         break;
-                                case self::class_d:     // Class D (multicast)
+                                case 'D':       // Class D (multicast)
                                         $this->netmask = ip2long(self::any_mask);
                                         $this->first = ip2long('224.0.0.0');
                                         $this->last = ip2long('239.255.255.255');
                                         break;
-                                case self::class_e:     // Class D (reserved)
+                                case 'E':       // Class E (reserved)
                                         $this->netmask = ip2long(self::any_mask);
                                         $this->first = ip2long('240.0.0.0');
                                         $this->last = ip2long('255.255.255.255');
                                         break;
                                 default:
-                                        throw new Exception(sprintf("Unknown address class %d", $this->class));
+                                        throw new Exception(sprintf("Unknown address class 0x%X", $this->class));
                         }
-                        if ($this->class < self::class_d) {
+                        if ($this->class != 'D' && $this->class != 'E') {
                                 $this->networking();
                         }
                 }
