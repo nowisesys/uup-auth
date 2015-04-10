@@ -125,6 +125,13 @@ class AddressRestrictorTest extends \PHPUnit_Framework_TestCase
                 $this->object->clear();
                 $this->object->add($address);
                 $this->assertTrue(in_array($address, $this->object->addresses));
+                
+                $address = '192.168.1.2;192.168.1.3';
+                $this->object->clear();
+                $this->object->add($address);
+                $this->assertTrue(count($this->object->addresses) == 2);
+                $this->assertTrue(in_array('192.168.1.2', $this->object->addresses));
+                $this->assertTrue(in_array('192.168.1.3', $this->object->addresses));
         }
 
         /**
