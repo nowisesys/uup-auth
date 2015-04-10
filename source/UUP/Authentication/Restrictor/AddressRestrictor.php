@@ -60,6 +60,7 @@ namespace UUP\Authentication\Restrictor {
                 const localhost_ipv6 = '::1';
                 const any_addr = '0.0.0.0/0';
                 const any_mask = '255.255.255.255';
+                const delim = ";";
 
                 private $address;
 
@@ -87,7 +88,7 @@ namespace UUP\Authentication\Restrictor {
 
                 public function __toString()
                 {
-                        return implode(",", $this->address);
+                        return implode(self::delim, $this->address);
                 }
 
                 /**
@@ -101,6 +102,8 @@ namespace UUP\Authentication\Restrictor {
                                 $this->address = array();
                                 $this->add(self::localhost_ipv4);
                                 $this->add(self::localhost_ipv6);
+                        } elseif (is_string($address) && strpos($address, self::delim)) {
+                                $this->address = explode(self::delim, $address);
                         } elseif (is_string($address)) {
                                 $this->address = array($address);
                         } elseif (is_array($address)) {
@@ -134,6 +137,9 @@ namespace UUP\Authentication\Restrictor {
                 public function add($address)
                 {
                         if (isset($address)) {
+                                if (is_string($address) && strpos($address, self::delim)) {
+                                        $address = explode(self::delim, $address);
+                                }
                                 if (is_array($address)) {
                                         $this->address = array_merge($this->address, $address);
                                         $this->address = array_unique($this->address);
