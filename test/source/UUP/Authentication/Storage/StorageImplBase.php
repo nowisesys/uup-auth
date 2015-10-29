@@ -9,7 +9,7 @@ use UUP\Authentication\Storage\Storage;
  *
  * @author Anders Lövgren (Computing Department at BMC, Uppsala University)
  */
-class StorageImplTest extends \PHPUnit_Framework_TestCase
+class StorageImplBase extends \PHPUnit_Framework_TestCase
 {
 
         /**
