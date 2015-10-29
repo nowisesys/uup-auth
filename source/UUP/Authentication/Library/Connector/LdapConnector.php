@@ -62,7 +62,7 @@ abstract class LdapConnector extends CredentialValidator
                 foreach ($this->options as $option => $value) {
                         if (!ldap_set_option($this->handle, $option, $value)) {
                                 ldap_close($this->handle);
-                                throw new Exception("Failed set option.");
+                                throw new Exception("Failed set option $option (value: $value)");
                         }
                 }
         }
