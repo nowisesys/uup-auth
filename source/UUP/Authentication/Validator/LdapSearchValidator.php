@@ -77,7 +77,6 @@ class LdapSearchValidator extends LdapConnector
                 parent::__construct($server, $port, $options);
                 $this->basedn = $basedn;
                 $this->filter = $filter;
-                $this->connect();
         }
 
         /**
@@ -102,6 +101,9 @@ class LdapSearchValidator extends LdapConnector
         {
                 if (!isset($this->user) || strlen($this->user) == 0) {
                         return false;
+                }
+                if (!isset($this->handle)) {
+                        $this->connect();
                 }
 
                 $filter = sprintf($this->filter, $this->user, $this->pass);

@@ -39,7 +39,6 @@ class LdapBindValidator extends LdapConnector
         public function __construct($server, $port = 389, $options = array())
         {
                 parent::__construct($server, $port, $options);
-                $this->connect();
         }
 
         /**
@@ -54,6 +53,9 @@ class LdapBindValidator extends LdapConnector
         {
                 if (!isset($this->user) || strlen($this->user) == 0) {
                         return false;
+                }
+                if (!isset($this->handle)) {
+                        $this->connect();
                 }
                 try {
                         $this->bind($this->user, $this->pass);
