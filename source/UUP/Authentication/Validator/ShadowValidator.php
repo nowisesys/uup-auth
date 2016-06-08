@@ -46,9 +46,9 @@ use UUP\Authentication\Validator\CredentialValidator;
 class ShadowValidator extends CredentialValidator
 {
 
-        const delim = ':';
+        const DELIMITER = ':';
 
-        private $shadow;
+        private $_shadow;
 
         /**
          * Constructor.
@@ -56,23 +56,23 @@ class ShadowValidator extends CredentialValidator
          */
         public function __construct($file = '/etc/shadow')
         {
-                $this->shadow = $file;
+                $this->_shadow = $file;
         }
 
         public function __set($name, $value)
         {
                 if ($name == 'shadow') {
-                        $this->shadow = (string) $value;
+                        $this->_shadow = (string) $value;
                 }
         }
 
         public function authenticate()
         {
-                if (!isset($this->user) || strlen($this->user) == 0) {
+                if (!isset($this->_user) || strlen($this->_user) == 0) {
                         return false;
                 }
                 if (($pass = $this->password()) != null) {
-                        return crypt($this->pass, $pass) == $pass;
+                        return crypt($this->_pass, $pass) == $pass;
                 } else {
                         return false;
                 }
@@ -80,17 +80,17 @@ class ShadowValidator extends CredentialValidator
 
         private function password()
         {
-                if (($handle = fopen($this->shadow, "r"))) {
+                if (($handle = fopen($this->_shadow, "r"))) {
                         while (($line = fgets($handle))) {
-                                if (strstr($line, $this->user)) {
-                                        $parts = explode(self::delim, $line);
+                                if (strstr($line, $this->_user)) {
+                                        $parts = explode(self::DELIMITER, $line);
                                         return $parts[1];
                                 }
                         }
                         fclose($handle);
                         return null;
                 } else {
-                        throw new Exception(sprintf("Failed open %s", $this->shadow));
+                        throw new Exception(sprintf("Failed open %s", $this->_shadow));
                 }
         }
 

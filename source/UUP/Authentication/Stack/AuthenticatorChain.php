@@ -49,7 +49,7 @@ use UUP\Authentication\Stack\AuthenticatorSearch;
 class AuthenticatorChain implements IteratorAggregate
 {
 
-        protected $chain = array();
+        protected $_chain = array();
 
         /**
          * Constructor.
@@ -76,11 +76,11 @@ class AuthenticatorChain implements IteratorAggregate
         public function insert($key, $object)
         {
                 if (is_array($object)) {
-                        $this->chain[$key] = new self($object);
+                        $this->_chain[$key] = new self($object);
                 } else {
-                        $this->chain[$key] = $object;
+                        $this->_chain[$key] = $object;
                 }
-                return $this->chain[$key];
+                return $this->_chain[$key];
         }
 
         /**
@@ -124,7 +124,7 @@ class AuthenticatorChain implements IteratorAggregate
          */
         public function remove($key)
         {
-                unset($this->chain[$key]);
+                unset($this->_chain[$key]);
                 return $this;
         }
 
@@ -162,7 +162,7 @@ class AuthenticatorChain implements IteratorAggregate
          */
         public function replace($array)
         {
-                $this->chain = array();
+                $this->_chain = array();
                 $this->append($array);
                 return $this;
         }
@@ -174,7 +174,7 @@ class AuthenticatorChain implements IteratorAggregate
          */
         public function exist($key)
         {
-                return isset($this->chain[$key]);
+                return isset($this->_chain[$key]);
         }
 
         /**
@@ -184,7 +184,7 @@ class AuthenticatorChain implements IteratorAggregate
          */
         public function get($key)
         {
-                return $this->chain[$key];
+                return $this->_chain[$key];
         }
 
         /**
@@ -213,17 +213,17 @@ class AuthenticatorChain implements IteratorAggregate
          */
         public function want($key)
         {
-                return isset($this->chain[$key]) ? $this->chain[$key] : $this->create($key);
+                return isset($this->_chain[$key]) ? $this->_chain[$key] : $this->create($key);
         }
 
         public function getIterator()
         {
-                return new ArrayIterator($this->chain);
+                return new ArrayIterator($this->_chain);
         }
 
         public function getArrayCopy()
         {
-                return $this->chain;
+                return $this->_chain;
         }
 
 }

@@ -31,17 +31,17 @@ use Iterator;
 class ArrayKeyFilterIterator extends FilterIterator
 {
 
-        private $name;
+        private $_name;
 
         public function __construct(Iterator $iterator, $key)
         {
-                $this->name = $key;
+                $this->_name = $key;
                 parent::__construct($iterator);
         }
 
         public function accept()
         {
-                return $this->key() === $this->name;
+                return $this->key() === $this->_name;
         }
 
 }

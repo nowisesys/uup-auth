@@ -35,7 +35,7 @@ use UUP\Authentication\Restrictor\Restrictor;
 class DomainAuthenticator extends HostnameAuthenticator implements Restrictor, Authenticator
 {
 
-        private $matched;
+        private $_matched;
 
         public function accepted()
         {
@@ -44,7 +44,7 @@ class DomainAuthenticator extends HostnameAuthenticator implements Restrictor, A
 
         public function getSubject()
         {
-                return $this->matched;
+                return $this->_matched;
         }
 
         /**
@@ -54,11 +54,11 @@ class DomainAuthenticator extends HostnameAuthenticator implements Restrictor, A
          */
         public function match($remote)
         {
-                if (preg_match($this->accept, $remote, $this->matched) === 1) {
-                        $this->matched = $remote;
+                if (preg_match($this->_accept, $remote, $this->_matched) === 1) {
+                        $this->_matched = $remote;
                         return true;
                 } else {
-                        $this->matched = null;
+                        $this->_matched = null;
                         return false;
                 }
         }

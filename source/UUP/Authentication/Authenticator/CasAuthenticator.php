@@ -42,63 +42,63 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
         /**
          * @var CAS_Client
          */
-        private $client;
-        private $host;
-        private $port;
-        private $path;
-        private $params = array();
-        private $status;
+        private $_client;
+        private $_host;
+        private $_port;
+        private $_path;
+        private $_params = array();
+        private $_status;
 
         public function __construct($host, $port = 443, $path = "/cas")
         {
-                $this->host = $host;
-                $this->port = $port;
-                $this->path = $path;
+                $this->_host = $host;
+                $this->_port = $port;
+                $this->_path = $path;
                 $this->initialize();
         }
 
         public function __set($name, $value)
         {
                 if ($name == 'return') {
-                        $this->params['service'] = (string) $value;
+                        $this->_params['service'] = (string) $value;
                 }
         }
 
         public function accepted()
         {
                 $this->invoke();
-                $result = $this->client->isAuthenticated();
+                $result = $this->_client->isAuthenticated();
                 $this->leave();
                 return $result;
         }
 
         public function getSubject()
         {
-                return $this->client->getUser();
+                return $this->_client->getUser();
         }
 
         public function login()
         {
-                $this->client->forceAuthentication();
+                $this->_client->forceAuthentication();
         }
 
         public function logout()
         {
                 $this->invoke();
-                $this->client->logout($this->params);
+                $this->_client->logout($this->_params);
                 $this->leave();
         }
 
         private function initialize()
         {
                 $this->requires('jasig/phpcas/CAS.php');
-                $this->client = new CAS_Client(CAS_VERSION_2_0, false, $this->host, $this->port, $this->path, false);
-                $this->client->setNoCasServerValidation();
+                $this->_client = new CAS_Client(CAS_VERSION_2_0, false, $this->_host, $this->_port, $this->_path, false);
+                $this->_client->setNoCasServerValidation();
         }
 
         private function invoke()
         {
-                $this->status = session_status();
+                $this->_status = session_status();
 
                 if (session_status() == PHP_SESSION_NONE &&
                     session_status() != PHP_SESSION_DISABLED) {
@@ -112,7 +112,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                     session_status() != PHP_SESSION_DISABLED) {
                         session_write_close();
                 }
-                if ($this->status == PHP_SESSION_ACTIVE &&
+                if ($this->_status == PHP_SESSION_ACTIVE &&
                     session_status() == PHP_SESSION_NONE) {
                         session_start();
                 }

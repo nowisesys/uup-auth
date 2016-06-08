@@ -31,15 +31,15 @@ interface Authenticator
         /**
          * Not used.
          */
-        const optional = 1;
+        const OPTIONAL = 1;
         /**
          * This authenticator is sufficient for successful authentication.
          */
-        const sufficient = 2;
+        const SUFFICIENT = 2;
         /**
          * This authenticator is required for successful authentication. 
          */
-        const required = 3;
+        const REQUIRED = 3;
 
         /**
          * Perform login for this authenticator.

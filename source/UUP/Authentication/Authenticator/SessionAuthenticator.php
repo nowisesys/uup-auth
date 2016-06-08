@@ -42,11 +42,11 @@ class SessionAuthenticator extends AuthenticatorBase implements Restrictor, Auth
         /**
          * @var Authenticator|Restrictor 
          */
-        private $authenticator;
+        private $_authenticator;
         /**
          * @var Storage 
          */
-        private $storage;
+        private $_storage;
 
         /**
          * Constructor.
@@ -55,16 +55,16 @@ class SessionAuthenticator extends AuthenticatorBase implements Restrictor, Auth
          */
         public function __construct($authenticator, $storage)
         {
-                $this->authenticator = $authenticator;
-                $this->storage = $storage;
+                $this->_authenticator = $authenticator;
+                $this->_storage = $storage;
         }
 
         public function accepted()
         {
-                if ($this->storage->exist($this->authenticator->getSubject())) {
+                if ($this->_storage->exist($this->_authenticator->getSubject())) {
                         return true;
-                } elseif ($this->authenticator->accepted()) {
-                        $this->storage->insert($this->authenticator->getSubject());
+                } elseif ($this->_authenticator->accepted()) {
+                        $this->_storage->insert($this->_authenticator->getSubject());
                         return true;
                 } else {
                         return false;
@@ -73,19 +73,19 @@ class SessionAuthenticator extends AuthenticatorBase implements Restrictor, Auth
 
         public function getSubject()
         {
-                return $this->authenticator->getSubject();
+                return $this->_authenticator->getSubject();
         }
 
         public function login()
         {
-                $this->authenticator->login();
-                $this->storage->insert($this->authenticator->getSubject());
+                $this->_authenticator->login();
+                $this->_storage->insert($this->_authenticator->getSubject());
         }
 
         public function logout()
         {
-                $this->storage->remove($this->authenticator->getSubject());
-                $this->authenticator->logout();
+                $this->_storage->remove($this->_authenticator->getSubject());
+                $this->_authenticator->logout();
         }
 
 }

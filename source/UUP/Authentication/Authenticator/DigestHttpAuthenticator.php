@@ -41,10 +41,10 @@ namespace UUP\Authentication\Library\Authenticator {
         class DigestHttpMessage
         {
 
-                private $digest;        // raw digest message
-                private $data;          // parsed digest message.
-                private $method;        // request method
-                private $required;
+                private $_digest;        // raw digest message
+                private $_data;          // parsed digest message.
+                private $_method;        // request method
+                private $_required;
 
                 /**
                  * Constructor.
@@ -53,11 +53,11 @@ namespace UUP\Authentication\Library\Authenticator {
                  */
                 public function __construct($message, $required)
                 {
-                        $this->digest = $message;
-                        $this->required = $required;
+                        $this->_digest = $message;
+                        $this->_required = $required;
 
-                        $this->data = array();
-                        $this->method = $_SERVER['REQUEST_METHOD'];
+                        $this->_data = array();
+                        $this->_method = $_SERVER['REQUEST_METHOD'];
 
                         $this->parse();
                 }
@@ -66,12 +66,12 @@ namespace UUP\Authentication\Library\Authenticator {
                 {
                         switch ($name) {
                                 case 'method':
-                                        return $this->method;
+                                        return $this->_method;
                                 case 'raw':
-                                        return $this->digest;
+                                        return $this->_digest;
                                 default:
-                                        if (isset($this->data[$name])) {
-                                                return $this->data[$name];
+                                        if (isset($this->_data[$name])) {
+                                                return $this->_data[$name];
                                         } else {
                                                 return false;
                                         }
@@ -80,21 +80,21 @@ namespace UUP\Authentication\Library\Authenticator {
 
                 private function parse()
                 {
-                        if (isset($this->digest)) {
-                                $needed = $this->required;
+                        if (isset($this->_digest)) {
+                                $needed = $this->_required;
                                 $pattern = '@(\w+)=(?:(?:")([^"]+)"|([^\s,$]+))@';
                                 $matches = array();
 
-                                preg_match_all($pattern, $this->digest, $matches, PREG_SET_ORDER);
+                                preg_match_all($pattern, $this->_digest, $matches, PREG_SET_ORDER);
 
                                 foreach ($matches as $m) {
-                                        $this->data[$m[1]] = $m[2] ? $m[2] : $m[3];
+                                        $this->_data[$m[1]] = $m[2] ? $m[2] : $m[3];
                                         if (isset($needed[$m[1]])) {
                                                 unset($needed[$m[1]]);
                                         }
                                 }
                                 if (!isset($needed)) {
-                                        $this->data = array();
+                                        $this->_data = array();
                                 }
                         }
                 }
@@ -111,7 +111,7 @@ namespace UUP\Authentication\Library\Authenticator {
         class DigestHttpResponse
         {
 
-                private $provider;
+                private $_provider;
 
                 /**
                  * Constructor
@@ -119,7 +119,7 @@ namespace UUP\Authentication\Library\Authenticator {
                  */
                 public function __construct($provider)
                 {
-                        $this->provider = $provider;
+                        $this->_provider = $provider;
                 }
 
                 /**
@@ -130,7 +130,7 @@ namespace UUP\Authentication\Library\Authenticator {
                 public function validate($message, $realm)
                 {
                         $user = $message->username;
-                        $pass = $this->provider->getPassword($user);
+                        $pass = $this->_provider->getPassword($user);
                         $validator = new DigestHttpValidator($realm, $message, $user, $pass);
                         return $validator->authenticate();
                 }
@@ -160,7 +160,7 @@ namespace UUP\Authentication\Authenticator {
 
                 use \UUP\Authentication\Library\Authenticator\HttpAuthenticator;
 
-                private $nonce;
+                private $_nonce;
 
                 /**
                  * Constructor.
@@ -183,7 +183,7 @@ namespace UUP\Authentication\Authenticator {
 
                 private function initialize($required)
                 {
-                        $this->nonce = uniqid();
+                        $this->_nonce = uniqid();
 
                         if (isset($_SERVER['PHP_AUTH_DIGEST'])) {               // mod_php
                                 $digest = $_SERVER['PHP_AUTH_DIGEST'];
@@ -208,22 +208,22 @@ namespace UUP\Authentication\Authenticator {
                         // this code behave well with session authentication.
                         // 
                         $message = new DigestHttpMessage($digest, $required);
-                        $response = new DigestHttpResponse($this->validator);
-                        if ($response->validate($message, $this->realm)) {
-                                $this->user = $message->username;
-                                $this->pass = $this->validator->getPassword($this->user);
-                                $this->validator->setCredentials($this->user, $this->pass);
+                        $response = new DigestHttpResponse($this->_validator);
+                        if ($response->validate($message, $this->_realm)) {
+                                $this->_user = $message->username;
+                                $this->_pass = $this->_validator->getPassword($this->_user);
+                                $this->_validator->setCredentials($this->_user, $this->_pass);
                         }
                 }
 
                 private function unauthorized()
                 {
-                        header(sprintf('WWW-Authenticate: Digest realm="%s",qop="auth",nonce="%s",opaque="%s"', $this->realm, $this->nonce, md5($this->realm)));
+                        header(sprintf('WWW-Authenticate: Digest realm="%s",qop="auth",nonce="%s",opaque="%s"', $this->_realm, $this->_nonce, md5($this->_realm)));
                         header('HTTP/1.0 401 Unauthorized');
-                        if (isset($this->redirect)) {
-                                header(sprintf("Location: %s", $this->redirect));
+                        if (isset($this->_redirect)) {
+                                header(sprintf("Location: %s", $this->_redirect));
                         } else {
-                                die($this->message);
+                                die($this->_message);
                         }
                 }
 

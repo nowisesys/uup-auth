@@ -33,8 +33,8 @@ use UUP\Authentication\Validator\Validator;
 abstract class CredentialValidator implements Validator
 {
 
-        protected $user;
-        protected $pass;
+        protected $_user;
+        protected $_pass;
 
         /**
          * Constructor.
@@ -43,14 +43,14 @@ abstract class CredentialValidator implements Validator
          */
         public function __construct($user = "", $pass = "")
         {
-                $this->user = $user;
-                $this->pass = $pass;
+                $this->_user = $user;
+                $this->_pass = $pass;
         }
 
         public function setCredentials($user, $pass)
         {
-                $this->user = $user;
-                $this->pass = $pass;
+                $this->_user = $user;
+                $this->_pass = $pass;
         }
 
 }

@@ -58,13 +58,13 @@ use UUP\Authentication\Restrictor\Restrictor;
 class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
 {
 
-        const login = 'login';
-        const logout = 'logout';
+        const LOGIN = 'login';
+        const LOGOUT = 'logout';
 
-        protected $options;
-        private $subject = 'REMOTE_USER';
-        private $handler;
-        private $return;
+        protected $_options;
+        private $_subject = 'REMOTE_USER';
+        private $_handler;
+        private $_return;
 
         /**
          * Constructor.
@@ -72,20 +72,20 @@ class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, A
          */
         public function __construct($options)
         {
-                $this->options = $options;
+                $this->_options = $options;
 
-                if (empty($this->return)) {
-                        $this->return = filter_input(INPUT_SERVER, 'HTTP_REFERER');
+                if (empty($this->_return)) {
+                        $this->_return = filter_input(INPUT_SERVER, 'HTTP_REFERER');
                 }
-                if (empty($this->return)) {
-                        $this->return = filter_input(INPUT_SERVER, 'REQUEST_URI');
+                if (empty($this->_return)) {
+                        $this->_return = filter_input(INPUT_SERVER, 'REQUEST_URI');
                 }
         }
 
         public function __get($name)
         {
                 if ($name == 'return') {
-                        return $this->return;
+                        return $this->_return;
                 } else {
                         return parent::__get($name);
                 }
@@ -94,40 +94,40 @@ class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, A
         public function __set($name, $value)
         {
                 if ($name == 'return') {
-                        $this->return = (string) $value;
+                        $this->_return = (string) $value;
                 }
                 if ($name == 'subject') {
-                        $this->subject = (string) $value;
+                        $this->_subject = (string) $value;
                 }
         }
 
         public function accepted()
         {
-                return isset($_SERVER[$this->subject]);
+                return isset($_SERVER[$this->_subject]);
         }
 
         public function getSubject()
         {
-                return $_SERVER[$this->subject];
+                return $_SERVER[$this->_subject];
         }
 
         public function login()
         {
-                $this->redirect(self::login);
+                $this->redirect(self::LOGIN);
         }
 
         public function logout()
         {
-                $this->redirect(self::logout);
+                $this->redirect(self::LOGOUT);
         }
 
         private function redirect($method)
         {
-                if (!isset($this->handler)) {
-                        $this->handler = $this->options[$method];
+                if (!isset($this->_handler)) {
+                        $this->_handler = $this->_options[$method];
                 }
 
-                header(sprintf("Location: %s", self::destination($this->handler, $this->return)));
+                header(sprintf("Location: %s", self::destination($this->_handler, $this->_return)));
         }
 
         // 

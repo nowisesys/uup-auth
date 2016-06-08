@@ -35,18 +35,18 @@ use UUP\Authentication\Restrictor\Restrictor;
 class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
 {
 
-        const localhost = 'localhost';
+        const LOCALHOST = 'localhost';
 
-        protected $accept;
+        protected $_accept;
 
         /**
          * Constructor. The hostname to authenticate default to localhost if 
          * the $accept argument is missing.
          * @param string $accept The hostname to authenticate.
          */
-        public function __construct($accept = self::localhost)
+        public function __construct($accept = self::LOCALHOST)
         {
-                $this->accept = $accept;
+                $this->_accept = $accept;
                 $this->visible(false);
         }
 
@@ -56,17 +56,17 @@ class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Aut
          */
         public function setHostname($accept)
         {
-                $this->accept = $accept;
+                $this->_accept = $accept;
         }
 
         public function accepted()
         {
-                return gethostbyaddr($_SERVER['REMOTE_ADDR']) == $this->accept;
+                return gethostbyaddr($_SERVER['REMOTE_ADDR']) == $this->_accept;
         }
 
         public function getSubject()
         {
-                return $this->accept;
+                return $this->_accept;
         }
 
         public function login()

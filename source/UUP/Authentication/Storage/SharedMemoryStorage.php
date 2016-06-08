@@ -31,17 +31,17 @@ use UUP\Authentication\Storage\Storage;
 class SharedMemoryStorage implements Storage
 {
 
-        const open_create = "c";
-        const open_readwr = "w";
-        const offset = 5;     // reserved for usage count
-        const size = 10000;
-        const mode = 0644;
+        const OPEN_CREATE = "c";
+        const OPEN_READWR = "w";
+        const OFFSET = 5;     // reserved for usage count
+        const SIZE = 10000;
+        const MODE = 0644;
 
-        private $id;
-        private $key;
-        private $flags;
-        private $mode;
-        private $size;
+        private $_id;
+        private $_key;
+        private $_flags;
+        private $_mode;
+        private $_size;
 
         /**
          * Constructor.
@@ -51,16 +51,16 @@ class SharedMemoryStorage implements Storage
          * @param int $size The initial segment size. Grown as needed.
          * @throws Exception
          */
-        public function __construct($key = 0, $flags = self::open_readwr, $mode = self::mode, $size = self::size)
+        public function __construct($key = 0, $flags = self::OPEN_READWR, $mode = self::MODE, $size = self::SIZE)
         {
                 if (!extension_loaded('shmop')) {
                         throw new Exception("The shmop extension is not loaded.");
                 }
 
-                $this->key = $key != 0 ? $key : self::genkey();
-                $this->flags = $flags;
-                $this->mode = $mode;
-                $this->size = $size;
+                $this->_key = $key != 0 ? $key : self::genkey();
+                $this->_flags = $flags;
+                $this->_mode = $mode;
+                $this->_size = $size;
 
                 $this->open();
                 $this->increment();
@@ -99,10 +99,10 @@ class SharedMemoryStorage implements Storage
 
         private function open()
         {
-                if (!($this->id = @shmop_open($this->key, $this->flags, $this->mode, $this->size))) {
-                        $this->flags = self::open_create;
+                if (!($this->_id = @shmop_open($this->_key, $this->_flags, $this->_mode, $this->_size))) {
+                        $this->_flags = self::OPEN_CREATE;
                 }
-                if (!($this->id = @shmop_open($this->key, $this->flags, $this->mode, $this->size))) {
+                if (!($this->_id = @shmop_open($this->_key, $this->_flags, $this->_mode, $this->_size))) {
                         throw new Exception("Failed open shared memory segment");
                 }
         }
@@ -110,15 +110,15 @@ class SharedMemoryStorage implements Storage
         private function close()
         {
                 if ($this->usage() == 0) {
-                        shmop_delete($this->id);
+                        shmop_delete($this->_id);
                 } else {
-                        shmop_close($this->id);
+                        shmop_close($this->_id);
                 }
         }
 
         private function read()
         {
-                if (!($data = shmop_read($this->id, self::offset, $this->size - self::offset))) {
+                if (!($data = shmop_read($this->_id, self::OFFSET, $this->_size - self::OFFSET))) {
                         throw new Exception("Failed read shared memory");
                 } else {
                         return (array) unserialize(trim($data));
@@ -130,11 +130,11 @@ class SharedMemoryStorage implements Storage
                 $data = serialize($array);
                 $size = strlen($data);
 
-                if ($size > $this->size) {
+                if ($size > $this->_size) {
                         $this->realloc($size * 2);
                 }
 
-                if (!(shmop_write($this->id, $data, self::offset))) {
+                if (!(shmop_write($this->_id, $data, self::OFFSET))) {
                         throw new Exception("Failed write shared memory");
                 }
         }
@@ -143,7 +143,7 @@ class SharedMemoryStorage implements Storage
         {
                 $data = $this->read();
                 $this->close();
-                $this->size = $size;
+                $this->_size = $size;
                 $this->open();
                 $this->write($data);
         }
@@ -151,18 +151,18 @@ class SharedMemoryStorage implements Storage
         private function increment()
         {
                 $count = $this->usage();
-                shmop_write($this->id, $count + 1, 0);
+                shmop_write($this->_id, $count + 1, 0);
         }
 
         private function decrement()
         {
                 $count = $this->usage();
-                shmop_write($this->id, $count - 1, 0);
+                shmop_write($this->_id, $count - 1, 0);
         }
 
         private function usage()
         {
-                if (!($count = shmop_read($this->id, 0, self::offset))) {
+                if (!($count = shmop_read($this->_id, 0, self::OFFSET))) {
                         throw new Exception("Failed read shared memory");
                 } else {
                         return (int) $count;

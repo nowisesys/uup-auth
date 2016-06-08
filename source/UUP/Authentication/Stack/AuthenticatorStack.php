@@ -98,7 +98,7 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
         /**
          * @var Authenticator|Restrictor Current active authenticator.
          */
-        private $authenticator;
+        private $_authenticator;
 
         /**
          * Constructor.
@@ -107,7 +107,7 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
         public function __construct($chains = array())
         {
                 parent::__construct($chains);
-                $this->authenticator = new NullAuthenticator();
+                $this->_authenticator = new NullAuthenticator();
         }
 
         /**
@@ -116,7 +116,7 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
          */
         public function getAuthenticator()
         {
-                return $this->authenticator;
+                return $this->_authenticator;
         }
 
         /**
@@ -128,7 +128,7 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
          */
         public function setAuthenticator($authenticator)
         {
-                $this->authenticator = $authenticator;
+                $this->_authenticator = $authenticator;
         }
 
         /**
@@ -161,10 +161,10 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
         public function chain($key, $recursive = true)
         {
                 if ($recursive) {
-                        $search = new AuthenticatorSearch($this->chain);
+                        $search = new AuthenticatorSearch($this->_chain);
                         return $search->chain($key);
                 } else {
-                        $search = new AuthenticatorFilter($this->chain);
+                        $search = new AuthenticatorFilter($this->_chain);
                         return $search->chain($key);
                 }
         }
@@ -183,10 +183,10 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
         public function authenticator($key, $recursive = true)
         {
                 if ($recursive) {
-                        $search = new AuthenticatorSearch($this->chain);
+                        $search = new AuthenticatorSearch($this->_chain);
                         return $search->authenticator($key);
                 } else {
-                        $search = new AuthenticatorFilter($this->chain);
+                        $search = new AuthenticatorFilter($this->_chain);
                         return $search->authenticator($key);
                 }
         }
@@ -199,9 +199,9 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
         public function authenticators($visible = false)
         {
                 if ($visible) {
-                        return new VisibilityFilterIterator((new AuthenticatorSearch($this->chain))->authenticators());
+                        return new VisibilityFilterIterator((new AuthenticatorSearch($this->_chain))->authenticators());
                 } else {
-                        return (new AuthenticatorSearch($this->chain))->authenticators();
+                        return (new AuthenticatorSearch($this->_chain))->authenticators();
                 }
         }
 
@@ -215,23 +215,23 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
          */
         public function accepted()
         {
-                if (!$this->authenticator->accepted()) {
+                if (!$this->_authenticator->accepted()) {
                         foreach ($this->authenticators() as $authenticator) {
-                                if ($authenticator->control === Authenticator::required) {
+                                if ($authenticator->control === Authenticator::REQUIRED) {
                                         if (!$authenticator->accepted()) {
                                                 throw new AuthenticatorRequiredException($authenticator->authenticator);
                                         }
                                 }
                         }
                         foreach ($this->authenticators() as $authenticator) {
-                                if ($authenticator->control === Authenticator::sufficient &&
+                                if ($authenticator->control === Authenticator::SUFFICIENT &&
                                     $authenticator->accepted()) {
-                                        $this->authenticator = $authenticator;
+                                        $this->_authenticator = $authenticator;
                                         break;
                                 }
                         }
                 }
-                return $this->authenticator->accepted();
+                return $this->_authenticator->accepted();
         }
 
         /**
@@ -240,7 +240,7 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
          */
         public function getSubject()
         {
-                return $this->authenticator->getSubject();
+                return $this->_authenticator->getSubject();
         }
 
         /**
@@ -249,7 +249,7 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
          */
         public function login()
         {
-                $this->authenticator->login();
+                $this->_authenticator->login();
         }
 
         /**
@@ -258,7 +258,7 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
         public function logout()
         {
                 if ($this->accepted()) {
-                        $this->authenticator->logout();
+                        $this->_authenticator->logout();
                 }
         }
 

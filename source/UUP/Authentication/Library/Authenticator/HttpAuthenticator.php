@@ -45,27 +45,27 @@ trait HttpAuthenticator
         /**
          * @var string The username.
          */
-        private $user = "";
+        private $_user = "";
         /**
          * @var string The password.
          */
-        private $pass = "";
+        private $_pass = "";
         /**
          * @var Validator 
          */
-        private $validator;
+        private $_validator;
         /**
          * @var string The authentication realm.
          */
-        private $realm;
+        private $_realm;
         /**
          * @var string The redirect URL. 
          */
-        private $redirect = null;
+        private $_redirect = null;
         /**
          * @var string 
          */
-        private $message = "";
+        private $_message = "";
 
         /**
          * Configure the property bag for this trait.
@@ -75,38 +75,38 @@ trait HttpAuthenticator
          */
         private function config($validator, $realm)
         {
-                $this->validator = $validator;
-                $this->realm = $realm;
+                $this->_validator = $validator;
+                $this->_realm = $realm;
         }
 
         public function __set($name, $value)
         {
                 switch ($name) {
                         case "redirect":
-                                $this->redirect = (string) $value;
+                                $this->_redirect = (string) $value;
                                 break;
                         case "message":
-                                $this->message = (string) $value;
+                                $this->_message = (string) $value;
                                 break;
                 }
         }
 
         public function accepted()
         {
-                return $this->validator->authenticate();
+                return $this->_validator->authenticate();
         }
 
         public function getSubject()
         {
-                return $this->user;
+                return $this->_user;
         }
 
         public function login()
         {
                 try {
-                        if (strlen($this->user) == 0) {
+                        if (strlen($this->_user) == 0) {
                                 $this->unauthorized();
-                        } elseif (!$this->validator->authenticate()) {
+                        } elseif (!$this->_validator->authenticate()) {
                                 $this->unauthorized();
                         }
                 } catch (Exception $exception) {

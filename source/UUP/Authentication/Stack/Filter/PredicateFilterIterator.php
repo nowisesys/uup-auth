@@ -83,17 +83,17 @@ interface PredicateFilterValidator
 class PredicateFilterIterator extends FilterIterator
 {
 
-        private $predicate;
+        private $_predicate;
 
         public function __construct(Iterator $iterator, PredicateFilterValidator $predicate)
         {
-                $this->predicate = $predicate;
+                $this->_predicate = $predicate;
                 parent::__construct($iterator);
         }
 
         public function accept()
         {
-                return $this->predicate->validate($this);
+                return $this->_predicate->validate($this);
         }
 
 }

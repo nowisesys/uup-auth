@@ -49,22 +49,22 @@ class BasicHttpAuthenticator extends AuthenticatorBase implements Restrictor, Au
         private function initialize()
         {
                 if (isset($_SERVER['PHP_AUTH_USER']) && strlen($_SERVER['PHP_AUTH_USER']) != 0) {
-                        $this->user = $_SERVER['PHP_AUTH_USER'];
+                        $this->_user = $_SERVER['PHP_AUTH_USER'];
                 }
                 if (isset($_SERVER['PHP_AUTH_PW']) && strlen($_SERVER['PHP_AUTH_PW']) != 0) {
-                        $this->pass = $_SERVER['PHP_AUTH_PW'];
+                        $this->_pass = $_SERVER['PHP_AUTH_PW'];
                 }
-                $this->validator->setCredentials($this->user, $this->pass);
+                $this->_validator->setCredentials($this->_user, $this->_pass);
         }
 
         private function unauthorized()
         {
-                header(sprintf('WWW-Authenticate: Basic realm="%s"', $this->realm));
+                header(sprintf('WWW-Authenticate: Basic realm="%s"', $this->_realm));
                 header('HTTP/1.0 401 Unauthorized');
-                if (isset($this->redirect)) {
-                        header(sprintf("Location: %s", $this->redirect));
+                if (isset($this->_redirect)) {
+                        header(sprintf("Location: %s", $this->_redirect));
                 } else {
-                        die($this->message);
+                        die($this->_message);
                 }
         }
 

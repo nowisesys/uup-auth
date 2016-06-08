@@ -69,11 +69,11 @@ class DateTimeRestrictor extends AuthenticatorBase implements Restrictor
         /**
          * @var int 
          */
-        protected $stime;
+        protected $_stime;
         /**
          * @var int 
          */
-        protected $etime;
+        protected $_etime;
 
         /**
          * Constructor.
@@ -82,19 +82,19 @@ class DateTimeRestrictor extends AuthenticatorBase implements Restrictor
          */
         public function __construct($stime, $etime)
         {
-                $this->stime = $stime;
-                $this->etime = $etime;
+                $this->_stime = $stime;
+                $this->_etime = $etime;
                 $this->visible(false);
-                $this->control(Authenticator::required);
+                $this->control(Authenticator::REQUIRED);
         }
 
         public function __get($name)
         {
                 switch ($name) {
                         case 'start':
-                                return $this->stime;
+                                return $this->_stime;
                         case 'end':
-                                return $this->etime;
+                                return $this->_etime;
                         default :
                                 return parent::__get($name);
                 }
@@ -102,7 +102,7 @@ class DateTimeRestrictor extends AuthenticatorBase implements Restrictor
 
         public function accepted()
         {
-                return ($this->stime <= time()) && (time() <= $this->etime);
+                return ($this->_stime <= time()) && (time() <= $this->_etime);
         }
 
         public function getSubject()

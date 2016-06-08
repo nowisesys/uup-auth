@@ -51,7 +51,7 @@ abstract class AuthenticatorBase
         public function __construct()
         {
                 $this->_visible = true;
-                $this->_control = Authenticator::sufficient;
+                $this->_control = Authenticator::SUFFICIENT;
         }
 
         public function __get($name)
@@ -118,7 +118,7 @@ abstract class AuthenticatorBase
          */
         public function sufficient()
         {
-                return $this->_control == Authenticator::sufficient;
+                return $this->_control == Authenticator::SUFFICIENT;
         }
 
         /**
@@ -127,7 +127,7 @@ abstract class AuthenticatorBase
          */
         public function required()
         {
-                return $this->_control == Authenticator::required;
+                return $this->_control == Authenticator::REQUIRED;
         }
 
 }

@@ -36,9 +36,9 @@ class SqlValidator extends CredentialValidator
                 initialize as private;
         }
 
-        const table = "users";
-        const fuser = "user";
-        const fpass = "pass";
+        const TABLE = "users";
+        const FUSER = "user";
+        const FPASS = "pass";
 
         /**
          * Constructor.
@@ -48,14 +48,14 @@ class SqlValidator extends CredentialValidator
          * @param string $fpass The password column (field) name.
          * @throws Exception
          */
-        public function __construct($pdo, $table = self::table, $fuser = self::fuser, $fpass = self::fpass)
+        public function __construct($pdo, $table = self::TABLE, $fuser = self::FUSER, $fpass = self::FPASS)
         {
                 $this->initialize($pdo, $table, $fuser, $fpass);
         }
 
         public function authenticate()
         {
-                $sql = sprintf("SELECT COUNT(*) FROM %s WHERE %s = '%s' AND %s = '%s'", $this->table, $this->fuser, $this->user, $this->fpass, $this->pass);
+                $sql = sprintf("SELECT COUNT(*) FROM %s WHERE %s = '%s' AND %s = '%s'", $this->_table, $this->_fuser, $this->_user, $this->_fpass, $this->_pass);
                 return $this->query($sql)->fetchColumn() > 0;
         }
 

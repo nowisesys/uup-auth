@@ -80,17 +80,17 @@ limitations under the License.
                         // 
                         $chain['auth']['pam'] = (new SystemAuthentication())
                             ->visible(true)
-                            ->control(Authenticator::sufficient)
+                            ->control(Authenticator::SUFFICIENT)
                             ->name('System')
                             ->description('Login using local system account.');
                         $chain['auth']['cas'] = (new CasAuthenticator('cas.example.com'))
                             ->visible(true)
-                            ->control(Authenticator::sufficient)
+                            ->control(Authenticator::SUFFICIENT)
                             ->name('CAS')
                             ->description('CAS server login');
                         $chain['auth']['ldap'] = (new LdapAuthenticator('ldaps://ldap.example.com'))
                             ->visible(true)
-                            ->control(Authenticator::sufficient)
+                            ->control(Authenticator::SUFFICIENT)
                             ->name('LDAP')
                             ->description('LDAP authentication');
                         // 
@@ -98,7 +98,7 @@ limitations under the License.
                         // 
                         $chain['access']['addr'] = (new AddressRestrictor(array('::1', '127.0.0.1', '192.168.0.0/16')))
                             ->visible(false)
-                            ->control(Authenticator::required);
+                            ->control(Authenticator::REQUIRED);
 
                         parent::__construct($chain);
                 }

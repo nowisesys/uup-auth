@@ -56,13 +56,13 @@ namespace UUP\Authentication\Restrictor {
         class AddressRestrictor extends AuthenticatorBase implements Restrictor
         {
 
-                const localhost_ipv4 = '127.0.0.1';
-                const localhost_ipv6 = '::1';
-                const any_addr = '0.0.0.0/0';
-                const any_mask = '255.255.255.255';
-                const delim = ";";
+                const LOCALHOST_IPV4 = '127.0.0.1';
+                const LOCALHOST_IPV6 = '::1';
+                const ANY_ADDR = '0.0.0.0/0';
+                const ANY_MASK = '255.255.255.255';
+                const DELIMITER = ";";
 
-                private $address;
+                private $_address;
 
                 /**
                  * Constructor.
@@ -74,13 +74,13 @@ namespace UUP\Authentication\Restrictor {
                         $this->reset();
                         $this->add($address);
                         $this->visible(false);
-                        $this->control(Authenticator::required);
+                        $this->control(Authenticator::REQUIRED);
                 }
 
                 public function __get($name)
                 {
                         if ($name == 'addresses') {
-                                return $this->address;
+                                return $this->_address;
                         } else {
                                 return parent::__get($name);
                         }
@@ -88,7 +88,7 @@ namespace UUP\Authentication\Restrictor {
 
                 public function __toString()
                 {
-                        return implode(self::delim, $this->address);
+                        return implode(self::DELIMITER, $this->_address);
                 }
 
                 /**
@@ -99,15 +99,15 @@ namespace UUP\Authentication\Restrictor {
                 public function set($address)
                 {
                         if (!isset($address)) {
-                                $this->address = array();
-                                $this->add(self::localhost_ipv4);
-                                $this->add(self::localhost_ipv6);
-                        } elseif (is_string($address) && strpos($address, self::delim)) {
-                                $this->address = explode(self::delim, $address);
+                                $this->_address = array();
+                                $this->add(self::LOCALHOST_IPV4);
+                                $this->add(self::LOCALHOST_IPV6);
+                        } elseif (is_string($address) && strpos($address, self::DELIMITER)) {
+                                $this->_address = explode(self::DELIMITER, $address);
                         } elseif (is_string($address)) {
-                                $this->address = array($address);
+                                $this->_address = array($address);
                         } elseif (is_array($address)) {
-                                $this->address = $address;
+                                $this->_address = $address;
                         } else {
                                 throw new Exception('Invalid argument type');
                         }
@@ -137,14 +137,14 @@ namespace UUP\Authentication\Restrictor {
                 public function add($address)
                 {
                         if (isset($address)) {
-                                if (is_string($address) && strpos($address, self::delim)) {
-                                        $address = explode(self::delim, $address);
+                                if (is_string($address) && strpos($address, self::DELIMITER)) {
+                                        $address = explode(self::DELIMITER, $address);
                                 }
                                 if (is_array($address)) {
-                                        $this->address = array_merge($this->address, $address);
-                                        $this->address = array_unique($this->address);
+                                        $this->_address = array_merge($this->_address, $address);
+                                        $this->_address = array_unique($this->_address);
                                 } elseif (is_string($address)) {
-                                        $this->address[] = $address;
+                                        $this->_address[] = $address;
                                 } else {
                                         throw new Exception('Invalid argument type');
                                 }
@@ -164,8 +164,8 @@ namespace UUP\Authentication\Restrictor {
                                 }
                                 if (is_array($address)) {
                                         foreach ($address as $addr) {
-                                                if (($pos = array_search($addr, $this->address)) !== false) {
-                                                        unset($this->address[$pos]);
+                                                if (($pos = array_search($addr, $this->_address)) !== false) {
+                                                        unset($this->_address[$pos]);
                                                 }
                                         }
                                 } else {
@@ -180,7 +180,7 @@ namespace UUP\Authentication\Restrictor {
                  */
                 public function get()
                 {
-                        return $this->address;
+                        return $this->_address;
                 }
 
                 /**
@@ -194,10 +194,10 @@ namespace UUP\Authentication\Restrictor {
                 public function contains($address)
                 {
                         if (is_string($address)) {
-                                return in_array($address, $this->address);
+                                return in_array($address, $this->_address);
                         } elseif (is_array($address)) {
                                 foreach ($address as $addr) {
-                                        if (!in_array($addr, $this->address)) {
+                                        if (!in_array($addr, $this->_address)) {
                                                 return false;
                                         }
                                 }
@@ -214,7 +214,7 @@ namespace UUP\Authentication\Restrictor {
                  */
                 public function match($remote)
                 {
-                        foreach ($this->address as $address) {
+                        foreach ($this->_address as $address) {
                                 if (strstr($address, ':')) {
                                         if (self::checkSingle($address, $remote)) {
                                                 return true;
@@ -339,20 +339,20 @@ namespace UUP\Authentication\Library\Authenticator {
         class AddressProperties
         {
 
-                const any_mask = "255.255.255.255";
-                const class_bits_mask = 0xF0000000;
-                const class_a_bits = 0x0;
-                const class_b_bits = 0x8;
-                const class_c_bits = 0xC;
-                const class_d_bits = 0xE;
-                const class_e_bits = 0xF;
-                const class_a_mask = 0x8;
-                const class_b_mask = 0xC;
-                const class_c_mask = 0xE;
-                const class_d_mask = 0xF;
-                const class_e_mask = 0xF;
+                const ANY_MASK = "255.255.255.255";
+                const CLASS_BITS_MASK = 0xF0000000;
+                const CLASS_A_BITS = 0x0;
+                const CLASS_B_BITS = 0x8;
+                const CLASS_C_BITS = 0xC;
+                const CLASS_D_BITS = 0xE;
+                const CLASS_E_BITS = 0xF;
+                const CLASS_A_MASK = 0x8;
+                const CLASS_B_MASK = 0xC;
+                const CLASS_C_MASK = 0xE;
+                const CLASS_D_MASK = 0xF;
+                const CLASS_E_MASK = 0xF;
 
-                private $input;
+                private $_input;
 
                 /**
                  * Constructor.
@@ -360,7 +360,7 @@ namespace UUP\Authentication\Library\Authenticator {
                  */
                 public function __construct($address)
                 {
-                        $this->input = $address;
+                        $this->_input = $address;
                         $this->decode($address);
                 }
 
@@ -390,17 +390,17 @@ namespace UUP\Authentication\Library\Authenticator {
                         $this->address = ip2long($addr);
                         $this->cidr = 32;
                         $this->hosts = 1;
-                        $this->class = ($this->address & self::class_bits_mask) >> 28;  // Leading four bits
+                        $this->class = ($this->address & self::CLASS_BITS_MASK) >> 28;  // Leading four bits
 
-                        if (($this->class & self::class_a_mask) == self::class_a_bits) {
+                        if (($this->class & self::CLASS_A_MASK) == self::CLASS_A_BITS) {
                                 $this->class = 'A';
-                        } elseif (($this->class & self::class_b_mask) == self::class_b_bits) {
+                        } elseif (($this->class & self::CLASS_B_MASK) == self::CLASS_B_BITS) {
                                 $this->class = 'B';
-                        } elseif (($this->class & self::class_c_mask) == self::class_c_bits) {
+                        } elseif (($this->class & self::CLASS_C_MASK) == self::CLASS_C_BITS) {
                                 $this->class = 'C';
-                        } elseif (($this->class & self::class_d_mask) == self::class_d_bits) {
+                        } elseif (($this->class & self::CLASS_D_MASK) == self::CLASS_D_BITS) {
                                 $this->class = 'D';
-                        } elseif (($this->class & self::class_e_mask) == self::class_e_bits) {
+                        } elseif (($this->class & self::CLASS_E_MASK) == self::CLASS_E_BITS) {
                                 $this->class = 'E';
                         }
 
@@ -415,12 +415,12 @@ namespace UUP\Authentication\Library\Authenticator {
                                         $this->netmask = self::netmask(24);
                                         break;
                                 case 'D':       // Class D (multicast)
-                                        $this->netmask = ip2long(self::any_mask);
+                                        $this->netmask = ip2long(self::ANY_MASK);
                                         $this->first = ip2long('224.0.0.0');
                                         $this->last = ip2long('239.255.255.255');
                                         break;
                                 case 'E':       // Class E (reserved)
-                                        $this->netmask = ip2long(self::any_mask);
+                                        $this->netmask = ip2long(self::ANY_MASK);
                                         $this->first = ip2long('240.0.0.0');
                                         $this->last = ip2long('255.255.255.255');
                                         break;
@@ -514,7 +514,7 @@ namespace UUP\Authentication\Library\Authenticator {
                         if ($cidr == 0) {
                                 return 0;
                         }
-                        $mask = (int) ip2long(self::any_mask);
+                        $mask = (int) ip2long(self::ANY_MASK);
                         $mask <<= (32 - $cidr);
                         return $mask & 0xffffffff;
                 }

@@ -45,7 +45,7 @@ class AuthenticatorFilter
         /**
          * @var array 
          */
-        protected $chain;
+        protected $_chain;
 
         /**
          * Constructor.
@@ -58,9 +58,9 @@ class AuthenticatorFilter
                         throw new Exception('The SPL extension is not loaded');
                 }
                 if ($chain instanceof AuthenticatorChain) {
-                        $this->chain = $chain->getArrayCopy();
+                        $this->_chain = $chain->getArrayCopy();
                 } else {
-                        $this->chain = $chain;
+                        $this->_chain = $chain;
                 }
         }
 
@@ -112,7 +112,7 @@ class AuthenticatorFilter
                         new ChainFilterIterator(
                         new ArrayKeyFilterIterator(
                         new RecursiveIteratorIterator(
-                        new RecursiveArrayIterator($this->chain), RecursiveIteratorIterator::SELF_FIRST
+                        new RecursiveArrayIterator($this->_chain), RecursiveIteratorIterator::SELF_FIRST
                         ), $key)
                 ));
         }
@@ -141,7 +141,7 @@ class AuthenticatorFilter
                         new AuthenticatorFilterIterator(
                         new ArrayKeyFilterIterator(
                         new RecursiveIteratorIterator(
-                        new RecursiveArrayIterator($this->chain), RecursiveIteratorIterator::SELF_FIRST
+                        new RecursiveArrayIterator($this->_chain), RecursiveIteratorIterator::SELF_FIRST
                         ), $key)
                 ));
         }
@@ -155,7 +155,7 @@ class AuthenticatorFilter
                 return self::forward(
                         new ChainFilterIterator(
                         new RecursiveIteratorIterator(
-                        new RecursiveArrayIterator($this->chain), RecursiveIteratorIterator::SELF_FIRST
+                        new RecursiveArrayIterator($this->_chain), RecursiveIteratorIterator::SELF_FIRST
                 )));
         }
 
@@ -168,13 +168,13 @@ class AuthenticatorFilter
                 return self::forward(
                         new AuthenticatorFilterIterator(
                         new RecursiveIteratorIterator(
-                        new RecursiveArrayIterator($this->chain), RecursiveIteratorIterator::SELF_FIRST
+                        new RecursiveArrayIterator($this->_chain), RecursiveIteratorIterator::SELF_FIRST
                 )));
         }
 
         public function getIterator()
         {
-                return new RecursiveArrayIterator($this->chain);
+                return new RecursiveArrayIterator($this->_chain);
         }
 
         private static function forward($iterator)

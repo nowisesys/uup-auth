@@ -51,14 +51,14 @@ class LdapBindValidator extends LdapConnector
 
         public function authenticate()
         {
-                if (!isset($this->user) || strlen($this->user) == 0) {
+                if (!isset($this->_user) || strlen($this->_user) == 0) {
                         return false;
                 }
-                if (!isset($this->handle)) {
+                if (!isset($this->_handle)) {
                         $this->connect();
                 }
                 try {
-                        $this->bind($this->user, $this->pass);
+                        $this->bind($this->_user, $this->_pass);
                         return true;
                 } catch (Exception $e) {
                         error_log(sprintf("%s in %s on line %d", $e->getMessage(), __METHOD__, __LINE__));

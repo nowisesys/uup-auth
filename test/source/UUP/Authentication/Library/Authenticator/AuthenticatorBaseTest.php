@@ -66,7 +66,7 @@ class AuthenticatorBaseTest extends \PHPUnit_Framework_TestCase
                 $name = 'Name1';
                 $description = 'Some description';
                 $visible = true;
-                $control = Authenticator::required;
+                $control = Authenticator::REQUIRED;
 
                 $this->object = (new DummyAuthenticator())
                     ->name($name)
@@ -87,7 +87,7 @@ class AuthenticatorBaseTest extends \PHPUnit_Framework_TestCase
                 $name = 'Name1';
                 $description = 'Some description';
                 $visible = true;
-                $control = Authenticator::required;
+                $control = Authenticator::REQUIRED;
 
                 $this->object->name($name);
                 $this->object->description($description);
@@ -105,12 +105,12 @@ class AuthenticatorBaseTest extends \PHPUnit_Framework_TestCase
          */
         public function testControl()
         {
-                $value = Authenticator::required;
+                $value = Authenticator::REQUIRED;
                 $this->object->control($value);
                 $this->assertTrue($this->object->control == $value);
                 $this->assertTrue(is_int($this->object->control));
 
-                $value = Authenticator::sufficient;
+                $value = Authenticator::SUFFICIENT;
                 $this->object->control($value);
                 $this->assertTrue($this->object->control == $value);
                 $this->assertTrue(is_int($this->object->control));
@@ -192,11 +192,11 @@ class AuthenticatorBaseTest extends \PHPUnit_Framework_TestCase
          */
         public function testSufficient()
         {
-                $value = Authenticator::sufficient;
+                $value = Authenticator::SUFFICIENT;
                 $this->object->control($value);
                 $this->assertTrue($this->object->sufficient());
 
-                $value = Authenticator::required;
+                $value = Authenticator::REQUIRED;
                 $this->object->control($value);
                 $this->assertFalse($this->object->sufficient());
         }
@@ -206,11 +206,11 @@ class AuthenticatorBaseTest extends \PHPUnit_Framework_TestCase
          */
         public function testRequired()
         {
-                $value = Authenticator::required;
+                $value = Authenticator::REQUIRED;
                 $this->object->control($value);
                 $this->assertTrue($this->object->required());
 
-                $value = Authenticator::sufficient;
+                $value = Authenticator::SUFFICIENT;
                 $this->object->control($value);
                 $this->assertFalse($this->object->required());
         }

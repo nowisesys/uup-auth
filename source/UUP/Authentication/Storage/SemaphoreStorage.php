@@ -31,12 +31,12 @@ use UUP\Authentication\Storage\Storage;
 class SemaphoreStorage implements Storage
 {
 
-        const key_usage = 1;
+        const KEY_USAGE = 1;
 
-        private $id;
-        private $key;
-        private $size;
-        private $perm;
+        private $_id;
+        private $_key;
+        private $_size;
+        private $_perm;
 
         /**
          * Constructor.
@@ -51,9 +51,9 @@ class SemaphoreStorage implements Storage
                         throw new Exception("The sysvshm extension is not loaded.");
                 }
 
-                $this->key = $key != 0 ? $key : self::genkey();
-                $this->size = $size;
-                $this->perm = $perm;
+                $this->_key = $key != 0 ? $key : self::genkey();
+                $this->_size = $size;
+                $this->_perm = $perm;
 
                 $this->open();
                 $this->increment();
@@ -70,46 +70,46 @@ class SemaphoreStorage implements Storage
 
         public function exist($user)
         {
-                return shm_has_var($this->id, self::hash($user));
+                return shm_has_var($this->_id, self::hash($user));
         }
 
         public function insert($user)
         {
-                shm_put_var($this->id, self::hash($user), $user);
+                shm_put_var($this->_id, self::hash($user), $user);
         }
 
         public function remove($user)
         {
-                shm_remove_var($this->id, self::hash($user));
+                shm_remove_var($this->_id, self::hash($user));
         }
 
         private function open()
         {
-                $this->id = shm_attach($this->key, $this->perm, $this->size);
+                $this->_id = shm_attach($this->_key, $this->_perm, $this->_size);
         }
 
         private function close()
         {
                 if ($this->usage() == 0) {
-                        shm_remove($this->id);
+                        shm_remove($this->_id);
                 } else {
-                        shm_detach($this->id);
+                        shm_detach($this->_id);
                 }
         }
 
         private function increment()
         {
-                shm_put_var($this->id, self::key_usage, $this->usage() + 1);
+                shm_put_var($this->_id, self::KEY_USAGE, $this->usage() + 1);
         }
 
         private function decrement()
         {
-                shm_put_var($this->id, self::key_usage, $this->usage() - 1);
+                shm_put_var($this->_id, self::KEY_USAGE, $this->usage() - 1);
         }
 
         private function usage()
         {
-                return shm_get_var($this->id, self::key_usage);
+                return shm_get_var($this->_id, self::KEY_USAGE);
         }
 
         private static function genkey()

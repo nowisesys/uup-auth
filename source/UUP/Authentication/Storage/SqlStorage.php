@@ -36,8 +36,8 @@ class SqlStorage implements Storage
                 initialize as private;
         }
 
-        const table = "sessions";
-        const fuser = "user";
+        const TABLE = "sessions";
+        const FUSER = "user";
 
         /**
          * Constructor.
@@ -46,26 +46,26 @@ class SqlStorage implements Storage
          * @param string $fuser The username column (field) name.
          * @throws Exception
          */
-        public function __construct($pdo, $table = self::table, $fuser = self::fuser)
+        public function __construct($pdo, $table = self::TABLE, $fuser = self::FUSER)
         {
                 $this->initialize($pdo, $table, $fuser, "");
         }
 
         public function exist($user)
         {
-                $sql = sprintf("SELECT COUNT(*) FROM %s WHERE %s = '%s'", $this->table, $this->fuser, $user);
+                $sql = sprintf("SELECT COUNT(*) FROM %s WHERE %s = '%s'", $this->_table, $this->_fuser, $user);
                 return $this->query($sql)->fetchColumn() > 0;
         }
 
         public function insert($user)
         {
-                $sql = sprintf("INSERT INTO %s(%s) VALUES('%s')", $this->table, $this->fuser, $user);
+                $sql = sprintf("INSERT INTO %s(%s) VALUES('%s')", $this->_table, $this->_fuser, $user);
                 return $this->exec($sql) !== 0;
         }
 
         public function remove($user)
         {
-                $sql = sprintf("DELETE FROM %s WHERE %s = '%s'", $this->table, $this->fuser, $user);
+                $sql = sprintf("DELETE FROM %s WHERE %s = '%s'", $this->_table, $this->_fuser, $user);
                 return $this->exec($sql) !== 0;
         }
 

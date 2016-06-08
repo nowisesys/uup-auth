@@ -15,12 +15,12 @@ class AuthenticatorChainAccessor extends AuthenticatorChain
 
         public function __get($name)
         {
-                return $this->chain;
+                return $this->_chain;
         }
 
         public function __toString()
         {
-                return print_r($this->chain, true);
+                return print_r($this->_chain, true);
         }
 
 }

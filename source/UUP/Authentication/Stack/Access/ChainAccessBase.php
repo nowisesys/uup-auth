@@ -36,11 +36,11 @@ class ChainAccessBase
         /**
          * @var AuthenticatorChain 
          */
-        private $chain;
+        private $_chain;
         /**
          * @var bool 
          */
-        private $throw;
+        private $_throw;
 
         /**
          * Constructor.
@@ -49,14 +49,14 @@ class ChainAccessBase
          */
         public function __construct($chain, $throw = false)
         {
-                $this->chain = $chain;
-                $this->throw = $throw;
+                $this->_chain = $chain;
+                $this->_throw = $throw;
         }
 
         public function __call($name, $arguments)
         {
-                if (method_exists($this->chain, $name)) {
-                        $this->chain->$name($arguments[0]);     // only single argument supported
+                if (method_exists($this->_chain, $name)) {
+                        $this->_chain->$name($arguments[0]);     // only single argument supported
                 }
         }
 
@@ -67,7 +67,7 @@ class ChainAccessBase
          */
         protected function exist($name)
         {
-                return $this->chain->exist($name);
+                return $this->_chain->exist($name);
         }
 
         /**
@@ -82,25 +82,25 @@ class ChainAccessBase
                 // Object or array access: $chain->obj->_ or $chain['obj']['@']:
                 // 
                 if ($name == '@' || $name == '_') {
-                        if ($this->chain instanceof Restrictor) {
-                                return $this->chain;
+                        if ($this->_chain instanceof Restrictor) {
+                                return $this->_chain;
                         } else {
-                                return $this->chain->getArrayCopy();
+                                return $this->_chain->getArrayCopy();
                         }
                 }
 
-                if ($this->chain instanceof AuthenticatorChain) {
-                        return new $class($this->chain->want($name), $this->throw);
-                } elseif ($this->chain instanceof Restrictor) {
-                        return $this->chain->$name;     // use magic accessor
-                } elseif (property_exists($this->chain, $name)) {
-                        return $this->chain->$name;     // public property
-                } elseif (method_exists($this->chain, $name)) {
-                        return $this->chain->$name();   // use function call
-                } elseif (($func = sprintf("get%s", ucfirst($name))) && method_exists($this->chain, $func)) {
-                        return $this->chain->$func();   // java style getName()
-                } elseif ($this->throw) {
-                        throw new Exception(sprintf('Failed get property %s on non-chain object (%s)', $name, get_class($this->chain)));
+                if ($this->_chain instanceof AuthenticatorChain) {
+                        return new $class($this->_chain->want($name), $this->_throw);
+                } elseif ($this->_chain instanceof Restrictor) {
+                        return $this->_chain->$name;     // use magic accessor
+                } elseif (property_exists($this->_chain, $name)) {
+                        return $this->_chain->$name;     // public property
+                } elseif (method_exists($this->_chain, $name)) {
+                        return $this->_chain->$name();   // use function call
+                } elseif (($func = sprintf("get%s", ucfirst($name))) && method_exists($this->_chain, $func)) {
+                        return $this->_chain->$func();   // java style getName()
+                } elseif ($this->_throw) {
+                        throw new Exception(sprintf('Failed get property %s on non-chain object (%s)', $name, get_class($this->_chain)));
                 }
         }
 
@@ -127,15 +127,15 @@ class ChainAccessBase
          */
         protected function set($name, $value)
         {
-                if (property_exists($this->chain, $name)) {
-                        $this->chain->$name = $value;           // set object property
-                } elseif (method_exists($this->chain, $name)) {
-                        $this->chain->$name($value);            // call member method
-                } elseif ($this->chain instanceof AuthenticatorChain) {
-                        $this->chain->insert($name, $value);    // insert in chain (relaxed)
-                } elseif ($this->throw && ($this->chain->$name = $value) && ($this->chain->$name !== $value)) {
+                if (property_exists($this->_chain, $name)) {
+                        $this->_chain->$name = $value;           // set object property
+                } elseif (method_exists($this->_chain, $name)) {
+                        $this->_chain->$name($value);            // call member method
+                } elseif ($this->_chain instanceof AuthenticatorChain) {
+                        $this->_chain->insert($name, $value);    // insert in chain (relaxed)
+                } elseif ($this->_throw && ($this->_chain->$name = $value) && ($this->_chain->$name !== $value)) {
                         // Logic error that is hard to detect and will cause data loss.
-                        throw new Exception(sprintf('Failed set property %s on immutable non-chain object (%s)', $name, get_class($this->chain)));
+                        throw new Exception(sprintf('Failed set property %s on immutable non-chain object (%s)', $name, get_class($this->_chain)));
                 }
         }
 
@@ -145,7 +145,7 @@ class ChainAccessBase
          */
         protected function remove($name)
         {
-                $this->chain->remove($name);
+                $this->_chain->remove($name);
         }
 
 }

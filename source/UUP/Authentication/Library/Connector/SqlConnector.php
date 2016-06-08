@@ -34,10 +34,10 @@ trait SqlConnector
         /**
          * @var PDO The database connection.
          */
-        private $pdo;
-        protected $table;
-        protected $fuser;
-        protected $fpass;
+        private $_pdo;
+        protected $_table;
+        protected $_fuser;
+        protected $_fpass;
 
         /**
          * Constructor.
@@ -52,16 +52,16 @@ trait SqlConnector
                 if (!extension_loaded('PDO')) {
                         throw new Exception("The PDO extension is not loaded.");
                 }
-                $this->pdo = $pdo;
-                $this->table = $table;
-                $this->fuser = $fuser;
-                $this->fpass = $fpass;
+                $this->_pdo = $pdo;
+                $this->_table = $table;
+                $this->_fuser = $fuser;
+                $this->_fpass = $fpass;
         }
 
         protected function query($sql)
         {
-                if (!($res = $this->pdo->query($sql))) {
-                        $error = $this->pdo->errorInfo();
+                if (!($res = $this->_pdo->query($sql))) {
+                        $error = $this->_pdo->errorInfo();
                         throw new Exception(sprintf("Failed query database: %s", $error[2]));
                 } else {
                         return $res;
@@ -70,7 +70,7 @@ trait SqlConnector
 
         protected function exec($sql)
         {
-                return $this->pdo->exec($sql);
+                return $this->_pdo->exec($sql);
         }
 
 }

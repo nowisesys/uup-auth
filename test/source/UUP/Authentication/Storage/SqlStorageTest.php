@@ -19,7 +19,7 @@ class SqlStorageTest extends StorageImplBase
         public function __construct()
         {
                 $this->pdo = new PDO('sqlite::memory:', null, null);
-                $this->sql = sprintf("CREATE TABLE %s(%s varchar(10))", SqlStorage::table, SqlStorage::fuser);
+                $this->sql = sprintf("CREATE TABLE %s(%s varchar(10))", SqlStorage::TABLE, SqlStorage::FUSER);
                 $this->pdo->exec($this->sql);
         }
 

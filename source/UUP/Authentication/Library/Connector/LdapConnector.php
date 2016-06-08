@@ -34,10 +34,10 @@ use UUP\Authentication\Validator\CredentialValidator;
 abstract class LdapConnector extends CredentialValidator
 {
 
-        private $server;
-        private $port;
-        private $options;
-        protected $handle;        // LDAP connection
+        private $_server;
+        private $_port;
+        private $_options;
+        protected $_handle;        // LDAP connection
 
         /**
          * Constructor.
@@ -49,19 +49,19 @@ abstract class LdapConnector extends CredentialValidator
 
         public function __construct($server, $port = 389, $options = array())
         {
-                $this->server = $server;
-                $this->port = $port;
-                $this->options = $options;
+                $this->_server = $server;
+                $this->_port = $port;
+                $this->_options = $options;
         }
 
         protected function connect()
         {
-                if (!($this->handle = ldap_connect($this->server, $this->port))) {
-                        throw new Exception(sprintf("Failed connect to ''%s:%d''", $this->server, $this->port));
+                if (!($this->_handle = ldap_connect($this->_server, $this->_port))) {
+                        throw new Exception(sprintf("Failed connect to ''%s:%d''", $this->_server, $this->_port));
                 }
-                foreach ($this->options as $option => $value) {
-                        if (!ldap_set_option($this->handle, $option, $value)) {
-                                ldap_close($this->handle);
+                foreach ($this->_options as $option => $value) {
+                        if (!ldap_set_option($this->_handle, $option, $value)) {
+                                ldap_close($this->_handle);
                                 throw new Exception(sprintf("Failed set option %s (value: %s)", (string) $option, (string) $value));
                         }
                 }
@@ -75,18 +75,18 @@ abstract class LdapConnector extends CredentialValidator
          */
         public function bind($user, $pass)
         {
-                if (!ldap_bind($this->handle, $user, $pass)) {
-                        ldap_close($this->handle);
-                        throw new Exception(sprintf("Failed bind as '%s' to %s:%d", $user, $this->server, $this->port));
+                if (!ldap_bind($this->_handle, $user, $pass)) {
+                        ldap_close($this->_handle);
+                        throw new Exception(sprintf("Failed bind as '%s' to %s:%d", $user, $this->_server, $this->_port));
                 } else {
-                        ldap_unbind($this->handle);
+                        ldap_unbind($this->_handle);
                 }
         }
 
         protected function disconnect()
         {
-                if (is_resource($this->handle)) {
-                        ldap_close($this->handle);
+                if (is_resource($this->_handle)) {
+                        ldap_close($this->_handle);
                 }
         }
 

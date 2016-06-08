@@ -22,13 +22,13 @@ class SqlValidatorHelper extends SqlValidator
 
         private function create()
         {
-                $sql = sprintf("CREATE TABLE %s(%s VARCHAR(10), %s VARCHAR(10))", parent::table, parent::fuser, parent::fpass);
+                $sql = sprintf("CREATE TABLE %s(%s VARCHAR(10), %s VARCHAR(10))", parent::TABLE, parent::FUSER, parent::FPASS);
                 $this->exec($sql);
         }
 
         public function add($user, $pass)
         {
-                $sql = sprintf("INSERT INTO %s VALUES('%s', '%s')", parent::table, $user, $pass);
+                $sql = sprintf("INSERT INTO %s VALUES('%s', '%s')", parent::TABLE, $user, $pass);
                 $this->exec($sql);
         }
 

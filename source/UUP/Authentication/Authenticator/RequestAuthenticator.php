@@ -86,18 +86,18 @@ use UUP\Authentication\Validator\Validator;
 class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor, Authenticator
 {
 
-        private static $defaults = array(
+        private static $_defaults = array(
                 'login' => '/login',
                 'name'  => 'auth',
                 'user'  => 'user',
                 'pass'  => 'pass'
         );
-        private $validator;
-        private $name;
-        private $user;
-        private $pass;
-        private $accepted;
-        private $methods = array(INPUT_POST, INPUT_GET);
+        private $_validator;
+        private $_name;
+        private $_user;
+        private $_pass;
+        private $_accepted;
+        private $_methods = array(INPUT_POST, INPUT_GET);
 
         /**
          * Constructor.
@@ -107,12 +107,12 @@ class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor
          */
         public function __construct($validator, $options = array())
         {
-                parent::__construct(array_merge(self::$defaults, $options));
+                parent::__construct(array_merge(self::$_defaults, $options));
 
                 $this->initialize();
-                $this->validator = $validator;
+                $this->_validator = $validator;
 
-                if (!empty($this->name) && !empty($this->user) && !empty($this->pass)) {
+                if (!empty($this->_name) && !empty($this->_user) && !empty($this->_pass)) {
                         $this->authenticate();
                 }
         }
@@ -121,11 +121,11 @@ class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor
         {
                 switch ($name) {
                         case 'name':
-                                return $this->options['name'];
+                                return $this->_options['name'];
                         case 'user':
-                                return $this->options['user'];
+                                return $this->_options['user'];
                         case 'pass':
-                                return $this->options['pass'];
+                                return $this->_options['pass'];
                         default:
                                 return parent::__get($name);
                 }
@@ -133,12 +133,12 @@ class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor
 
         public function accepted()
         {
-                return $this->accepted;
+                return $this->_accepted;
         }
 
         public function getSubject()
         {
-                return $this->user;
+                return $this->_user;
         }
 
         public function logout()
@@ -152,24 +152,28 @@ class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor
          */
         public function setMethods($methods)
         {
-                $this->methods = $methods;
+                $this->_methods = $methods;
         }
 
         private function authenticate()
         {
-                $this->validator->setCredentials($this->user, $this->pass);
-                if ($this->validator->authenticate()) {
-                        $this->accepted = true;
+                $this->_validator->setCredentials($this->_user, $this->_pass);
+                if ($this->_validator->authenticate()) {
+                        $this->_accepted = true;
                 }
         }
 
         private function initialize()
         {
-                foreach (array('name', 'user', 'pass') as $name) {
-                        foreach ($this->methods as $type) {
-                                if (empty($this->$name)) {
-                                        $this->$name = filter_input($type, $this->options[$name], FILTER_SANITIZE_STRING);
-                                }
+                foreach ($this->_methods as $type) {
+                        if (empty($this->_name)) {
+                                $this->_name = filter_input($type, $this->_options['name'], FILTER_SANITIZE_STRING);
+                        }
+                        if (empty($this->_user)) {
+                                $this->_user = filter_input($type, $this->_options['user'], FILTER_SANITIZE_STRING);
+                        }
+                        if (empty($this->_pass)) {
+                                $this->_pass = filter_input($type, $this->_options['pass'], FILTER_SANITIZE_STRING);
                         }
                 }
         }

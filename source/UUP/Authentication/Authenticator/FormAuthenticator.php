@@ -75,18 +75,18 @@ use UUP\Authentication\Validator\Validator;
 class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, Authenticator
 {
 
-        private static $defaults = array(
+        private static $_defaults = array(
                 'login' => '/login',
                 'name'  => 'auth',
                 'user'  => 'user',
                 'pass'  => 'pass'
         );
-        private $validator;
-        private $session;
-        private $name;
-        private $user;
-        private $pass;
-        private $methods = array(INPUT_POST, INPUT_GET);
+        private $_validator;
+        private $_session;
+        private $_name;
+        private $_user;
+        private $_pass;
+        private $_methods = array(INPUT_POST, INPUT_GET);
 
         /**
          * Constructor.
@@ -96,13 +96,13 @@ class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, A
          */
         public function __construct($validator, $options = array(), $session = null)
         {
-                parent::__construct(array_merge(self::$defaults, $options));
+                parent::__construct(array_merge(self::$_defaults, $options));
 
-                $this->validator = $validator;
-                $this->session = $session;
+                $this->_validator = $validator;
+                $this->_session = $session;
                 $this->initialize();
 
-                if (!empty($this->name) && !empty($this->user) && !empty($this->pass)) {
+                if (!empty($this->_name) && !empty($this->_user) && !empty($this->_pass)) {
                         $this->authenticate();
                 }
         }
@@ -111,11 +111,11 @@ class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, A
         {
                 switch ($name) {
                         case 'name':
-                                return $this->options['name'];
+                                return $this->_options['name'];
                         case 'user':
-                                return $this->options['user'];
+                                return $this->_options['user'];
                         case 'pass':
-                                return $this->options['pass'];
+                                return $this->_options['pass'];
                         default:
                                 return parent::__get($name);
                 }
@@ -123,19 +123,19 @@ class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, A
 
         public function accepted()
         {
-                $user = $this->session->read()->user;
-                return $this->session->exist($user);
+                $user = $this->_session->read()->user;
+                return $this->_session->exist($user);
         }
 
         public function getSubject()
         {
-                return $this->session->read()->user;
+                return $this->_session->read()->user;
         }
 
         public function logout()
         {
-                $user = $this->session->read()->user;
-                $this->session->remove($user);
+                $user = $this->_session->read()->user;
+                $this->_session->remove($user);
         }
 
         /**
@@ -144,27 +144,31 @@ class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, A
          */
         public function setMethods($methods)
         {
-                $this->methods = $methods;
+                $this->_methods = $methods;
         }
 
         private function authenticate()
         {
-                $this->validator->setCredentials($this->user, $this->pass);
-                if ($this->validator->authenticate()) {
-                        $this->session->insert($this->user);
+                $this->_validator->setCredentials($this->_user, $this->_pass);
+                if ($this->_validator->authenticate()) {
+                        $this->_session->insert($this->_user);
                 }
         }
 
         private function initialize()
         {
-                if (!isset($this->session)) {
-                        $this->session = new SessionStorage($this->options['name'], false);
+                if (!isset($this->_session)) {
+                        $this->_session = new SessionStorage($this->_options['name'], false);
                 }
-                foreach (array('name', 'user', 'pass') as $name) {
-                        foreach ($this->methods as $type) {
-                                if (empty($this->$name)) {
-                                        $this->$name = filter_input($type, $this->options[$name], FILTER_SANITIZE_STRING);
-                                }
+                foreach ($this->_methods as $type) {
+                        if (empty($this->_name)) {
+                                $this->_name = filter_input($type, $this->_options['name'], FILTER_SANITIZE_STRING);
+                        }
+                        if (empty($this->_pass)) {
+                                $this->_pass = filter_input($type, $this->_options['pass'], FILTER_SANITIZE_STRING);
+                        }
+                        if (empty($this->_user)) {
+                                $this->_user = filter_input($type, $this->_options['user'], FILTER_SANITIZE_STRING);
                         }
                 }
         }

@@ -34,33 +34,33 @@ use UUP\Authentication\Storage\Storage;
 class CookieData implements Serializable
 {
 
-        private $data;
+        private $_data;
 
         public function __construct()
         {
-                $this->data = (object) array();
+                $this->_data = (object) array();
         }
 
         public function __get($name)
         {
-                if (isset($this->data->$name)) {
-                        return $this->data->$name;
+                if (isset($this->_data->$name)) {
+                        return $this->_data->$name;
                 }
         }
 
         public function __set($name, $value)
         {
-                $this->data->$name = $value;
+                $this->_data->$name = $value;
         }
 
         public function serialize()
         {
-                return base64_encode(serialize((array) $this->data));
+                return base64_encode(serialize((array) $this->_data));
         }
 
         public function unserialize($serialized)
         {
-                $this->data = (object) unserialize(base64_decode($serialized));
+                $this->_data = (object) unserialize(base64_decode($serialized));
         }
 
 }
@@ -80,13 +80,13 @@ class CookieData implements Serializable
 class CookieStorage implements Storage
 {
 
-        private $key;
-        private $name;
-        private $expire;
-        private $path;
-        private $domain;
-        private $secure;
-        private $httponly;
+        private $_key;
+        private $_name;
+        private $_expire;
+        private $_path;
+        private $_domain;
+        private $_secure;
+        private $_httponly;
 
         /**
          * Constructor.
@@ -104,13 +104,13 @@ class CookieStorage implements Storage
          */
         public function __construct($key = null, $name = null, $expire = 0, $path = null, $domain = null, $secure = false, $httponly = false)
         {
-                $this->key = $key;
-                $this->name = $name;
-                $this->expire = $expire;
-                $this->path = $path;
-                $this->domain = $domain;
-                $this->secure = $secure;
-                $this->httponly = $httponly;
+                $this->_key = $key;
+                $this->_name = $name;
+                $this->_expire = $expire;
+                $this->_path = $path;
+                $this->_domain = $domain;
+                $this->_secure = $secure;
+                $this->_httponly = $httponly;
 
                 $this->initialize();
         }
@@ -124,7 +124,7 @@ class CookieStorage implements Storage
         public function insert($user)
         {
                 $data = $this->read($user);
-                $data->expires = $this->expire == 0 ? 0 : time() + $this->expire;
+                $data->expires = $this->_expire == 0 ? 0 : time() + $this->_expire;
                 $data->addr = $_SERVER['REMOTE_ADDR'];
                 $data->user = $user;
                 $data->hash = $this->hash($data);
@@ -145,12 +145,12 @@ class CookieStorage implements Storage
          */
         private function save($data)
         {
-                if (isset($this->path) && isset($this->domain)) {
-                        $result = setcookie($this->name, $data->serialize(), $data->expires, $this->path, $this->domain, $this->secure, $this->httponly);
-                } elseif (isset($this->path)) {
-                        $result = setcookie($this->name, $data->serialize(), $data->expires, $this->path);
+                if (isset($this->_path) && isset($this->_domain)) {
+                        $result = setcookie($this->_name, $data->serialize(), $data->expires, $this->_path, $this->_domain, $this->_secure, $this->_httponly);
+                } elseif (isset($this->_path)) {
+                        $result = setcookie($this->_name, $data->serialize(), $data->expires, $this->_path);
                 } else {
-                        $result = setcookie($this->name, $data->serialize(), $data->expires);
+                        $result = setcookie($this->_name, $data->serialize(), $data->expires);
                 }
                 if (!$result) {
                         throw new Exception("Failed set cookie");
@@ -165,7 +165,7 @@ class CookieStorage implements Storage
         private function read($user)
         {
                 $data = new CookieData();
-                $temp = filter_input(INPUT_COOKIE, $this->name);
+                $temp = filter_input(INPUT_COOKIE, $this->_name);
 
                 if (isset($temp)) {
                         $data->unserialize($temp);
@@ -196,7 +196,7 @@ class CookieStorage implements Storage
          */
         private function hash($data)
         {
-                return sha1(sprintf("%s%s%s%d", $this->key, $data->user, $data->addr, $data->expires));
+                return sha1(sprintf("%s%s%s%d", $this->_key, $data->user, $data->addr, $data->expires));
         }
 
         /**
@@ -224,23 +224,23 @@ class CookieStorage implements Storage
 
         private function initialize()
         {
-                if (!isset($this->key)) {
-                        $this->file = sprintf("%s/%s.key", sys_get_temp_dir(), $this->name);
+                if (!isset($this->_key)) {
+                        $this->file = sprintf("%s/%s.key", sys_get_temp_dir(), $this->_name);
                         if (file_exists($this->file)) {
-                                $this->key = file_get_contents($this->file);
+                                $this->_key = file_get_contents($this->file);
                         } elseif (function_exists('openssl_random_pseudo_bytes ')) {
-                                $this->key = openssl_random_pseudo_bytes(20, true);
-                                file_put_contents($this->file, $this->key);
+                                $this->_key = openssl_random_pseudo_bytes(20, true);
+                                file_put_contents($this->file, $this->_key);
                         } elseif (function_exists('crypt')) {
-                                $this->key = crypt(rand(), $_SERVER['REMOTE_ADDR']);
-                                file_put_contents($this->file, $this->key);
+                                $this->_key = crypt(rand(), $_SERVER['REMOTE_ADDR']);
+                                file_put_contents($this->file, $this->_key);
                         } else {
-                                $this->key = uniqid(__CLASS__, true);
-                                file_put_contents($this->file, $this->key);
+                                $this->_key = uniqid(__CLASS__, true);
+                                file_put_contents($this->file, $this->_key);
                         }
                 }
-                if (!isset($this->name)) {
-                        $this->name = strtr(__CLASS__, '\\', '_');
+                if (!isset($this->_name)) {
+                        $this->_name = strtr(__CLASS__, '\\', '_');
                 }
         }
 

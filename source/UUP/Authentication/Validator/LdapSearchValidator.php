@@ -58,10 +58,10 @@ class LdapSearchValidator extends LdapConnector
         /**
          * The default LDAP search filter.
          */
-        const filter = "(&(uid={%1})({passwd}={%2}))";
+        const FILTER = "(&(uid={%1})({passwd}={%2}))";
 
-        private $basedn;
-        private $filter;
+        private $_basedn;
+        private $_filter;
 
         /**
          * Constructor.
@@ -72,11 +72,11 @@ class LdapSearchValidator extends LdapConnector
          * @param array $options Associative array of miscellanous LDAP options.
          * @see ldap_set_options()
          */
-        public function __construct($server, $basedn, $filter = self::filter, $port = 389, $options = array())
+        public function __construct($server, $basedn, $filter = self::FILTER, $port = 389, $options = array())
         {
                 parent::__construct($server, $port, $options);
-                $this->basedn = $basedn;
-                $this->filter = $filter;
+                $this->_basedn = $basedn;
+                $this->_filter = $filter;
         }
 
         /**
@@ -94,26 +94,26 @@ class LdapSearchValidator extends LdapConnector
          */
         public function setFilter($filter)
         {
-                $this->filter = $filter;
+                $this->_filter = $filter;
         }
 
         public function authenticate()
         {
-                if (!isset($this->user) || strlen($this->user) == 0) {
+                if (!isset($this->_user) || strlen($this->_user) == 0) {
                         return false;
                 }
-                if (!isset($this->handle)) {
+                if (!isset($this->_handle)) {
                         $this->connect();
                 }
 
-                $filter = sprintf($this->filter, $this->user, $this->pass);
+                $filter = sprintf($this->_filter, $this->_user, $this->_pass);
 
-                if (!($result = ldap_search($this->handle, $this->basedn, $filter))) {
-                        throw new Exception(sprintf("Failed search LDAP: %s", ldap_error($this->handle)));
+                if (!($result = ldap_search($this->_handle, $this->_basedn, $filter))) {
+                        throw new Exception(sprintf("Failed search LDAP: %s", ldap_error($this->_handle)));
                 }
-                if (!($entries = ldap_count_entries($this->handle, $result))) {
+                if (!($entries = ldap_count_entries($this->_handle, $result))) {
                         ldap_free_result($result);
-                        throw new Exception(sprintf("Failed fetch entries count: %s", ldap_error($this->handle)));
+                        throw new Exception(sprintf("Failed fetch entries count: %s", ldap_error($this->_handle)));
                 }
 
                 ldap_free_result($result);

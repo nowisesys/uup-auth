@@ -44,9 +44,9 @@ use UUP\Authentication\Validator\CredentialValidator;
 class PamValidator extends CredentialValidator
 {
 
-        private $errmsg;
-        private $errlog = false;
-        private $throws = false;
+        private $_errmsg;
+        private $_errlog = false;
+        private $_throws = false;
 
         /**
          * Constructor.
@@ -69,25 +69,25 @@ class PamValidator extends CredentialValidator
         public function __set($name, $value)
         {
                 if ($name == 'errlog') {
-                        $this->errlog = (bool) $value;
+                        $this->_errlog = (bool) $value;
                 } elseif ($name == 'throws') {
-                        $this->throws = (bool) $value;
+                        $this->_throws = (bool) $value;
                 }
         }
 
         public function __get($name)
         {
                 if ($name == 'errmsg') {
-                        return $this->errmsg;
+                        return $this->_errmsg;
                 }
         }
 
         public function authenticate()
         {
-                if (!isset($this->user) || strlen($this->user) == 0) {
+                if (!isset($this->_user) || strlen($this->_user) == 0) {
                         return false;
                 }
-                if (pam_auth($this->user, $this->pass, $this->errmsg, false)) {
+                if (pam_auth($this->_user, $this->_pass, $this->_errmsg, false)) {
                         return true;
                 } else {
                         $this->failed();
@@ -97,14 +97,14 @@ class PamValidator extends CredentialValidator
 
         private function failed()
         {
-                if ($this->errlog) {
-                        error_log(sprintf("Failed authenticate %s: %s", $this->user, $this->errmsg));
+                if ($this->_errlog) {
+                        error_log(sprintf("Failed authenticate %s: %s", $this->_user, $this->_errmsg));
                 }
-                if ($this->throws) {
-                        throw new Exception($this->errmsg);
+                if ($this->_throws) {
+                        throw new Exception($this->_errmsg);
                 }
-                if ($this->errmsg != 'Authentication failure (in pam_authenticate)') {
-                        throw new Exception($this->errmsg);
+                if ($this->_errmsg != 'Authentication failure (in pam_authenticate)') {
+                        throw new Exception($this->_errmsg);
                 }
         }
 

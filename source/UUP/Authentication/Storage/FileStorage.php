@@ -28,11 +28,11 @@ namespace UUP\Authentication\Storage;
 class FileStorage implements Storage
 {
 
-        private $file;
+        private $_file;
 
         public function __construct($file)
         {
-                $this->file = $file;
+                $this->_file = $file;
         }
 
         public function exist($user)
@@ -59,12 +59,12 @@ class FileStorage implements Storage
 
         private function read()
         {
-                return (array) unserialize(file_get_contents($this->file));
+                return (array) unserialize(file_get_contents($this->_file));
         }
 
         private function write($data)
         {
-                file_put_contents($this->file, serialize($data));
+                file_put_contents($this->_file, serialize($data));
         }
 
 }

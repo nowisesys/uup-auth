@@ -33,24 +33,23 @@ use UUP\Authentication\Stack\Filter\PropertyFilterIterator;
 class PropertyFilterIterator extends PredicateFilterIterator implements PredicateFilterValidator
 {
 
-        private $property;
-        private $value;
+        private $_property;
+        private $_value;
 
         public function __construct(Iterator $iterator, $property, $value)
         {
-                $this->property = $property;
-                $this->value = $value;
+                $this->_property = $property;
+                $this->_value = $value;
                 parent::__construct($iterator, $this);
         }
 
         public function validate(Iterator $iterator)
         {
-                return self::check($iterator->current(), $this->property, $this->value);
+                return self::check($iterator->current(), $this->_property, $this->_value);
         }
 
         protected static function check($obj, $prop, $value)
         {
-                // return (isset($obj->$prop) && ($obj->$prop === $value));
                 return $obj->$prop === $value;
         }
 

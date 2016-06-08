@@ -36,33 +36,33 @@ use UUP\Authentication\Storage\Storage;
 class SessionData implements Serializable
 {
 
-        private $data;
+        private $_data;
 
         public function __construct()
         {
-                $this->data = (object) array();
+                $this->_data = (object) array();
         }
 
         public function __get($name)
         {
-                if (isset($this->data->$name)) {
-                        return $this->data->$name;
+                if (isset($this->_data->$name)) {
+                        return $this->_data->$name;
                 }
         }
 
         public function __set($name, $value)
         {
-                $this->data->$name = $value;
+                $this->_data->$name = $value;
         }
 
         public function serialize()
         {
-                return serialize((array) $this->data);
+                return serialize((array) $this->_data);
         }
 
         public function unserialize($serialized)
         {
-                $this->data = (object) unserialize($serialized);
+                $this->_data = (object) unserialize($serialized);
         }
 
 }
@@ -91,12 +91,12 @@ class SessionStorage implements Storage
         /**
          * Number of seconds until an session expires if not being refreshed.
          */
-        const expires = 7200;
+        const EXPIRES = 7200;
 
-        private $https;
-        private $match;
-        private $name;
-        private $expires = self::expires;
+        private $_https;
+        private $_match;
+        private $_name;
+        private $_expires = self::EXPIRES;
 
         /**
          * Constructor.
@@ -107,9 +107,9 @@ class SessionStorage implements Storage
          */
         public function __construct($name = null, $https = true, $match = true)
         {
-                $this->https = $https;
-                $this->match = $match;
-                $this->name = self::name($name);
+                $this->_https = $https;
+                $this->_match = $match;
+                $this->_name = self::name($name);
 
                 $this->initialize();
         }
@@ -118,11 +118,11 @@ class SessionStorage implements Storage
         {
                 switch ($name) {
                         case 'expires':
-                                return $this->expires;
+                                return $this->_expires;
                         case 'https':
-                                return $this->https;
+                                return $this->_https;
                         case 'match':
-                                return $this->match;
+                                return $this->_match;
                 }
         }
 
@@ -130,20 +130,20 @@ class SessionStorage implements Storage
         {
                 switch ($name) {
                         case 'expires':
-                                $this->expires = (int) $value;
+                                $this->_expires = (int) $value;
                                 break;
                         case 'https':
-                                $this->https = (bool) $value;
+                                $this->_https = (bool) $value;
                                 break;
                         case 'match':
-                                $this->match = (bool) $value;
+                                $this->_match = (bool) $value;
                 }
         }
 
         public function exist($user)
         {
                 $data = $this->read();
-                if ($this->match) {
+                if ($this->_match) {
                         $this->sanitize($data);
                 }
                 if ($data->expires < time()) {
@@ -158,14 +158,14 @@ class SessionStorage implements Storage
                 $data = $this->read();
                 $data->user = $user;
                 $data->addr = $_SERVER['REMOTE_ADDR'];
-                $data->expires = time() + $this->expires;
+                $data->expires = time() + $this->_expires;
                 $this->save($data);
         }
 
         public function remove($user)
         {
                 session_start();
-                unset($_SESSION[$this->name]);
+                unset($_SESSION[$this->_name]);
                 session_write_close();
         }
 
@@ -176,7 +176,7 @@ class SessionStorage implements Storage
         public function read()
         {
                 session_start();
-                $data = isset($_SESSION[$this->name]) ? $_SESSION[$this->name] : new SessionData();
+                $data = isset($_SESSION[$this->_name]) ? $_SESSION[$this->_name] : new SessionData();
                 session_write_close();
                 return $data;
         }
@@ -188,13 +188,13 @@ class SessionStorage implements Storage
         private function save($data)
         {
                 session_start();
-                $_SESSION[$this->name] = $data;
+                $_SESSION[$this->_name] = $data;
                 session_write_close();
         }
 
         private function initialize()
         {
-                if ($this->https && !isset($_SERVER['HTTPS'])) {
+                if ($this->_https && !isset($_SERVER['HTTPS'])) {
                         throw new Exception("HTTPS protocol is required");
                 }
 

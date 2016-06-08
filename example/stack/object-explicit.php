@@ -80,17 +80,17 @@ limitations under the License.
                                 'auth'   => array(
                                         'pam'  => (new SystemAuthentication())
                                             ->visible(true)
-                                            ->control(Authenticator::sufficient)
+                                            ->control(Authenticator::SUFFICIENT)
                                             ->name('System')
                                             ->description('Login using local system account.'),
                                         'cas'  => (new CasAuthenticator('cas.example.com'))
                                             ->visible(true)
-                                            ->control(Authenticator::sufficient)
+                                            ->control(Authenticator::SUFFICIENT)
                                             ->name('CAS')
                                             ->description('CAS server login'),
                                         'ldap' => (new LdapAuthenticator('ldaps://ldap.example.com'))
                                             ->visible(true)
-                                            ->control(Authenticator::sufficient)
+                                            ->control(Authenticator::SUFFICIENT)
                                             ->name('LDAP')
                                             ->description('LDAP authentication')
                                 ),
@@ -100,7 +100,7 @@ limitations under the License.
                                 'access' => array(
                                         'addr' => (new AddressRestrictor(array('::1', '127.0.0.1', '192.168.0.0/16')))
                                             ->visible(false)
-                                            ->control(Authenticator::required)
+                                            ->control(Authenticator::REQUIRED)
                                 )
                         );
 

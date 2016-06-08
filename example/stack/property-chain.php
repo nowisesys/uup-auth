@@ -82,19 +82,19 @@ limitations under the License.
                         // 
                         $chain->auth->pam = new SystemAuthentication();
                         $chain->auth->pam->visible = true;
-                        $chain->auth->pam->control = Authenticator::sufficient;
+                        $chain->auth->pam->control = Authenticator::SUFFICIENT;
                         $chain->auth->pam->name = 'System';
                         $chain->auth->pam->description = 'Login using local system account.';
 
                         $chain->auth->cas = new CasAuthenticator('cas.example.com');
                         $chain->auth->cas->visible = true;
-                        $chain->auth->cas->control = Authenticator::sufficient;
+                        $chain->auth->cas->control = Authenticator::SUFFICIENT;
                         $chain->auth->cas->name = 'CAS';
                         $chain->auth->cas->description = 'CAS server login';
 
                         $chain->auth->ldap = new LdapAuthenticator('ldaps://ldap.example.com');
                         $chain->auth->ldap->visible = true;
-                        $chain->auth->ldap->control = Authenticator::sufficient;
+                        $chain->auth->ldap->control = Authenticator::SUFFICIENT;
                         $chain->auth->ldap->name = 'LDAP';
                         $chain->auth->ldap->description = 'LDAP authentication';
 
@@ -103,7 +103,7 @@ limitations under the License.
                         // 
                         $chain->access->addr = new AddressRestrictor(array('::1', '127.0.0.1', '192.168.0.0/16'));
                         $chain->access->addr->visible = false;
-                        $chain->access->addr->control = Authenticator::required;
+                        $chain->access->addr->control = Authenticator::REQUIRED;
                 }
 
                 public function getName()

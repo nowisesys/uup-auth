@@ -15,8 +15,8 @@ class AddressRestrictorTest extends \PHPUnit_Framework_TestCase
          */
         protected $object;
         private static $defaddr = array(
-                AddressRestrictor::localhost_ipv4,
-                AddressRestrictor::localhost_ipv6
+                AddressRestrictor::LOCALHOST_IPV4,
+                AddressRestrictor::LOCALHOST_IPV6
         );
 
         /**
@@ -26,7 +26,7 @@ class AddressRestrictorTest extends \PHPUnit_Framework_TestCase
         protected function setUp()
         {
                 $this->object = new AddressRestrictor();
-                $_SERVER['REMOTE_ADDR'] = AddressRestrictor::localhost_ipv4;
+                $_SERVER['REMOTE_ADDR'] = AddressRestrictor::LOCALHOST_IPV4;
         }
 
         /**

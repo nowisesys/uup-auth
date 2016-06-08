@@ -37,38 +37,38 @@ use IteratorAggregate;
 class RandomAccessIterator implements ArrayAccess, IteratorAggregate
 {
 
-        private $data = array();
+        private $_data = array();
 
         public function __construct(Iterator $iterator)
         {
                 for ($iterator->rewind(); $iterator->valid(); $iterator->next()) {
-                        $this->data[$iterator->key()] = $iterator->current();
+                        $this->_data[$iterator->key()] = $iterator->current();
                 }
         }
 
         public function offsetExists($offset)
         {
-                return isset($this->data[$offset]);
+                return isset($this->_data[$offset]);
         }
 
         public function offsetGet($offset)
         {
-                return $this->data[$offset];
+                return $this->_data[$offset];
         }
 
         public function offsetSet($offset, $value)
         {
-                $this->data[$offset] = $value;
+                $this->_data[$offset] = $value;
         }
 
         public function offsetUnset($offset)
         {
-                unset($this->data[$offset]);
+                unset($this->_data[$offset]);
         }
 
         public function getIterator()
         {
-                return new ArrayIterator($this->data);
+                return new ArrayIterator($this->_data);
         }
 
 }

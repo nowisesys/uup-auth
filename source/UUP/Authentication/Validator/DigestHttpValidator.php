@@ -31,8 +31,8 @@ use UUP\Authentication\Validator\CredentialValidator;
 class DigestHttpValidator extends CredentialValidator
 {
 
-        private $message;
-        private $realm;
+        private $_message;
+        private $_realm;
 
         /**
          * Constructor. 
@@ -44,14 +44,16 @@ class DigestHttpValidator extends CredentialValidator
         public function __construct($realm, $message, $user = "", $pass = "")
         {
                 parent::__construct($user, $pass);
-                $this->realm = $realm;
-                $this->message = $message;
+                $this->_realm = $realm;
+                $this->_message = $message;
         }
 
         public function authenticate()
         {
-                $response = $this->response();
-                return $response == $this->message->response;
+                $response1 = $this->response();
+                $response2 = $this->_message->response;
+                error_log("$response1 == $response2");
+                return $response1 == $response2;
         }
 
         /**
@@ -60,7 +62,7 @@ class DigestHttpValidator extends CredentialValidator
          */
         public function setMessage($message)
         {
-                $this->message = $message;
+                $this->_message = $message;
         }
 
         // 
@@ -69,10 +71,10 @@ class DigestHttpValidator extends CredentialValidator
         // 
         private function ha1()
         {
-                if ($this->message->algorithm && $this->message->algorithm == 'MD5-sess') {
-                        return md5(sprintf("%s:%s:%s", sprintf("%s:%s:%s", $this->user, $this->realm, $this->pass), $this->message->nonce, $this->message->cnonce));
+                if ($this->_message->algorithm && $this->_message->algorithm == 'MD5-sess') {
+                        return md5(sprintf("%s:%s:%s", sprintf("%s:%s:%s", $this->_user, $this->_realm, $this->_pass), $this->_message->nonce, $this->_message->cnonce));
                 } else {
-                        return md5(sprintf("%s:%s:%s", $this->user, $this->realm, $this->pass));
+                        return md5(sprintf("%s:%s:%s", $this->_user, $this->_realm, $this->_pass));
                 }
         }
 
@@ -82,10 +84,10 @@ class DigestHttpValidator extends CredentialValidator
         // 
         private function ha2()
         {
-                if ($this->message->qop && $this->message->qop == 'auth-int') {
-                        return md5(sprintf("%s:%s:%s", $this->message->method, $this->message->uri, md5($this->message->raw)));
+                if ($this->_message->qop && $this->_message->qop == 'auth-int') {
+                        return md5(sprintf("%s:%s:%s", $this->_message->method, $this->_message->uri, md5($this->_message->raw)));
                 } else {
-                        return md5(sprintf("%s:%s", $this->message->method, $this->message->uri));
+                        return md5(sprintf("%s:%s", $this->_message->method, $this->_message->uri));
                 }
         }
 
@@ -95,10 +97,10 @@ class DigestHttpValidator extends CredentialValidator
         // 
         private function response()
         {
-                if (!$this->message->qop) {
-                        return md5(sprintf("%s:%s:%s", $this->ha1(), $this->message->nonce, $this->ha2()));
+                if (!$this->_message->qop) {
+                        return md5(sprintf("%s:%s:%s", $this->ha1(), $this->_message->nonce, $this->ha2()));
                 } else {
-                        return md5(sprintf("%s:%s:%s:%s:%s:%s", $this->ha1(), $this->message->nonce, $this->message->nc, $this->message->cnonce, $this->message->qop, $this->ha2()));
+                        return md5(sprintf("%s:%s:%s:%s:%s:%s", $this->ha1(), $this->_message->nonce, $this->_message->nc, $this->_message->cnonce, $this->_message->qop, $this->ha2()));
                 }
         }
 
