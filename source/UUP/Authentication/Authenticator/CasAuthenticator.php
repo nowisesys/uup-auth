@@ -32,6 +32,10 @@ use UUP\Authentication\Restrictor\Restrictor;
  * 
  * @property-write string $return The redirect URL on logout.
  * 
+ * @property-read string $host The server name or IP-address.
+ * @property-read int $port The server port.
+ * @property-read string $path The server path.
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Authentication
@@ -55,6 +59,20 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                 $this->_port = $port;
                 $this->_path = $path;
                 $this->initialize();
+        }
+
+        public function __get($name)
+        {
+                switch ($name) {
+                        case 'host':
+                                return $this->_host;
+                        case 'port':
+                                return $this->_port;
+                        case 'path':
+                                return $this->_path;
+                        default:
+                                return parent::__get($name);
+                }
         }
 
         public function __set($name, $value)
