@@ -47,7 +47,7 @@ use UUP\Authentication\Restrictor\Restrictor;
  * 
  * <code>
  * $options = array(
- *              'name'   => 'default-sp',     // The service provider name
+ *              'spid'   => 'default-sp',     // The service provider identifier
  *              'path'   => null,             // Only check standard locations
  *              'target' => '/auth/login',    // The redirect URL on login
  *              'return' => '/auth/logout'    // The redirect URL on logout
@@ -60,7 +60,7 @@ use UUP\Authentication\Restrictor\Restrictor;
  * @property string $return The redirect URL on logout.
  * 
  * @property-read string $path The installation path.
- * @property-read string $name The service provider name.
+ * @property-read string $spid The service provider identifier.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -99,10 +99,10 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
          */
         private $_subject;
         /**
-         * The service provider name.
+         * The service provider identifier.
          * @var string
          */
-        private $_name;
+        private $_spid;
         /**
          * The installation path.
          * @var string
@@ -129,10 +129,10 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
                         $this->_return = $options['return'];
                 }
 
-                if (!isset($options['name'])) {
-                        $this->_name = 'default-sp';
+                if (!isset($options['spid'])) {
+                        $this->_spid = 'default-sp';
                 } else {
-                        $this->_name = $options['name'];
+                        $this->_spid = $options['spid'];
                 }
 
                 if (!isset($options['path'])) {
@@ -151,7 +151,7 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
                         throw new Exception("Failed locate any Simple SAML installation");
                 }
 
-                $this->_client = new SimpleSAML_Auth_Simple($this->_name);
+                $this->_client = new SimpleSAML_Auth_Simple($this->_spid);
         }
 
         public function __get($name)
@@ -163,8 +163,8 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
                                 return $this->_return;
                         case 'path':
                                 return $this->_path;
-                        case 'name':
-                                return $this->_name;
+                        case 'spid':
+                                return $this->_spid;
                         default:
                                 return parent::__get($name);
                 }
