@@ -187,45 +187,40 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
 
         public function accepted()
         {
-                $this->invoke();
                 $result = $this->_client->isAuthenticated();
-                $this->leave();
                 return $result;
         }
 
         public function getSubject()
         {
-                $this->invoke();
                 $result = $this->_client->getAttributes()[$this->_subject][0];
-                $this->leave();
                 return $result;
         }
 
         public function attributes()
         {
-                $this->invoke();
                 $result = $this->_client->getAttributes();
-                $this->leave();
                 return $result;
         }
 
         public function login()
         {
-                $this->invoke();
                 $this->_client->requireAuth(array(
                         'ReturnTo' => $this->_target
                 ));
-                $this->leave();
         }
 
         public function logout()
         {
-                $this->invoke();
                 $this->_client->logout(array(
                         'ReturnTo' => $this->_return
                 ));
-                $this->leave();
         }
+
+        // 
+        // Using invoke() and leave() is not really needed if Simple SAML 
+        // is setup to use its own session name.
+        // 
 
         private function invoke()
         {
