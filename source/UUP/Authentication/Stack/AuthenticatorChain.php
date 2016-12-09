@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,17 +49,29 @@ use UUP\Authentication\Stack\AuthenticatorSearch;
 class AuthenticatorChain implements IteratorAggregate
 {
 
+        /**
+         * The authenticator 
+         * @var type 
+         */
         protected $_chain = array();
 
         /**
          * Constructor.
          * 
-         * @param array $array See append().
+         * @param array $array The authenticator chains.
          * @see append
          */
         public function __construct($array = array())
         {
                 $this->append($array);
+        }
+
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                $this->_chain = null;
         }
 
         /**
@@ -106,7 +118,7 @@ class AuthenticatorChain implements IteratorAggregate
          * );
          * </code>
          * Returns a reference to this chain.
-         * @param array $array
+         * @param array $array The authenticator chains.
          * @return AuthenticatorChain 
          */
         public function append($array)
@@ -216,11 +228,19 @@ class AuthenticatorChain implements IteratorAggregate
                 return isset($this->_chain[$key]) ? $this->_chain[$key] : $this->create($key);
         }
 
+        /**
+         * Get array iterator.
+         * @return ArrayIterator
+         */
         public function getIterator()
         {
                 return new ArrayIterator($this->_chain);
         }
 
+        /**
+         * Get chains array.
+         * @return array
+         */
         public function getArrayCopy()
         {
                 return $this->_chain;

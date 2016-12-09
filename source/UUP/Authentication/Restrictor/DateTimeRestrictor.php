@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,12 +82,26 @@ class DateTimeRestrictor extends AuthenticatorBase implements Restrictor
          */
         public function __construct($stime, $etime)
         {
+                parent::__construct();
+                
                 $this->_stime = $stime;
                 $this->_etime = $etime;
+                
                 $this->visible(false);
                 $this->control(Authenticator::REQUIRED);
         }
 
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                parent::__destruct();
+                
+                $this->_stime = null;
+                $this->_etime = null;
+        }
+        
         public function __get($name)
         {
                 switch ($name) {
@@ -100,11 +114,19 @@ class DateTimeRestrictor extends AuthenticatorBase implements Restrictor
                 }
         }
 
+        /**
+         * Check if datetime is accepted.
+         * @return boolean
+         */
         public function accepted()
         {
                 return ($this->_stime <= time()) && (time() <= $this->_etime);
         }
 
+        /**
+         * Get accepted datetime.
+         * @return string
+         */
         public function getSubject()
         {
                 return strftime("%x %X", time());

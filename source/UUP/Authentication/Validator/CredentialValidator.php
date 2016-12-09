@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,15 @@ use UUP\Authentication\Validator\Validator;
 abstract class CredentialValidator implements Validator
 {
 
+        /**
+         * The username.
+         * @var string 
+         */
         protected $_user;
+        /**
+         * The password.
+         * @var string 
+         */
         protected $_pass;
 
         /**
@@ -47,6 +55,21 @@ abstract class CredentialValidator implements Validator
                 $this->_pass = $pass;
         }
 
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                $this->_user = null;
+                $this->_pass = null;
+        }
+
+        /**
+         * Set credentials for authentication.
+         * 
+         * @param string $user The username.
+         * @param string $pass The password.
+         */
         public function setCredentials($user, $pass)
         {
                 $this->_user = $user;

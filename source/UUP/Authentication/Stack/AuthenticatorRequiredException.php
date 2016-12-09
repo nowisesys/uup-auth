@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +24,13 @@ use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
 /**
  * Exception thrown when authentication against a required authenticator failed.
  *
+ * @property-read AuthenticatorBase $autneticator The authenticator throwing exception.
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Authentication
  */
 class AuthenticatorRequiredException extends RuntimeException
 {
-
-        var $authenticator;
 
         /**
          * Constructor.
@@ -43,4 +42,11 @@ class AuthenticatorRequiredException extends RuntimeException
                 $this->authenticator = $authenticator;
         }
 
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                $this->autneticator = null;
+        }
 }

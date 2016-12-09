@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -177,8 +177,19 @@ namespace UUP\Authentication\Authenticator {
                  */
                 public function __construct($validator, $realm, $required = array('nonce' => 1, 'nc' => 1, 'cnonce' => 1, 'qop' => 1, 'username' => 1, 'uri' => 1, 'response' => 1, 'algorithm' => 0))
                 {
+                        parent::__construct();
+                        
                         $this->config($validator, $realm);
                         $this->initialize($required);
+                }
+
+                /**
+                 * Destructor.
+                 */
+                public function __destruct()
+                {
+                        parent::__destruct();
+                        $this->_nonce = null;
                 }
 
                 private function initialize($required)

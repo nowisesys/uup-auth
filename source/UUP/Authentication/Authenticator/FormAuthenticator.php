@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ use UUP\Authentication\Authenticator\Authenticator;
 use UUP\Authentication\Authenticator\RemoteUserAuthenticator;
 use UUP\Authentication\Restrictor\Restrictor;
 use UUP\Authentication\Storage\SessionStorage;
-use UUP\Authentication\Storage\Storage;
 use UUP\Authentication\Validator\Validator;
 
 /**
@@ -75,24 +74,52 @@ use UUP\Authentication\Validator\Validator;
 class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, Authenticator
 {
 
+        /**
+         * Default options.
+         * @var array 
+         */
         private static $_defaults = array(
                 'login' => '/login',
                 'name'  => 'auth',
                 'user'  => 'user',
                 'pass'  => 'pass'
         );
+        /**
+         * The request validator.
+         * @var Validator 
+         */
         private $_validator;
+        /**
+         * The session storage.
+         * @var SessionStorage 
+         */
         private $_session;
+        /**
+         * The form name.
+         * @var string 
+         */
         private $_name;
+        /**
+         * The form username field name.
+         * @var string 
+         */
         private $_user;
+        /**
+         * The form password field name.
+         * @var string 
+         */
         private $_pass;
+        /**
+         * Accepted request methods (POST/GET).
+         * @var array 
+         */
         private $_methods = array(INPUT_POST, INPUT_GET);
 
         /**
          * Constructor.
          * @param Validator $validator The validator callback object.
          * @param array $options
-         * @param Storage $session The session storage.
+         * @param SessionStorage $session The session storage.
          */
         public function __construct($validator, $options = array(), $session = null)
         {
@@ -105,6 +132,18 @@ class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, A
                 if (!empty($this->_name) && !empty($this->_user) && !empty($this->_pass)) {
                         $this->authenticate();
                 }
+        }
+
+        public function __destruct()
+        {
+                parent::__destruct();
+
+                $this->_methods = null;
+                $this->_name = null;
+                $this->_pass = null;
+                $this->_session = null;
+                $this->_user = null;
+                $this->_validator = null;
         }
 
         public function __get($name)
@@ -121,17 +160,28 @@ class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, A
                 }
         }
 
+        /**
+         * Check if session storage has user.
+         * @return boolean
+         */
         public function accepted()
         {
                 $user = $this->_session->read()->user;
                 return $this->_session->exist($user);
         }
 
+        /**
+         * Get user from session storage.
+         * @return string
+         */
         public function getSubject()
         {
                 return $this->_session->read()->user;
         }
 
+        /**
+         * Logout and remove user from session storage.
+         */
         public function logout()
         {
                 $user = $this->_session->read()->user;
@@ -147,6 +197,9 @@ class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, A
                 $this->_methods = $methods;
         }
 
+        /**
+         * Authenticate user.
+         */
         private function authenticate()
         {
                 $this->_validator->setCredentials($this->_user, $this->_pass);
@@ -155,6 +208,9 @@ class FormAuthenticator extends RemoteUserAuthenticator implements Restrictor, A
                 }
         }
 
+        /**
+         * Initialize authenticator.
+         */
         private function initialize()
         {
                 if (!isset($this->_session)) {

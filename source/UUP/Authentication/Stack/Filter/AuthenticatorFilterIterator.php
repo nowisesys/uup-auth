@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2014-2016 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,13 @@ use UUP\Authentication\Restrictor\Restrictor;
 class AuthenticatorFilterIterator extends FilterIterator
 {
 
+        /**
+         * Check current iterator node.
+         * 
+         * Returns true if current iterator node implements the restrictor interface.
+         * 
+         * @return boolean
+         */
         public function accept()
         {
                 return $this->current() instanceof Restrictor;

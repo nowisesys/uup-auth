@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2014-2016 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,15 @@ class ChainAccessBase
         {
                 $this->_chain = $chain;
                 $this->_throw = $throw;
+        }
+
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                $this->_chain = null;
+                $this->_throw = null;
         }
 
         public function __call($name, $arguments)

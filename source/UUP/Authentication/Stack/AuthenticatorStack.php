@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -108,6 +108,15 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
         {
                 parent::__construct($chains);
                 $this->_authenticator = new NullAuthenticator();
+        }
+        
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                parent::__destruct();
+                $this->_authenticator = null;
         }
 
         /**

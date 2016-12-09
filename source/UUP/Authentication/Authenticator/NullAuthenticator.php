@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2014-2016 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,21 +36,35 @@ use UUP\Authentication\Restrictor\Restrictor;
 class NullAuthenticator implements Restrictor, Authenticator
 {
 
+        /**
+         * Get authentication status (always false).
+         * @return boolean
+         */
         public function accepted()
         {
                 return false;
         }
 
+        /**
+         * Get authenticator subject (always an empty string).
+         * @return string
+         */
         public function getSubject()
         {
                 return "";
         }
 
+        /**
+         * Trigger login (noop).
+         */
         public function login()
         {
                 // ignore
         }
 
+        /**
+         * Trigger logout (noop).
+         */
         public function logout()
         {
                 // ignore

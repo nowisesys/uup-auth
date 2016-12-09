@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,6 +117,21 @@ class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor
                 }
         }
 
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                parent::__destruct();
+
+                $this->_accepted = null;
+                $this->_methods = null;
+                $this->_name = null;
+                $this->_pass = null;
+                $this->_user = null;
+                $this->_validator = null;
+        }
+
         public function __get($name)
         {
                 switch ($name) {
@@ -131,16 +146,27 @@ class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor
                 }
         }
 
+        /**
+         * Check if user is authenticated.
+         * @return boolean
+         */
         public function accepted()
         {
                 return $this->_accepted;
         }
 
+        /**
+         * Get authenticated user.
+         * @return string
+         */
         public function getSubject()
         {
                 return $this->_user;
         }
 
+        /**
+         * Trigger logout (noop).
+         */
         public function logout()
         {
                 // Ignore
@@ -155,6 +181,9 @@ class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor
                 $this->_methods = $methods;
         }
 
+        /**
+         * Authenticate request against validator.
+         */
         private function authenticate()
         {
                 $this->_validator->setCredentials($this->_user, $this->_pass);

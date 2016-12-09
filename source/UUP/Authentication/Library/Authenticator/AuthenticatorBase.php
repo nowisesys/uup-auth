@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,15 +43,47 @@ use UUP\Authentication\Authenticator\Authenticator;
 abstract class AuthenticatorBase
 {
 
+        /**
+         * The authenticator name.
+         * @var string 
+         */
         private $_name;
+        /**
+         * The authenticator description.
+         * @var string 
+         */
         private $_desc;
+        /**
+         * Is authenticator visible or hidden?
+         * @var boolean 
+         */
         private $_visible;
+        /**
+         * The authenticator control (sufficient, required or optional).
+         * @var int 
+         */
         private $_control;
 
+        /**
+         * Constructor.
+         * 
+         * The default authenticator is both visible and sufficient.
+         */
         public function __construct()
         {
                 $this->_visible = true;
                 $this->_control = Authenticator::SUFFICIENT;
+        }
+
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                $this->_name = null;
+                $this->_desc = null;
+                $this->_visible = null;
+                $this->_control = null;
         }
 
         public function __get($name)

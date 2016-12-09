@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,13 +37,29 @@ use IteratorAggregate;
 class RandomAccessIterator implements ArrayAccess, IteratorAggregate
 {
 
+        /**
+         * The data.
+         * @var array 
+         */
         private $_data = array();
 
+        /**
+         * Constructor.
+         * @param Iterator $iterator The data iterator.
+         */
         public function __construct(Iterator $iterator)
         {
                 for ($iterator->rewind(); $iterator->valid(); $iterator->next()) {
                         $this->_data[$iterator->key()] = $iterator->current();
                 }
+        }
+
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                $this->_data = null;
         }
 
         public function offsetExists($offset)

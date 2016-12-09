@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,17 @@ class SqlValidator extends CredentialValidator
                 initialize as private;
         }
 
+        /**
+         * The default users table name.
+         */
         const TABLE = "users";
+        /**
+         * The default username field name.
+         */
         const FUSER = "user";
+        /**
+         * The default password field name.
+         */
         const FPASS = "pass";
 
         /**
@@ -50,9 +59,23 @@ class SqlValidator extends CredentialValidator
          */
         public function __construct($pdo, $table = self::TABLE, $fuser = self::FUSER, $fpass = self::FPASS)
         {
+                parent::__construct();
                 $this->initialize($pdo, $table, $fuser, $fpass);
         }
 
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                parent::__destruct();
+                $this->cleanup();       // traits
+        }
+
+        /**
+         * Check credentials in storage.
+         * @return boolean
+         */
         public function authenticate()
         {
                 $sql = sprintf("SELECT COUNT(*) FROM %s WHERE %s = '%s' AND %s = '%s'", $this->_table, $this->_fuser, $this->_user, $this->_fpass, $this->_pass);

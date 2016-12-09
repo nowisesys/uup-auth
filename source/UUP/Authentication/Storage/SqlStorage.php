@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,13 @@ class SqlStorage implements Storage
                 initialize as private;
         }
 
+        /**
+         * The default session table name.
+         */
         const TABLE = "sessions";
+        /**
+         * The default session user field name.
+         */
         const FUSER = "user";
 
         /**
@@ -50,19 +56,42 @@ class SqlStorage implements Storage
         {
                 $this->initialize($pdo, $table, $fuser, "");
         }
+        
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                $this->cleanup();
+        }
 
+        /**
+         * Check if user exists in storage.
+         * @param string $user The username.
+         * @return boolean
+         */
         public function exist($user)
         {
                 $sql = sprintf("SELECT COUNT(*) FROM %s WHERE %s = '%s'", $this->_table, $this->_fuser, $user);
                 return $this->query($sql)->fetchColumn() > 0;
         }
 
+        /**
+         * Insert user in storage.
+         * @param string $user The username.
+         * @return boolean
+         */
         public function insert($user)
         {
                 $sql = sprintf("INSERT INTO %s(%s) VALUES('%s')", $this->_table, $this->_fuser, $user);
                 return $this->exec($sql) !== 0;
         }
 
+        /**
+         * Remove user from storage.
+         * @param string $user The username.
+         * @return boolean
+         */
         public function remove($user)
         {
                 $sql = sprintf("DELETE FROM %s WHERE %s = '%s'", $this->_table, $this->_fuser, $user);

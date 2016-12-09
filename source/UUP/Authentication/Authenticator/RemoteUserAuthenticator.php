@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,20 +58,44 @@ use UUP\Authentication\Restrictor\Restrictor;
 class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
 {
 
+        /**
+         * Default login location.
+         */
         const LOGIN = 'login';
+        /**
+         * Default logout location.
+         */
         const LOGOUT = 'logout';
 
+        /**
+         * Custom options.
+         * @var array 
+         */
         protected $_options;
+        /**
+         * The server variable name containing logged on user.
+         * @var string 
+         */
         private $_subject = 'REMOTE_USER';
+        /**
+         * The login/logout handler location.
+         * @var string 
+         */
         private $_handler;
+        /**
+         * The return URL.
+         * @var string 
+         */
         private $_return;
 
         /**
          * Constructor.
-         * @param array $options
+         * @param array $options Custom options.
          */
         public function __construct($options)
         {
+                parent::__construct();
+
                 $this->_options = $options;
 
                 if (empty($this->_return)) {
@@ -80,6 +104,19 @@ class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, A
                 if (empty($this->_return)) {
                         $this->_return = filter_input(INPUT_SERVER, 'REQUEST_URI');
                 }
+        }
+
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                parent::__destruct();
+
+                $this->_options = null;
+                $this->_subject = null;
+                $this->_handler = null;
+                $this->_return = null;
         }
 
         public function __get($name)
@@ -101,26 +138,44 @@ class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, A
                 }
         }
 
+        /**
+         * Check if remote user is set.
+         * @return boolean
+         */
         public function accepted()
         {
                 return isset($_SERVER[$this->_subject]);
         }
 
+        /**
+         * Get remote user subject.
+         * @return string
+         */
         public function getSubject()
         {
                 return $_SERVER[$this->_subject];
         }
 
+        /**
+         * Trigger remote user login.
+         */
         public function login()
         {
                 $this->redirect(self::LOGIN);
         }
 
+        /**
+         * Trigger remote user logout.
+         */
         public function logout()
         {
                 $this->redirect(self::LOGOUT);
         }
 
+        /**
+         * Redirect client to login/logout URL.
+         * @param string $method The requested method.
+         */
         private function redirect($method)
         {
                 if (!isset($this->_handler)) {
@@ -130,9 +185,12 @@ class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, A
                 header(sprintf("Location: %s", self::destination($this->_handler, $this->_return)));
         }
 
-        // 
-        // Generate and returns a redirect URL.
-        // 
+        /**
+         * Generate redirect URL.
+         * @param string $handler The login/logout location.
+         * @param string $return The return URL.
+         * @return string
+         */
         private static function destination($handler, $return)
         {
                 if (strstr($handler, '?')) {

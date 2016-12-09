@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ class AuthenticatorFilter
 
         /**
          * Constructor.
-         * @param AuthenticatorChain|array $chain
+         * @param AuthenticatorChain|array $chain The authenticator chain.
          * @throws Exception
          */
         public function __construct($chain)
@@ -62,6 +62,14 @@ class AuthenticatorFilter
                 } else {
                         $this->_chain = $chain;
                 }
+        }
+
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                $this->_chain = null;
         }
 
         /**
@@ -108,7 +116,7 @@ class AuthenticatorFilter
          */
         public function chain($key)
         {
-                return self::forward(
+                return self::rewind(
                         new ChainFilterIterator(
                         new ArrayKeyFilterIterator(
                         new RecursiveIteratorIterator(
@@ -137,7 +145,7 @@ class AuthenticatorFilter
          */
         public function authenticator($key)
         {
-                return self::forward(
+                return self::rewind(
                         new AuthenticatorFilterIterator(
                         new ArrayKeyFilterIterator(
                         new RecursiveIteratorIterator(
@@ -152,7 +160,7 @@ class AuthenticatorFilter
          */
         public function chains()
         {
-                return self::forward(
+                return self::rewind(
                         new ChainFilterIterator(
                         new RecursiveIteratorIterator(
                         new RecursiveArrayIterator($this->_chain), RecursiveIteratorIterator::SELF_FIRST
@@ -165,19 +173,28 @@ class AuthenticatorFilter
          */
         public function authenticators()
         {
-                return self::forward(
+                return self::rewind(
                         new AuthenticatorFilterIterator(
                         new RecursiveIteratorIterator(
                         new RecursiveArrayIterator($this->_chain), RecursiveIteratorIterator::SELF_FIRST
                 )));
         }
 
+        /**
+         * Get array iterator.
+         * @return RecursiveArrayIterator
+         */
         public function getIterator()
         {
                 return new RecursiveArrayIterator($this->_chain);
         }
 
-        private static function forward($iterator)
+        /**
+         * Rewind and return iterator.
+         * @param Iterator $iterator The iterator.
+         * @return \Iterator
+         */
+        private static function rewind($iterator)
         {
                 $iterator->rewind();
                 return $iterator;

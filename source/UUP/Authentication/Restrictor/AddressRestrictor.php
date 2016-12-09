@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,12 +56,31 @@ namespace UUP\Authentication\Restrictor {
         class AddressRestrictor extends AuthenticatorBase implements Restrictor
         {
 
+                /**
+                 * The IPv4 address for localhost.
+                 */
                 const LOCALHOST_IPV4 = '127.0.0.1';
+                /**
+                 * The IPv6 address for localhost.
+                 */
                 const LOCALHOST_IPV6 = '::1';
+                /**
+                 * The IPv4 any address.
+                 */
                 const ANY_ADDR = '0.0.0.0/0';
+                /**
+                 * The IPv4 any subnet mask.
+                 */
                 const ANY_MASK = '255.255.255.255';
+                /**
+                 * The address range delimiter.
+                 */
                 const DELIMITER = ";";
 
+                /**
+                 * The IP-addresses.
+                 * @var array
+                 */
                 private $_address;
 
                 /**
@@ -71,10 +90,21 @@ namespace UUP\Authentication\Restrictor {
                  */
                 public function __construct($address = null)
                 {
+                        parent::__construct();
+
                         $this->reset();
                         $this->add($address);
                         $this->visible(false);
                         $this->control(Authenticator::REQUIRED);
+                }
+
+                /**
+                 * Destructor.
+                 */
+                public function __destruct()
+                {
+                        parent::__destruct();
+                        $this->_address = null;
                 }
 
                 public function __get($name)
@@ -236,42 +266,68 @@ namespace UUP\Authentication\Restrictor {
                         return false;
                 }
 
+                /**
+                 * Check if peer address is accepted.
+                 * @return boolean
+                 */
                 public function accepted()
                 {
                         return $this->match($this->getSubject());
                 }
 
+                /**
+                 * Get peer address.
+                 * @return string
+                 */
                 public function getSubject()
                 {
                         return $_SERVER['REMOTE_ADDR'];
                 }
 
-                // 
-                // Check a single IPv4 or IPv6 address.
-                // 
+                /**
+                 * Check single IP address.
+                 * 
+                 * @param string $address The accepted address.
+                 * @param string $remote The address to check.
+                 * @return boolean
+                 */
                 private static function checkSingle($address, $remote)
                 {
                         return $address == $remote;
                 }
 
+                /**
+                 * Check range of IP addresses.
+                 * 
+                 * This function checks if a single address or network (in remote) is
+                 * contained in the address range (the address argument).
+                 * 
+                 * @param string $address The address range.
+                 * @param string $remote The remote address.
+                 * @return boolean
+                 */
                 private static function checkRange($address, $remote)
                 {
                         $a = new AddressProperties($address);
                         $r = new AddressProperties($remote);
 
-//                self::output($a, "filter");
-//                self::output($r, "remote");
-
                         return ($a->first <= $r->address) && ($r->address <= $a->last);
                 }
 
+                /**
+                 * Check if IP address is masked.
+                 * 
+                 * This function checks if a single address or network (in remote) is
+                 * masked by the address range (the address argument).
+                 * 
+                 * @param string $address The address range.
+                 * @param string $remote The remote address.
+                 * @return boolean
+                 */
                 private static function checkMasked($address, $remote)
                 {
                         $a = new AddressProperties($address);
                         $r = new AddressProperties($remote);
-
-//                self::output($a, "filter");
-//                self::output($r, "remote");
 
                         if ($a->address == 0 && $a->netmask == 0) {
                                 return true;    // '0.0.0.0/0' => match all
@@ -339,29 +395,77 @@ namespace UUP\Authentication\Library\Authenticator {
         class AddressProperties
         {
 
+                /**
+                 * The any address mask.
+                 */
                 const ANY_MASK = "255.255.255.255";
+                /**
+                 * The address class bit mask.
+                 */
                 const CLASS_BITS_MASK = 0xF0000000;
+                /**
+                 * The class A network bits.
+                 */
                 const CLASS_A_BITS = 0x0;
+                /**
+                 * The class B network bits.
+                 */
                 const CLASS_B_BITS = 0x8;
+                /**
+                 * The class C network bits.
+                 */
                 const CLASS_C_BITS = 0xC;
+                /**
+                 * The class D network bits.
+                 */
                 const CLASS_D_BITS = 0xE;
+                /**
+                 * The class E network bits.
+                 */
                 const CLASS_E_BITS = 0xF;
+                /**
+                 * The class A network mask.
+                 */
                 const CLASS_A_MASK = 0x8;
+                /**
+                 * The class B network mask.
+                 */
                 const CLASS_B_MASK = 0xC;
+                /**
+                 * The class C network mask.
+                 */
                 const CLASS_C_MASK = 0xE;
+                /**
+                 * The class D network mask.
+                 */
                 const CLASS_D_MASK = 0xF;
+                /**
+                 * The class E network mask.
+                 */
                 const CLASS_E_MASK = 0xF;
 
+                /**
+                 * The input address.
+                 * @var string 
+                 */
                 private $_input;
 
                 /**
                  * Constructor.
-                 * @param string $address A single, range or masked IP-address.
+                 * @param string $address A single address, an IP address range or masked IP-address (addr/mask).
                  */
                 public function __construct($address)
                 {
                         $this->_input = $address;
                         $this->decode($address);
+                }
+
+                /**
+                 * Destructor.
+                 */
+                public function __destruct()
+                {
+                        $this->_input = null;
                 }
 
                 public function __get($name)
@@ -371,6 +475,14 @@ namespace UUP\Authentication\Library\Authenticator {
                         }
                 }
 
+                /**
+                 * Decode an address.
+                 * 
+                 * The input argument is either addr (single adress), addr1-addr2 (an 
+                 * range of addresses) or addr/mask (an masked address).
+                 * 
+                 * @param string $addr The input address.
+                 */
                 private function decode($addr)
                 {
                         if (strstr($addr, "-")) {
@@ -382,9 +494,11 @@ namespace UUP\Authentication\Library\Authenticator {
                         }
                 }
 
-                // 
-                // Decode an single address.
-                // 
+                /**
+                 * Decode single address.
+                 * @param string $addr The input address.
+                 * @throws Exception
+                 */
                 private function single($addr)
                 {
                         $this->address = ip2long($addr);
@@ -432,9 +546,10 @@ namespace UUP\Authentication\Library\Authenticator {
                         }
                 }
 
-                // 
-                // Decode an range of IP-addresses (xxx-xxx).
-                // 
+                /**
+                 * Decode address range (xxx-xxx).
+                 * @param string $addr The input address.
+                 */
                 private function range($addr)
                 {
                         $range = explode("-", $addr);
@@ -445,9 +560,10 @@ namespace UUP\Authentication\Library\Authenticator {
                         $this->hosts = $this->last - $this->first;
                 }
 
-                // 
-                // Decode an address having an address length (CIDR or netmask).
-                // 
+                /**
+                 * Decode masked address (CIDR or netmask notation).
+                 * @param type $addr The input address.
+                 */
                 private function masked($addr)
                 {
                         $part = explode("/", $addr);
@@ -467,9 +583,12 @@ namespace UUP\Authentication\Library\Authenticator {
                         $this->networking();
                 }
 
-                // 
-                // An helper function for setting network properties.
-                // 
+                /**
+                 * Set network properties.
+                 * 
+                 * This is purily an helper method for detecting network, broadcast,
+                 * gateway, first and last address and number of hosts.
+                 */
                 private function networking()
                 {
                         $this->network = $this->address & $this->netmask;
@@ -495,9 +614,13 @@ namespace UUP\Authentication\Library\Authenticator {
                         }
                 }
 
-                // 
-                // Netmask -> CIDR.
-                // 
+                /**
+                 * Subnet mask converter (netmask -> CIDR).
+                 * 
+                 * Returns the CIDR length given an standard subnet mask.
+                 * @param int $mask The subnet mask.
+                 * @return int
+                 */
                 private static function cidr($mask)
                 {
                         for ($mask = ((~$mask) & 0xffffffff), $cidr = 32; $mask != 0; --$cidr) {
@@ -506,9 +629,13 @@ namespace UUP\Authentication\Library\Authenticator {
                         return $cidr;
                 }
 
-                // 
-                // CIDR -> netmask.
-                // 
+                /**
+                 * Subnet mask converter (CIDR -> netmask).
+                 * 
+                 * Returns the standard subnet mask given an CIDR length.
+                 * @param int $cidr The CIDR length.
+                 * @return int
+                 */
                 private static function netmask($cidr)
                 {
                         if ($cidr == 0) {
@@ -522,4 +649,3 @@ namespace UUP\Authentication\Library\Authenticator {
         }
 
 }
-

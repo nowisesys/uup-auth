@@ -117,6 +117,8 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
          */
         public function __construct($options = array())
         {
+                parent::__construct();
+                
                 if (!isset($options['target'])) {
                         $this->_target = '/auth/login';
                 } else {
@@ -154,6 +156,21 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
                 $this->_client = new SimpleSAML_Auth_Simple($this->_spid);
         }
 
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                parent::__destruct();
+                
+                $this->_client = null;
+                $this->_path = null;
+                $this->_return = null;
+                $this->_spid = null;
+                $this->_subject = null;
+                $this->_target = null;
+        }
+
         public function __get($name)
         {
                 switch ($name) {
@@ -185,24 +202,36 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
                 }
         }
 
+        /**
+         * Check if authenticated.
+         * @return boolean
+         */
         public function accepted()
         {
-                $result = $this->_client->isAuthenticated();
-                return $result;
+                return $this->_client->isAuthenticated();
         }
 
+        /**
+         * Get username.
+         * @return string
+         */
         public function getSubject()
         {
-                $result = $this->_client->getAttributes()[$this->_subject][0];
-                return $result;
+                return $this->_client->getAttributes()[$this->_subject][0];
         }
 
+        /**
+         * Get user attributes.
+         * @return array
+         */
         public function attributes()
         {
-                $result = $this->_client->getAttributes();
-                return $result;
+                return $this->_client->getAttributes();
         }
 
+        /**
+         * Trigger login.
+         */
         public function login()
         {
                 $this->_client->requireAuth(array(
@@ -210,6 +239,9 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
                 ));
         }
 
+        /**
+         * Trigger logout.
+         */
         public function logout()
         {
                 $this->_client->logout(array(
@@ -248,6 +280,12 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
                 }
         }
 
+        /**
+         * Require Simple SAML library.
+         * @param string $file The filename.
+         * @param string $path Optional extra directory.
+         * @return boolean
+         */
         private function requires($file, $path = null)
         {
                 $locations = array(

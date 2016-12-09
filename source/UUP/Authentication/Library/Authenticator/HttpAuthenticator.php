@@ -67,18 +67,6 @@ trait HttpAuthenticator
          */
         private $_message = "";
 
-        /**
-         * Configure the property bag for this trait.
-         * 
-         * @param Validator $validator The validator callback object.
-         * @param string $realm The authentication realm.
-         */
-        private function config($validator, $realm)
-        {
-                $this->_validator = $validator;
-                $this->_realm = $realm;
-        }
-
         public function __set($name, $value)
         {
                 switch ($name) {
@@ -91,16 +79,27 @@ trait HttpAuthenticator
                 }
         }
 
+        /**
+         * Check if accepted by validator.
+         * @return boolean
+         */
         public function accepted()
         {
                 return $this->_validator->authenticate();
         }
 
+        /**
+         * Get authenticated subject (e.g. username).
+         * @return string
+         */
         public function getSubject()
         {
                 return $this->_user;
         }
 
+        /**
+         * Trigger login.
+         */
         public function login()
         {
                 try {
@@ -115,9 +114,37 @@ trait HttpAuthenticator
                 }
         }
 
+        /**
+         * Trigger logout.
+         */
         public function logout()
         {
                 $this->unauthorized();
+        }
+
+        /**
+         * Configure the property bag for this trait.
+         * 
+         * @param Validator $validator The validator callback object.
+         * @param string $realm The authentication realm.
+         */
+        private function config($validator, $realm)
+        {
+                $this->_validator = $validator;
+                $this->_realm = $realm;
+        }
+
+        /**
+         * Cleanup routing.
+         */
+        protected function cleanup()
+        {
+                $this->_user = null;
+                $this->_pass = null;
+                $this->_validator = null;
+                $this->_realm = null;
+                $this->_redirect = null;
+                $this->_message = null;
         }
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,12 @@ use UUP\Authentication\Stack\Filter\PredicateFilterValidator;
 interface PredicateFilterValidator
 {
 
+        /**
+         * Validate current iterator node.
+         * 
+         * @param Iterator $iterator The input iterator.
+         * @return boolean
+         */
         function validate(Iterator $iterator);
 }
 
@@ -83,14 +89,35 @@ interface PredicateFilterValidator
 class PredicateFilterIterator extends FilterIterator
 {
 
+        /**
+         * The predicate object.
+         * @var PredicateFilterValidator 
+         */
         private $_predicate;
 
+        /**
+         * 
+         * @param Iterator $iterator The data iterator.
+         * @param PredicateFilterValidator $predicate The predicate object.
+         */
         public function __construct(Iterator $iterator, PredicateFilterValidator $predicate)
         {
                 $this->_predicate = $predicate;
                 parent::__construct($iterator);
         }
 
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                $this->_predicate = null;
+        }
+
+        /**
+         * Check this object using predicate validation.
+         * @return boolean
+         */
         public function accept()
         {
                 return $this->_predicate->validate($this);

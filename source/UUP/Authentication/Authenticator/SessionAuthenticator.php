@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,10 +55,27 @@ class SessionAuthenticator extends AuthenticatorBase implements Restrictor, Auth
          */
         public function __construct($authenticator, $storage)
         {
+                parent::__construct();
+                
                 $this->_authenticator = $authenticator;
                 $this->_storage = $storage;
         }
 
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                parent::__destruct();
+                
+                $this->_authenticator = null;
+                $this->_storage = null;
+        }
+
+        /**
+         * Check if session is authenticated.
+         * @return boolean
+         */
         public function accepted()
         {
                 if ($this->_storage->exist($this->_authenticator->getSubject())) {
@@ -71,17 +88,27 @@ class SessionAuthenticator extends AuthenticatorBase implements Restrictor, Auth
                 }
         }
 
+        /**
+         * Get authenticated subject.
+         * @return string
+         */
         public function getSubject()
         {
                 return $this->_authenticator->getSubject();
         }
 
+        /**
+         * Trigger login and insert in storage.
+         */
         public function login()
         {
                 $this->_authenticator->login();
                 $this->_storage->insert($this->_authenticator->getSubject());
         }
 
+        /**
+         * Trigger logout and removal from storage.
+         */
         public function logout()
         {
                 $this->_storage->remove($this->_authenticator->getSubject());

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,11 +32,24 @@ trait SqlConnector
 {
 
         /**
-         * @var PDO The database connection.
+         * The database connection.
+         * @var PDO 
          */
         private $_pdo;
+        /**
+         * The table name.
+         * @var string 
+         */
         protected $_table;
+        /**
+         * The username field name.
+         * @var string 
+         */
         protected $_fuser;
+        /**
+         * The password field name.
+         * @var string 
+         */
         protected $_fpass;
 
         /**
@@ -58,6 +71,13 @@ trait SqlConnector
                 $this->_fpass = $fpass;
         }
 
+        /**
+         * Execute SQL query.
+         * 
+         * @param string $sql The SQL string.
+         * @return PDOStatement
+         * @throws Exception
+         */
         protected function query($sql)
         {
                 if (!($res = $this->_pdo->query($sql))) {
@@ -68,9 +88,26 @@ trait SqlConnector
                 }
         }
 
+        /**
+         * Execute SQL statement.
+         * 
+         * @param string $sql The SQL string.
+         * @return int The number of rows that were modified or deleted
+         */
         protected function exec($sql)
         {
                 return $this->_pdo->exec($sql);
+        }
+
+        /**
+         * Cleanup routine.
+         */
+        protected function cleanup()
+        {
+                $this->_fpass = null;
+                $this->_fuser = null;
+                $this->_table = null;
+                $this->_pdo = null;
         }
 
 }

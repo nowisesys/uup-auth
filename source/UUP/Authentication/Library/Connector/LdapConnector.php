@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,19 +34,35 @@ use UUP\Authentication\Validator\CredentialValidator;
 abstract class LdapConnector extends CredentialValidator
 {
 
+        /**
+         * The LDAP server name.
+         * @var string 
+         */
         private $_server;
+        /**
+         * The LDAP server port.
+         * @var int 
+         */
         private $_port;
+        /**
+         * Miscellanous LDAP options.
+         * @var array 
+         */
         private $_options;
-        protected $_handle;        // LDAP connection
+        /**
+         * The LDAP connection
+         * @var resource 
+         */
+        protected $_handle;
 
         /**
          * Constructor.
-         * @param string $server The LDAP server.
-         * @param int $port Port on server.
-         * @param array $options Associative array of miscellanous LDAP options.
+         * 
+         * @param string $server The LDAP server name.
+         * @param int $port The LDAP server port.
+         * @param array $options Miscellanous LDAP options.
          * @see ldap_set_options()
          */
-
         public function __construct($server, $port = 389, $options = array())
         {
                 $this->_server = $server;
@@ -54,6 +70,23 @@ abstract class LdapConnector extends CredentialValidator
                 $this->_options = $options;
         }
 
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                parent::__destruct();
+
+                $this->_handle = null;
+                $this->_options = null;
+                $this->_port = null;
+                $this->_server = null;
+        }
+
+        /**
+         * Open LDAP connection.
+         * @throws Exception
+         */
         protected function connect()
         {
                 if (!($this->_handle = ldap_connect($this->_server, $this->_port))) {
@@ -68,9 +101,14 @@ abstract class LdapConnector extends CredentialValidator
         }
 
         /**
-         * Bind to LDAP tree using supplied username and password.
+         * Bind LDAP connection.
+         * 
+         * Binding is done using supplied username and password credentials. Use
+         * this method to check authentication.
+         * 
          * @param string $user The username.
          * @param string $pass The password.
+         * 
          * @throws Exception
          */
         public function bind($user, $pass)
@@ -83,6 +121,9 @@ abstract class LdapConnector extends CredentialValidator
                 }
         }
 
+        /**
+         * Disconnect LDAP connection.
+         */
         protected function disconnect()
         {
                 if (is_resource($this->_handle)) {

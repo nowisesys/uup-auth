@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,15 @@ use UUP\Authentication\Restrictor\Restrictor;
 class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
 {
 
+        /**
+         * Default hostname to accept.
+         */
         const LOCALHOST = 'localhost';
 
+        /**
+         * The hostname to accept.
+         * @var string 
+         */
         protected $_accept;
 
         /**
@@ -46,8 +53,20 @@ class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Aut
          */
         public function __construct($accept = self::LOCALHOST)
         {
+                parent::__construct();
+
                 $this->_accept = $accept;
                 $this->visible(false);
+        }
+
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                parent::__destruct();
+
+                $this->_accept = null;
         }
 
         /**
@@ -59,21 +78,35 @@ class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Aut
                 $this->_accept = $accept;
         }
 
+        /**
+         * Check if peer is accepted.
+         * @return boolean
+         */
         public function accepted()
         {
                 return gethostbyaddr($_SERVER['REMOTE_ADDR']) == $this->_accept;
         }
 
+        /**
+         * Get authenticated hostname.
+         * @return string
+         */
         public function getSubject()
         {
                 return $this->_accept;
         }
 
+        /**
+         * Trigger hostname login (noop).
+         */
         public function login()
         {
                 // ignore
         }
 
+        /**
+         * Trigger hostname logout (noop).
+         */
         public function logout()
         {
                 // ignore

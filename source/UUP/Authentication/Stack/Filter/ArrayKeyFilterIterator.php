@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2014-2016 Anders Lövgren (Computing Department at BMC, Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,14 +31,39 @@ use Iterator;
 class ArrayKeyFilterIterator extends FilterIterator
 {
 
+        /**
+         * The key name.
+         * @var string 
+         */
         private $_name;
 
+        /**
+         * Constructor.
+         * @param Iterator $iterator The data iterator.
+         * @param string $key The key name.
+         */
         public function __construct(Iterator $iterator, $key)
         {
                 $this->_name = $key;
                 parent::__construct($iterator);
         }
+        
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                $this->_name = null;
+        }
 
+        /**
+         * Check current iterator node.
+         * 
+         * Returns true if key of current iterator node matches the key
+         * name of this object.
+         * 
+         * @return boolean
+         */
         public function accept()
         {
                 return $this->key() === $this->_name;

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +33,23 @@ use UUP\Authentication\Stack\Filter\PropertyFilterIterator;
 class PropertyFilterIterator extends PredicateFilterIterator implements PredicateFilterValidator
 {
 
+        /**
+         * The property name.
+         * @var string 
+         */
         private $_property;
+        /**
+         * The property value.
+         * @var mixed 
+         */
         private $_value;
 
+        /**
+         * Constructor.
+         * @param Iterator $iterator The data iterator.
+         * @param string $property The property name.
+         * @param mixed $value The property value.
+         */
         public function __construct(Iterator $iterator, $property, $value)
         {
                 $this->_property = $property;
@@ -43,11 +57,36 @@ class PropertyFilterIterator extends PredicateFilterIterator implements Predicat
                 parent::__construct($iterator, $this);
         }
 
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                parent::__destruct();
+
+                $this->_property = null;
+                $this->_value = null;
+        }
+
+        /**
+         * Validate current iterator node.
+         * 
+         * @param Iterator $iterator The input iterator.
+         * @return boolean
+         */
         public function validate(Iterator $iterator)
         {
                 return self::check($iterator->current(), $this->_property, $this->_value);
         }
 
+        /**
+         * Check if object property matches value.
+         * 
+         * @param object $obj The object with properties.
+         * @param string $prop The property name.
+         * @param mixed $value The property value.
+         * @return boolean
+         */
         protected static function check($obj, $prop, $value)
         {
                 return $obj->$prop === $value;
@@ -61,6 +100,10 @@ class PropertyFilterIterator extends PredicateFilterIterator implements Predicat
 class VisibilityFilterIterator extends PropertyFilterIterator
 {
 
+        /**
+         * constructor.
+         * @param Iterator $iterator The data iterator.
+         */
         public function __construct(Iterator $iterator)
         {
                 parent::__construct($iterator, 'visible', true);

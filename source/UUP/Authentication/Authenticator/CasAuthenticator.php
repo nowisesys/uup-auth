@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,21 +44,65 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
 {
 
         /**
+         * The CAS client.
          * @var CAS_Client
          */
         private $_client;
+        /**
+         * The CAS server host.
+         * @var string 
+         */
         private $_host;
+        /**
+         * The CAS server port.
+         * @var string 
+         */
         private $_port;
+        /**
+         * The CAS server path.
+         * @var string 
+         */
         private $_path;
+        /**
+         * CAS service parameters.
+         * @var array 
+         */
         private $_params = array();
+        /**
+         * Current session status.
+         * @var int 
+         */
         private $_status;
 
+        /**
+         * Constructor.
+         * @param type $host The CAS server host (required).
+         * @param type $port The CAS server port (optional).
+         * @param type $path The CAS server path (optional).
+         */
         public function __construct($host, $port = 443, $path = "/cas")
         {
+                parent::__construct();
+
                 $this->_host = $host;
                 $this->_port = $port;
                 $this->_path = $path;
                 $this->initialize();
+        }
+
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                parent::__destruct();
+
+                $this->_client = null;
+                $this->_host = null;
+                $this->_params = null;
+                $this->_path = null;
+                $this->_port = null;
+                $this->_status = null;
         }
 
         public function __get($name)
@@ -82,6 +126,10 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                 }
         }
 
+        /**
+         * Check if client is authenticated.
+         * @return boolean
+         */
         public function accepted()
         {
                 $this->invoke();
@@ -90,16 +138,26 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                 return $result;
         }
 
+        /**
+         * Get logged in username.
+         * @return string
+         */
         public function getSubject()
         {
                 return $this->_client->getUser();
         }
 
+        /**
+         * Trigger CAS client login.
+         */
         public function login()
         {
                 $this->_client->forceAuthentication();
         }
 
+        /**
+         * Trigger CAS client logout.
+         */
         public function logout()
         {
                 $this->invoke();
@@ -107,6 +165,9 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                 $this->leave();
         }
 
+        /**
+         * Initialize CAS client.
+         */
         private function initialize()
         {
                 $this->requires('jasig/phpcas/CAS.php');
@@ -114,6 +175,9 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                 $this->_client->setNoCasServerValidation();
         }
 
+        /**
+         * Start session before calling any CAS client method.
+         */
         private function invoke()
         {
                 $this->_status = session_status();
@@ -124,6 +188,9 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                 }
         }
 
+        /**
+         * Reset session after calling any CAS client method.
+         */
         private function leave()
         {
                 if (session_status() == PHP_SESSION_ACTIVE &&
@@ -136,6 +203,10 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                 }
         }
 
+        /**
+         * Require CAS library.
+         * @param string $file The filename.
+         */
         private function requires($file)
         {
                 $locations = array(
