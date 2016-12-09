@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,17 @@ use UUP\Authentication\Restrictor\Restrictor;
  * 
  * Similar to HostnameAuthenticator, but accepts a domain name regex pattern 
  * to match remote host against.
+ * 
+ * <code>
+ * $auth = new DomainAuthenticator('|^.*.(bmc.uu.se)$|');
+ * if ($auth->accepted()) {
+ *      printf("Welcome %s from %s\n", $auth->getSubject(), $auth->getDomain());
+ * }
+ * </code>
  *
+ * The same domain authenticator can be used to match against multiple DNS 
+ * domains. Capture patterns are optional unless getDomain() is used.
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Authentication
@@ -35,16 +45,56 @@ use UUP\Authentication\Restrictor\Restrictor;
 class DomainAuthenticator extends HostnameAuthenticator implements Restrictor, Authenticator
 {
 
+        /**
+         * The matched hostname and domain.
+         * @var array 
+         */
         private $_matched;
 
+        /**
+         * Constructor.
+         * @param string $accept The domain matching pattern.
+         */
+        public function __construct($accept)
+        {
+                parent::__construct($accept);
+                $this->accepted();
+        }
+
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                parent::__destruct();
+                $this->_matched = null;
+        }
+
+        /**
+         * Check if peer is accepted.
+         * @return boolean
+         */
         public function accepted()
         {
                 return $this->match(gethostbyaddr($_SERVER['REMOTE_ADDR']));
         }
 
+        /**
+         * Get peer hostname.
+         * @return string
+         */
         public function getSubject()
         {
-                return $this->_matched;
+                return $this->_matched[0];
+        }
+
+        /**
+         * Get peer domain.
+         * @return string
+         */
+        public function getDomain()
+        {
+                return $this->_matched[1];
         }
 
         /**
@@ -55,7 +105,6 @@ class DomainAuthenticator extends HostnameAuthenticator implements Restrictor, A
         public function match($remote)
         {
                 if (preg_match($this->_accept, $remote, $this->_matched) === 1) {
-                        $this->_matched = $remote;
                         return true;
                 } else {
                         $this->_matched = null;
