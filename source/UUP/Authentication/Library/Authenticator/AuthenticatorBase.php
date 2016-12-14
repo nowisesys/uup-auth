@@ -180,4 +180,13 @@ abstract class AuthenticatorBase
                 return $this->_control == Authenticator::REQUIRED;
         }
 
+        /**
+         * This authenticator is optional for authentication.
+         * @return bool
+         */
+        public function optional()
+        {
+                return $this->_control == Authenticator::OPTIONAL;
+        }
+
 }
