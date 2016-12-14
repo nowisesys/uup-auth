@@ -31,10 +31,10 @@ use UUP\Authentication\Authenticator\Authenticator;
  *      ->description("A longer text with more information");
  * </code>
  * 
- * @property-read int $control The access control for this authenticator.
- * @property-read string $name Short name for wrapped authenticator.
- * @property-read string $description Longer descriptive text for wrapped authenticator.
- * @property-read bool $visible This authenticator is visible for and selectable by remote user.
+ * @property int $control The access control for this authenticator.
+ * @property string $name Short name for wrapped authenticator.
+ * @property string $description Longer descriptive text for wrapped authenticator.
+ * @property bool $visible This authenticator is visible for and selectable by remote user.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -97,6 +97,24 @@ abstract class AuthenticatorBase
                                 return $this->_desc;
                         case 'visible':
                                 return $this->_visible;
+                }
+        }
+
+        public function __set($name, $value)
+        {
+                switch ($name) {
+                        case 'control':
+                                $this->control($value);
+                                break;
+                        case 'name':
+                                $this->name($value);
+                                break;
+                        case 'description':
+                                $this->description($value);
+                                break;
+                        case 'visible':
+                                $this->visible($value);
+                                break;
                 }
         }
 
