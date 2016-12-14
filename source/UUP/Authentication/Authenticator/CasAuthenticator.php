@@ -36,6 +36,8 @@ use UUP\Authentication\Restrictor\Restrictor;
  * @property-read int $port The server port.
  * @property-read string $path The server path.
  * 
+ * @property CAS_Client $client The CAS client object.
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Authentication
@@ -43,11 +45,6 @@ use UUP\Authentication\Restrictor\Restrictor;
 class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenticator
 {
 
-        /**
-         * The CAS client.
-         * @var CAS_Client
-         */
-        private $_client;
         /**
          * The CAS server host.
          * @var string 
@@ -87,7 +84,6 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                 $this->_host = $host;
                 $this->_port = $port;
                 $this->_path = $path;
-                $this->initialize();
         }
 
         /**
@@ -97,17 +93,21 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
         {
                 parent::__destruct();
 
-                $this->_client = null;
                 $this->_host = null;
                 $this->_params = null;
                 $this->_path = null;
                 $this->_port = null;
                 $this->_status = null;
+
+                $this->client = null;
         }
 
         public function __get($name)
         {
                 switch ($name) {
+                        case 'client':
+                                $this->initialize();
+                                return $this->client;
                         case 'host':
                                 return $this->_host;
                         case 'port':
@@ -121,8 +121,16 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
 
         public function __set($name, $value)
         {
-                if ($name == 'return') {
-                        $this->_params['service'] = (string) $value;
+                switch ($name) {
+                        case 'return':
+                                $this->_params['service'] = (string) $value;
+                                break;
+                        case 'client':
+                                $this->client = $value;
+                                break;
+                        default:
+                                parent::__set($name, $value);
+                                break;
                 }
         }
 
@@ -133,7 +141,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
         public function accepted()
         {
                 $this->invoke();
-                $result = $this->_client->isAuthenticated();
+                $result = $this->client->isAuthenticated();
                 $this->leave();
                 return $result;
         }
@@ -144,7 +152,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
          */
         public function getSubject()
         {
-                return $this->_client->getUser();
+                return $this->client->getUser();
         }
 
         /**
@@ -152,7 +160,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
          */
         public function login()
         {
-                $this->_client->forceAuthentication();
+                $this->client->forceAuthentication();
         }
 
         /**
@@ -161,7 +169,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
         public function logout()
         {
                 $this->invoke();
-                $this->_client->logout($this->_params);
+                $this->client->logout($this->_params);
                 $this->leave();
         }
 
@@ -171,8 +179,8 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
         private function initialize()
         {
                 $this->requires('jasig/phpcas/CAS.php');
-                $this->_client = new CAS_Client(CAS_VERSION_2_0, false, $this->_host, $this->_port, $this->_path, false);
-                $this->_client->setNoCasServerValidation();
+                $this->client = new CAS_Client(CAS_VERSION_2_0, false, $this->_host, $this->_port, $this->_path, false);
+                $this->client->setNoCasServerValidation();
         }
 
         /**
