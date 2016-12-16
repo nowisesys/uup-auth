@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,13 +31,21 @@ use UUP\Authentication\Validator\CredentialValidator;
 class DigestHttpValidator extends CredentialValidator
 {
 
+        /**
+         * The HTTP digest message to authenticate.
+         * @var DigestHttpMessage 
+         */
         private $_message;
+        /**
+         * The authentication realm.
+         * @var string 
+         */
         private $_realm;
 
         /**
          * Constructor. 
          * @param string $realm The authentication realm.
-         * @param DigestHttpMessage $message The Digest HTTP message to authenticate.
+         * @param DigestHttpMessage $message The HTTP digest message to authenticate.
          * @param string $user The expected username.
          * @param string $pass The expected password.
          */
@@ -65,10 +73,11 @@ class DigestHttpValidator extends CredentialValidator
                 $this->_message = $message;
         }
 
-        // 
-        // Computer HA1 based on parsed digest values.
-        // See http://en.wikipedia.org/wiki/Digest_access_authentication
-        // 
+        /**
+         * Compute HA1 based on parsed digest values.
+         * @return string
+         * @link http://en.wikipedia.org/wiki/Digest_access_authentication
+         */
         private function ha1()
         {
                 if ($this->_message->algorithm && $this->_message->algorithm == 'MD5-sess') {
@@ -78,10 +87,11 @@ class DigestHttpValidator extends CredentialValidator
                 }
         }
 
-        // 
-        // Computer HA2 based on parsed digest values.
-        // See http://en.wikipedia.org/wiki/Digest_access_authentication
-        // 
+        /**
+         * Compute HA2 based on parsed digest values.
+         * @return string
+         * @link http://en.wikipedia.org/wiki/Digest_access_authentication
+         */
         private function ha2()
         {
                 if ($this->_message->qop && $this->_message->qop == 'auth-int') {
@@ -91,10 +101,11 @@ class DigestHttpValidator extends CredentialValidator
                 }
         }
 
-        // 
-        // Computer response based on parsed digest values.
-        // See http://en.wikipedia.org/wiki/Digest_access_authentication
-        // 
+        /**
+         * Compute response based on parsed digest values.
+         * @return string
+         * @link http://en.wikipedia.org/wiki/Digest_access_authentication
+         */
         private function response()
         {
                 if (!$this->_message->qop) {

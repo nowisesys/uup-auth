@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,16 +60,26 @@ class LdapSearchValidator extends LdapConnector
          */
         const FILTER = "(&(uid={%1})({passwd}={%2}))";
 
+        /**
+         * The LDAP search base DN.
+         * @var string 
+         */
         private $_basedn;
+        /**
+         * The LDAP search filter.
+         * @var string 
+         */
         private $_filter;
 
         /**
          * Constructor.
+         * 
          * @param string $server The LDAP server.
-         * @param int $port Port on server.
          * @param string $basedn The LDAP search base DN.
          * @param string $filter The LDAP search filter.
+         * @param int $port Port on server.
          * @param array $options Associative array of miscellanous LDAP options.
+         * 
          * @see ldap_set_options()
          */
         public function __construct($server, $basedn, $filter = self::FILTER, $port = 389, $options = array())

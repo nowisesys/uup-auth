@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,13 +46,20 @@ use UUP\Authentication\Validator\CredentialValidator;
 class ShadowValidator extends CredentialValidator
 {
 
+        /**
+         * The gecos information delimiter.
+         */
         const DELIMITER = ':';
 
+        /**
+         * Shadow password file path.
+         * @var string 
+         */
         private $_shadow;
 
         /**
          * Constructor.
-         * @param string $file The path to an alternative shadow password file.
+         * @param string $file Shadow password file path.
          */
         public function __construct($file = '/etc/shadow')
         {

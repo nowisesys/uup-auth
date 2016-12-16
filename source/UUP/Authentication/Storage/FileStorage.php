@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,19 +28,37 @@ namespace UUP\Authentication\Storage;
 class FileStorage implements Storage
 {
 
+        /**
+         * The filename.
+         * @var string 
+         */
         private $_file;
 
+        /**
+         * Constructor.
+         * @param string $file The filename path.
+         */
         public function __construct($file)
         {
                 $this->_file = $file;
         }
 
+        /**
+         * Check if user exists.
+         * @param string $user The username.
+         * @return boolean
+         */
         public function exist($user)
         {
                 $data = $this->read();
-                return key_exists($user, $data);
+                return array_key_exists($user, $data);
         }
 
+        /**
+         * Insert user in storage.
+         * @param string $user The username.
+         * @return boolean
+         */
         public function insert($user)
         {
                 $data = $this->read();
@@ -49,6 +67,11 @@ class FileStorage implements Storage
                 return true;
         }
 
+        /**
+         * Remove user from storage.
+         * @param string $user The username.
+         * @return boolean
+         */
         public function remove($user)
         {
                 $data = $this->read();
@@ -57,11 +80,19 @@ class FileStorage implements Storage
                 return true;
         }
 
+        /**
+         * Read file storage.
+         * @return array
+         */
         private function read()
         {
                 return (array) unserialize(file_get_contents($this->_file));
         }
 
+        /**
+         * Write file storage.
+         * @param array $data The storage data.
+         */
         private function write($data)
         {
                 file_put_contents($this->_file, serialize($data));

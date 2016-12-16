@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,13 +34,25 @@ use UUP\Authentication\Storage\Storage;
 class CookieData implements Serializable
 {
 
+        /**
+         * The cookie data.
+         * @var object 
+         */
         private $_data;
 
+        /**
+         * Constructor.
+         */
         public function __construct()
         {
                 $this->_data = (object) array();
         }
 
+        /**
+         * Get value of key.
+         * @param string $name The key name.
+         * @return mixed
+         */
         public function __get($name)
         {
                 if (isset($this->_data->$name)) {
@@ -48,16 +60,29 @@ class CookieData implements Serializable
                 }
         }
 
+        /**
+         * Set key value.
+         * @param string $name The key name.
+         * @param mixed $value The value.
+         */
         public function __set($name, $value)
         {
                 $this->_data->$name = $value;
         }
 
+        /**
+         * Serialize storage data.
+         * @return string
+         */
         public function serialize()
         {
                 return base64_encode(serialize((array) $this->_data));
         }
 
+        /**
+         * Unserialize storage data.
+         * @param string $serialized The serialized data.
+         */
         public function unserialize($serialized)
         {
                 $this->_data = (object) unserialize(base64_decode($serialized));
@@ -80,12 +105,40 @@ class CookieData implements Serializable
 class CookieStorage implements Storage
 {
 
+        /**
+         * The encryption key.
+         * @var string 
+         */
         private $_key;
+        /**
+         * The name of the cookie.
+         * @var string 
+         */
         private $_name;
+        /**
+         * The expire time.
+         * @var int 
+         */
         private $_expire;
+        /**
+         * The cookie path.
+         * @var string 
+         */
         private $_path;
+        /**
+         * The cookie domain.
+         * @var string 
+         */
         private $_domain;
+        /**
+         * Use secure cookie (HTTPS only).
+         * @var boolean 
+         */
         private $_secure;
+        /**
+         * Only accessable thru HTTP.
+         * @var boolean 
+         */
         private $_httponly;
 
         /**
@@ -115,12 +168,21 @@ class CookieStorage implements Storage
                 $this->initialize();
         }
 
+        /**
+         * Check if user is set.
+         * @param string $user The username.
+         * @return boolean
+         */
         public function exist($user)
         {
                 $data = $this->read($user);
                 return $data->user == $user;
         }
 
+        /**
+         * Create user cookie.
+         * @param string $user The username. 
+         */
         public function insert($user)
         {
                 $data = $this->read($user);
@@ -131,6 +193,10 @@ class CookieStorage implements Storage
                 $this->save($data);
         }
 
+        /**
+         * Remove user cookie.
+         * @param string $user The username.
+         */
         public function remove($user)
         {
                 $data = $this->read($user);
@@ -222,6 +288,9 @@ class CookieStorage implements Storage
                 }
         }
 
+        /**
+         * Create cookie storage.
+         */
         private function initialize()
         {
                 if (!isset($this->_key)) {

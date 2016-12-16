@@ -86,17 +86,45 @@ use UUP\Authentication\Validator\Validator;
 class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor, Authenticator
 {
 
+        /**
+         * Default options.
+         * @var array 
+         */
         private static $_defaults = array(
                 'login' => '/login',
                 'name'  => 'auth',
                 'user'  => 'user',
                 'pass'  => 'pass'
         );
+        /**
+         * The request validator.
+         * @var Validator 
+         */
         private $_validator;
+        /**
+         * The form name. 
+         * @var string 
+         */
         private $_name;
+        /**
+         * The username.
+         * @var string 
+         */
         private $_user;
+        /**
+         * The password.
+         * @var string 
+         */
         private $_pass;
+        /**
+         * Successful authenticated.
+         * @var boolean 
+         */
         private $_accepted;
+        /**
+         * Accepted request methods.
+         * @var array 
+         */
         private $_methods = array(INPUT_POST, INPUT_GET);
 
         /**

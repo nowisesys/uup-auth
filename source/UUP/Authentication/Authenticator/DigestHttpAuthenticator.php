@@ -17,9 +17,9 @@
  */
 
 namespace UUP\Authentication\Library\Authenticator {
-        
+
         use UUP\Authentication\Validator\DigestHttpValidator;
-        
+
         /**
          * Represent an Digest HTTP message.
          * 
@@ -41,15 +41,31 @@ namespace UUP\Authentication\Library\Authenticator {
         class DigestHttpMessage
         {
 
-                private $_digest;        // raw digest message
-                private $_data;          // parsed digest message.
-                private $_method;        // request method
+                /**
+                 * Raw digest message.
+                 * @var string 
+                 */
+                private $_digest;
+                /**
+                 * Parsed digest message.
+                 * @var string 
+                 */
+                private $_data;
+                /**
+                 * Request method.
+                 * @var string 
+                 */
+                private $_method;
+                /**
+                 * Required message digest parts.
+                 * @var array 
+                 */
                 private $_required;
 
                 /**
                  * Constructor.
                  * @param string $message The digest message to parse.
-                 * @param array $required Array of required message digest parts.
+                 * @param array $required Required message digest parts.
                  */
                 public function __construct($message, $required)
                 {
@@ -78,6 +94,9 @@ namespace UUP\Authentication\Library\Authenticator {
                         }
                 }
 
+                /**
+                 * Parse digest message.
+                 */
                 private function parse()
                 {
                         if (isset($this->_digest)) {
@@ -111,6 +130,10 @@ namespace UUP\Authentication\Library\Authenticator {
         class DigestHttpResponse
         {
 
+                /**
+                 * The password provider.
+                 * @var PasswordProvider 
+                 */
                 private $_provider;
 
                 /**
@@ -160,6 +183,10 @@ namespace UUP\Authentication\Authenticator {
 
                 use \UUP\Authentication\Library\Authenticator\HttpAuthenticator;
 
+                /**
+                 * Some unique string.
+                 * @var string 
+                 */
                 private $_nonce;
 
                 /**
@@ -175,10 +202,19 @@ namespace UUP\Authentication\Authenticator {
                  * @param array $required Restriction on required digest parts.
                  * @see PasswordProvider
                  */
-                public function __construct($validator, $realm, $required = array('nonce' => 1, 'nc' => 1, 'cnonce' => 1, 'qop' => 1, 'username' => 1, 'uri' => 1, 'response' => 1, 'algorithm' => 0))
+                public function __construct($validator, $realm, $required = array(
+                        'nonce'     => 1,
+                        'nc'        => 1,
+                        'cnonce'    => 1,
+                        'qop'       => 1,
+                        'username'  => 1,
+                        'uri'       => 1,
+                        'response'  => 1,
+                        'algorithm' => 0
+                ))
                 {
                         parent::__construct();
-                        
+
                         $this->config($validator, $realm);
                         $this->initialize($required);
                 }

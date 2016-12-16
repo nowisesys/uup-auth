@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,15 @@ use UUP\Authentication\Storage\Storage;
 class SessionData implements Serializable
 {
 
+        /**
+         * The session data.
+         * @var object 
+         */
         private $_data;
 
+        /**
+         * Constructor.
+         */
         public function __construct()
         {
                 $this->_data = (object) array();
@@ -55,11 +62,19 @@ class SessionData implements Serializable
                 $this->_data->$name = $value;
         }
 
+        /**
+         * Serialize session data.
+         * @return string
+         */
         public function serialize()
         {
                 return serialize((array) $this->_data);
         }
 
+        /**
+         * Unserialize session data.
+         * @param string $serialized The serialized session data.
+         */
         public function unserialize($serialized)
         {
                 $this->_data = (object) unserialize($serialized);
@@ -93,9 +108,25 @@ class SessionStorage implements Storage
          */
         const EXPIRES = 7200;
 
+        /**
+         * Enforce session over HTTPS.
+         * @var bool 
+         */
         private $_https;
+        /**
+         * Check peer address.
+         * @var bool 
+         */
         private $_match;
+        /**
+         * The session data name.
+         * @var string 
+         */
         private $_name;
+        /**
+         * The expire time (timestamp).
+         * @var int 
+         */
         private $_expires = self::EXPIRES;
 
         /**
@@ -140,6 +171,11 @@ class SessionStorage implements Storage
                 }
         }
 
+        /**
+         * Check if storage contains user session.
+         * @param string $user The username.
+         * @return boolean
+         */
         public function exist($user)
         {
                 $data = $this->read();
@@ -153,6 +189,10 @@ class SessionStorage implements Storage
                 return $data->user == $user;
         }
 
+        /**
+         * Insert user session.
+         * @param string $user The username.
+         */
         public function insert($user)
         {
                 $data = $this->read();
@@ -162,6 +202,10 @@ class SessionStorage implements Storage
                 $this->save($data);
         }
 
+        /**
+         * Remove user session.
+         * @param string $user The username.
+         */
         public function remove($user)
         {
                 session_start();
@@ -192,6 +236,10 @@ class SessionStorage implements Storage
                 session_write_close();
         }
 
+        /**
+         * Initialize session storage.
+         * @throws Exception
+         */
         private function initialize()
         {
                 if ($this->_https && !isset($_SERVER['HTTPS'])) {
@@ -203,6 +251,11 @@ class SessionStorage implements Storage
                 session_write_close();
         }
 
+        /**
+         * Validate session data.
+         * @param object $data The session data.
+         * @throws Exception
+         */
         private function sanitize($data)
         {
                 if (isset($data->addr) && $data->addr != $_SERVER['REMOTE_ADDR']) {
@@ -210,6 +263,11 @@ class SessionStorage implements Storage
                 }
         }
 
+        /**
+         * Generate session name.
+         * @param string $name The session name (might be null).
+         * @return string
+         */
         private static function name($name)
         {
                 return isset($name) ? $name : strtolower(basename(__FILE__) . __LINE__);

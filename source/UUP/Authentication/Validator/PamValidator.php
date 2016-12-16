@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,8 +44,20 @@ use UUP\Authentication\Validator\CredentialValidator;
 class PamValidator extends CredentialValidator
 {
 
+        /**
+         * The PAM error message.
+         * @var string 
+         */
         private $_errmsg;
+        /**
+         * Write errors to web server log.
+         * @var boolean 
+         */
         private $_errlog = false;
+        /**
+         * Throw exception on error.
+         * @var boolean 
+         */
         private $_throws = false;
 
         /**

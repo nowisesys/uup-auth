@@ -254,6 +254,9 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
         // is setup to use its own session name.
         // 
 
+        /**
+         * Called before invoking library methods.
+         */
         private function invoke()
         {
                 $this->_status = session_status();
@@ -268,6 +271,9 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
                 }
         }
 
+        /**
+         * Called after invoking library methods.
+         */
         private function leave()
         {
                 if (session_status() == PHP_SESSION_ACTIVE &&
