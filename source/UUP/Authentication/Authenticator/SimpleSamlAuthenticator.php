@@ -62,6 +62,8 @@ use UUP\Authentication\Restrictor\Restrictor;
  * @property-read string $path The installation path.
  * @property-read string $spid The service provider identifier.
  * 
+ * @property SimpleSAML_Auth_Simple $client The simple SAML client object.
+ * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Authentication
@@ -78,11 +80,6 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
          */
         const SESSION_NAME = 'simplesaml';
 
-        /**
-         * The simple SAML object.
-         * @var SimpleSAML_Auth_Simple 
-         */
-        private $_client;
         /**
          * Target base URI.
          * @var string 
@@ -118,7 +115,7 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
         public function __construct($options = array())
         {
                 parent::__construct();
-                
+
                 if (!isset($options['target'])) {
                         $this->_target = '/auth/login';
                 } else {
@@ -148,12 +145,6 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
                 } else {
                         $this->_subject = $options['subject'];
                 }
-
-                if (!$this->requires('lib/_autoload.php', $this->_path)) {
-                        throw new Exception("Failed locate any Simple SAML installation");
-                }
-
-                $this->_client = new SimpleSAML_Auth_Simple($this->_spid);
         }
 
         /**
@@ -162,18 +153,22 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
         public function __destruct()
         {
                 parent::__destruct();
-                
-                $this->_client = null;
+
                 $this->_path = null;
                 $this->_return = null;
                 $this->_spid = null;
                 $this->_subject = null;
                 $this->_target = null;
+
+                $this->client = null;
         }
 
         public function __get($name)
         {
                 switch ($name) {
+                        case 'client':
+                                $this->initialize();
+                                return $this->client;
                         case 'target':
                                 return $this->_target;
                         case 'return':
@@ -208,7 +203,7 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
          */
         public function accepted()
         {
-                return $this->_client->isAuthenticated();
+                return $this->client->isAuthenticated();
         }
 
         /**
@@ -217,7 +212,7 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
          */
         public function getSubject()
         {
-                return $this->_client->getAttributes()[$this->_subject][0];
+                return $this->client->getAttributes()[$this->_subject][0];
         }
 
         /**
@@ -226,7 +221,7 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
          */
         public function attributes()
         {
-                return $this->_client->getAttributes();
+                return $this->client->getAttributes();
         }
 
         /**
@@ -234,7 +229,7 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
          */
         public function login()
         {
-                $this->_client->requireAuth(array(
+                $this->client->requireAuth(array(
                         'ReturnTo' => $this->_target
                 ));
         }
@@ -244,9 +239,18 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
          */
         public function logout()
         {
-                $this->_client->logout(array(
+                $this->client->logout(array(
                         'ReturnTo' => $this->_return
                 ));
+        }
+
+        /**
+         * Initialize simple SAML client.
+         */
+        private function initialize()
+        {
+                $this->requires('lib/_autoload.php', $this->_path);
+                $this->client = new SimpleSAML_Auth_Simple($this->_spid);
         }
 
         // 
@@ -287,17 +291,18 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
         }
 
         /**
-         * Require Simple SAML library.
+         * Require simple SAML library.
+         * 
          * @param string $file The filename.
          * @param string $path Optional extra directory.
-         * @return boolean
+         * @throws Exception
          */
         private function requires($file, $path = null)
         {
                 $locations = array(
-                        '/usr/share/php/simplesamlphp/', // standard
-                        __DIR__ . '/../../../../../../', // deployed
-                        __DIR__ . '/../../../../vendor/' // package
+                        '/usr/share/php/simplesamlphp', // standard
+                        __DIR__ . '/../../../../../../simplesamlphp/simplesamlphp', // deployed
+                        __DIR__ . '/../../../../vendor/simplesamlphp/simplesamlphp' // package
                 );
                 if (isset($path)) {
                         if (!in_array($path, $locations)) {
@@ -305,12 +310,33 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
                         }
                 }
                 foreach ($locations as $location) {
-                        if (file_exists($location . $file)) {
-                                require_once $location . $file;
-                                $this->_path = $location;
+                        if ($this->loaded($location, $file)) {
                                 return true;
                         }
                 }
+
+                throw new Exception("Failed locate simple SAML installation");
+        }
+
+        /**
+         * Try require file.
+         * @param string $path The directory path.
+         * @param string $file The filename.
+         * @return boolean
+         */
+        private function loaded($path, $file)
+        {
+                $library = realpath(sprintf("%s/%s", $path, $file));
+
+                if (!file_exists($library)) {
+                        return false;
+                }
+                if (!require_once($library)) {
+                        return false;
+                }
+
+                $this->_path = $path;
+                return true;
         }
 
 }
