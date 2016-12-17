@@ -20,6 +20,7 @@ namespace UUP\Authentication\Authenticator;
 
 use CAS_Client;
 use UUP\Authentication\Authenticator\Authenticator;
+use UUP\Authentication\Exception;
 use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
 use UUP\Authentication\Restrictor\Restrictor;
 
@@ -178,7 +179,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
          */
         private function initialize()
         {
-                $this->requires('jasig/phpcas/CAS.php');
+                $this->requires('CAS.php');
                 $this->client = new CAS_Client(CAS_VERSION_2_0, false, $this->_host, $this->_port, $this->_path, false);
                 $this->client->setNoCasServerValidation();
         }
@@ -213,19 +214,51 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
 
         /**
          * Require CAS library.
+         * 
          * @param string $file The filename.
+         * @param string $path Optional extra directory.         
+         * @throws Exception
          */
-        private function requires($file)
+        private function requires($file, $path = null)
         {
                 $locations = array(
-                        __DIR__ . '/../../../../../../', // deployed
-                        __DIR__ . '/../../../../vendor/'        // package
+                        __DIR__ . '/../../../../vendor/jasig/phpcas', // package
+                        __DIR__ . '/../../../../../../jasig/phpcas', // deployed
+                        '/usr/share/php'                  // standard
                 );
-                foreach ($locations as $location) {
-                        if (file_exists($location . $file)) {
-                                require_once $location . $file;
+                if (isset($path)) {
+                        if (!in_array($path, $locations)) {
+                                array_unshift($locations, $path);
                         }
                 }
+                foreach ($locations as $location) {
+                        if ($this->loaded($location, $file)) {
+                                return true;
+                        }
+                }
+
+                throw new Exception("Failed locate CAS library");
+        }
+
+        /**
+         * Try require file.
+         * @param string $path The directory path.
+         * @param string $file The filename.
+         * @return boolean
+         */
+        private function loaded($path, $file)
+        {
+                $library = realpath(sprintf("%s/%s", $path, $file));
+
+                if (!file_exists($library)) {
+                        return false;
+                }
+                if (!require_once($library)) {
+                        return false;
+                }
+
+                error_log($library);
+                return true;
         }
 
 }
