@@ -1,8 +1,7 @@
 <?php
 
 /*
- * Copyright Error: on line 4, column 29 in Templates/Licenses/license-apache20.txt
-  The string doesn't match the expected date/time format. The string to parse was: "2014-feb-27". The expected format was: "MMM d, yyyy". Anders Lövgren (Computing Department at BMC, Uppsala University).
+ * Copyright (C) 2014-2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +18,6 @@
 
 namespace UUP\Authentication\Library\Authenticator;
 
-use UUP\Authentication\Exception;
-use UUP\Authentication\Validator\Validator;
-
 /**
  * Trait for HTTP authenticators. 
  * 
@@ -31,6 +27,10 @@ use UUP\Authentication\Validator\Validator;
  * 
  * The redirect property affects whether the browser is instructed to clear 
  * the username and password associated with the authentication realm.
+ * 
+ * The user class should define the client object used to perform the real validation
+ * and authorization. It should also define the member method unauthorized() that
+ * gets called on authorization failure.
  * 
  * @property-write string $redirect The redirect URL.
  * @property-write string $message Text to send if user hits Cancel button.
@@ -42,22 +42,6 @@ use UUP\Authentication\Validator\Validator;
 trait HttpAuthenticator
 {
 
-        /**
-         * @var string The username.
-         */
-        private $_user = "";
-        /**
-         * @var string The password.
-         */
-        private $_pass = "";
-        /**
-         * @var Validator 
-         */
-        private $_validator;
-        /**
-         * @var string The authentication realm.
-         */
-        private $_realm;
         /**
          * @var string The redirect URL. 
          */
@@ -76,6 +60,9 @@ trait HttpAuthenticator
                         case "message":
                                 $this->_message = (string) $value;
                                 break;
+                        case "client":
+                                $this->client = $value;
+                                break;
                 }
         }
 
@@ -85,7 +72,7 @@ trait HttpAuthenticator
          */
         public function accepted()
         {
-                return $this->_validator->authenticate();
+                return $this->client->accepted();
         }
 
         /**
@@ -94,7 +81,7 @@ trait HttpAuthenticator
          */
         public function getSubject()
         {
-                return $this->_user;
+                return $this->client->getSubject();
         }
 
         /**
@@ -103,9 +90,9 @@ trait HttpAuthenticator
         public function login()
         {
                 try {
-                        if (strlen($this->_user) == 0) {
+                        if (strlen($this->client->getSubject()) == 0) {
                                 $this->unauthorized();
-                        } elseif (!$this->_validator->authenticate()) {
+                        } elseif (!$this->client->accepted()) {
                                 $this->unauthorized();
                         }
                 } catch (Exception $exception) {
@@ -120,31 +107,6 @@ trait HttpAuthenticator
         public function logout()
         {
                 $this->unauthorized();
-        }
-
-        /**
-         * Configure the property bag for this trait.
-         * 
-         * @param Validator $validator The validator callback object.
-         * @param string $realm The authentication realm.
-         */
-        private function config($validator, $realm)
-        {
-                $this->_validator = $validator;
-                $this->_realm = $realm;
-        }
-
-        /**
-         * Cleanup routing.
-         */
-        protected function cleanup()
-        {
-                $this->_user = null;
-                $this->_pass = null;
-                $this->_validator = null;
-                $this->_realm = null;
-                $this->_redirect = null;
-                $this->_message = null;
         }
 
 }
