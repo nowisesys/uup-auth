@@ -29,6 +29,10 @@ use UUP\Authentication\Validator\Validator;
  * class is kind of generic, it could also be used to provide authentication
  * for simple GET requests.
  * 
+ * This class is suitable for a simple web application using PHP sessions to
+ * identify users and using a form based logon. The only requirement in that 
+ * case is to supply an user validator (could be LDAP or SQL).
+ * 
  * These are the default options unless overridden by the options argument
  * for the constructor:
  * 
