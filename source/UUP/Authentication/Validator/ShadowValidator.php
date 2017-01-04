@@ -73,6 +73,11 @@ class ShadowValidator extends CredentialValidator
                 }
         }
 
+        /**
+         * Authenticate using currently set credentials. Returns true if authentication succeed.
+         * @return bool 
+         * @throws Exception
+         */
         public function authenticate()
         {
                 if (!isset($this->_user) || strlen($this->_user) == 0) {
@@ -85,6 +90,16 @@ class ShadowValidator extends CredentialValidator
                 }
         }
 
+        /**
+         * Get encrypted password.
+         * 
+         * Search the shadow file for currently defined user and return the
+         * encrypted password. Returns null if not found. Throws exception on
+         * read permission error.
+         * 
+         * @return string
+         * @throws Exception
+         */
         private function password()
         {
                 if (($handle = fopen($this->_shadow, "r"))) {

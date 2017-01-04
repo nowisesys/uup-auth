@@ -107,6 +107,11 @@ class LdapSearchValidator extends LdapConnector
                 $this->_filter = $filter;
         }
 
+        /**
+         * Authenticate using currently set credentials. Returns true if authentication succeed.
+         * @return bool 
+         * @throws Exception
+         */
         public function authenticate()
         {
                 if (!isset($this->_user) || strlen($this->_user) == 0) {

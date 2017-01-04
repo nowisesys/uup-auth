@@ -56,6 +56,11 @@ class DigestHttpValidator extends CredentialValidator
                 $this->_message = $message;
         }
 
+        /**
+         * Authenticate using currently set credentials. Returns true if authentication succeed.
+         * @return bool 
+         * @throws Exception
+         */
         public function authenticate()
         {
                 $response1 = $this->response();
