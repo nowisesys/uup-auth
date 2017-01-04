@@ -69,8 +69,6 @@ namespace UUP\Authentication\Library\Authenticator {
                  */
                 public function __construct($validator, $options, $methods)
                 {
-                        error_log(__METHOD__);
-
                         $this->_validator = $validator;
                         $this->initialize($options, $methods);
                 }
