@@ -22,7 +22,7 @@ namespace UUP\Authentication\Library\Authenticator {
         use UUP\Authentication\Validator\Validator;
 
         /**
-         * Handles authentication for Basic HTTP (WWW-Authenticate) authenticator.
+         * Basic HTTP (WWW-Authenticate) access restrictor.
          * 
          * @author Anders Lövgren (QNET/BMC CompDept)
          * @package UUP
@@ -61,8 +61,8 @@ namespace UUP\Authentication\Library\Authenticator {
                  */
                 public function __destruct()
                 {
-                        $this->_pass = null;
                         $this->_user = null;
+                        $this->_pass = null;
                         $this->_validator = null;
                 }
 

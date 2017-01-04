@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-Copyright (C) 2014-2015 Anders Lövgren (QNET/BMC CompDept).
+Copyright (C) 2014-2017 Anders Lövgren (QNET/BMC CompDept).
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -68,7 +68,6 @@ limitations under the License.
                 $validator = new DataValidator($objpdo);
 
                 $authenticator = new DigestHttpAuthenticator($validator, "HTTP Digest Authentication Example");
-//                        $authenticator->redirect = basename(__FILE__);
                 $authenticator->message = "Logon cancelled by caller";
 
                 if (isset($_GET['login'])) {
