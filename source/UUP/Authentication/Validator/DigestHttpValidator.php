@@ -65,7 +65,7 @@ class DigestHttpValidator extends CredentialValidator
         {
                 $response1 = $this->response();
                 $response2 = $this->_message->response;
-                error_log("$response1 == $response2");
+                
                 return $response1 == $response2;
         }
 
