@@ -49,6 +49,14 @@ class SessionData implements Serializable
         {
                 $this->_data = (object) array();
         }
+        
+        /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                $this->_data = null;
+        }
 
         public function __get($name)
         {

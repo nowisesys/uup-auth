@@ -24,7 +24,7 @@ use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
 /**
  * Exception thrown when authentication against a required authenticator failed.
  *
- * @property-read AuthenticatorBase $autneticator The authenticator throwing exception.
+ * @property-read AuthenticatorBase $authenticator The authenticator throwing exception.
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
  * @subpackage Authentication

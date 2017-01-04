@@ -57,6 +57,16 @@ class DigestHttpValidator extends CredentialValidator
         }
 
         /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                parent::__destruct();
+                $this->_message = null;
+                $this->_realm = null;
+        }
+
+        /**
          * Authenticate using currently set credentials. Returns true if authentication succeed.
          * @return bool 
          * @throws Exception

@@ -49,6 +49,14 @@ class CookieData implements Serializable
         }
 
         /**
+         * Destructor.
+         */
+        public function __destruct()
+        {
+                $this->_data = null;
+        }
+
+        /**
          * Get value of key.
          * @param string $name The key name.
          * @return mixed
