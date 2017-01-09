@@ -257,7 +257,6 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
                         return false;
                 }
 
-                error_log($library);
                 return true;
         }
 
