@@ -185,6 +185,9 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
         public function __set($name, $value)
         {
                 switch ($name) {
+                        case 'client':
+                                $this->client = $value;
+                                break;
                         case 'target':
                                 $this->_target = (string) $value;
                                 break;
@@ -193,6 +196,9 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
                                 break;
                         case 'subject':
                                 $this->_subject = (string) $value;
+                                break;
+                        default:
+                                parent::__set($name, $value);
                                 break;
                 }
         }
