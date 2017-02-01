@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copyright Error: on line 4, column 29 in Templates/Licenses/license-apache20.txt
-The string doesn't match the expected date/time format. The string to parse was: "2014-feb-26". The expected format was: "MMM d, yyyy". Anders Lövgren (Computing Department at BMC, Uppsala University).
+Copyright (C) 2014-2017 Anders Lövgren (QNET/BMC CompDept).
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

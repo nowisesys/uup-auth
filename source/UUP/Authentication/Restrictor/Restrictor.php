@@ -1,8 +1,7 @@
 <?php
 
 /*
- * Copyright (C) Error: on line 5, column 33 in Templates/Licenses/license-apache20.txt
-  The string doesn't match the expected date/time format. The string to parse was: "Aug 28, 2014". The expected format was: "yyyy-MMM-dd". Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
