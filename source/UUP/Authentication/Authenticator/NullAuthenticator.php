@@ -70,4 +70,9 @@ class NullAuthenticator implements Restrictor, Authenticator
                 // ignore
         }
 
+        public function setNormalizer(\UUP\Authentication\Restrictor\callable $normalizer)
+        {
+                // ignore
+        }
+
 }

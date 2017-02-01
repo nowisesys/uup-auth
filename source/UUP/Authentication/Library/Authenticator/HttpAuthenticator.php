@@ -81,7 +81,7 @@ trait HttpAuthenticator
          */
         public function getSubject()
         {
-                return $this->client->getSubject();
+                return call_user_func($this->_normalizer, $this->client->getSubject());
         }
 
         /**

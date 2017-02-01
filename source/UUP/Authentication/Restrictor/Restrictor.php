@@ -40,4 +40,10 @@ interface Restrictor
          * @return string
          */
         function getSubject();
+
+        /**
+         * Set subject normalizer.
+         * @param callable $normalizer The normalizer callback.
+         */
+        function setNormalizer(callable $normalizer);
 }

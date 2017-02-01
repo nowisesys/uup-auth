@@ -141,4 +141,9 @@ class RequestClient implements Restrictor
                 }
         }
 
+        public function setNormalizer(callable $normalizer)
+        {
+                // ignore
+        }
+
 }

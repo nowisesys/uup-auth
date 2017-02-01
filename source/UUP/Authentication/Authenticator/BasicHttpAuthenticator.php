@@ -100,6 +100,11 @@ namespace UUP\Authentication\Library\Authenticator {
                         }
                 }
 
+                public function setNormalizer(callable $normalizer)
+                {
+                        // ignore
+                }
+
         }
 
 }

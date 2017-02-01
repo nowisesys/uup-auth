@@ -153,7 +153,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
          */
         public function getSubject()
         {
-                return $this->client->getUser();
+                return call_user_func($this->_normalizer, $this->client->getUser());
         }
 
         /**

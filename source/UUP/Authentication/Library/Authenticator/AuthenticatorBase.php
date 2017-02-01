@@ -63,6 +63,11 @@ abstract class AuthenticatorBase
          * @var int 
          */
         private $_control;
+        /**
+         * The subject normalizer callback.
+         * @var callable 
+         */
+        protected $_normalizer;
 
         /**
          * Constructor.
@@ -73,6 +78,10 @@ abstract class AuthenticatorBase
         {
                 $this->_visible = true;
                 $this->_control = Authenticator::SUFFICIENT;
+
+                $this->_normalizer = function($user) {
+                        return $user;
+                };
         }
 
         /**
@@ -84,6 +93,8 @@ abstract class AuthenticatorBase
                 $this->_desc = null;
                 $this->_visible = null;
                 $this->_control = null;
+
+                $this->_normalizer = null;
         }
 
         public function __get($name)
@@ -187,6 +198,38 @@ abstract class AuthenticatorBase
         public function optional()
         {
                 return $this->_control == Authenticator::OPTIONAL;
+        }
+
+        /**
+         * Set subject normalizer.
+         * 
+         * <code>
+         * // 
+         * // Lower case usernames:
+         * // 
+         * $auth->setNormalizer('strtolower');
+         * $auth->setNormalizer(function($user) { return strtolower($user); });
+         * </code>
+         * 
+         * @param callable $normalizer The normalizer callback.
+         */
+        public function setNormalizer(callable $normalizer)
+        {
+                $this->_normalizer = $normalizer;
+        }
+
+        /**
+         * Get normlized username.
+         * 
+         * This function passes the username argument through the current set
+         * normalizer function. The default normalizer is a noop.
+         * 
+         * @param string $user The username to normalize.
+         * @return string
+         */
+        public function getNormalized($user)
+        {
+                return call_user_func($this->_normalizer, $user);
         }
 
 }

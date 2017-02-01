@@ -37,6 +37,8 @@ limitations under the License.
         $path = "/cas";
 
         $authenticator = new CasAuthenticator($host, $port, $path);
+        // $authenticator->setNormalizer('strtolower');
+        // $authenticator->setNormalizer(function($user) { return strtolower($user); });
 
         if ($authenticator->accepted()) {
                 printf("<p>Logged on as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getSubject());

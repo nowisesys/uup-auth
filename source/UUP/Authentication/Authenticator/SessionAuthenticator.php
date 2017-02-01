@@ -94,7 +94,7 @@ class SessionAuthenticator extends AuthenticatorBase implements Restrictor, Auth
          */
         public function getSubject()
         {
-                return $this->_authenticator->getSubject();
+                return call_user_func($this->_normalizer, $this->_authenticator->getSubject());
         }
 
         /**

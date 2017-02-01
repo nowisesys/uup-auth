@@ -218,7 +218,7 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
          */
         public function getSubject()
         {
-                return $this->client->getAttributes()[$this->_subject][0];
+                return call_user_func($this->_normalizer, $this->getUser());
         }
 
         /**
@@ -343,6 +343,15 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
 
                 $this->_path = $path;
                 return true;
+        }
+
+        /**
+         * Get username attribute.
+         * @return string
+         */
+        private function getUser()
+        {
+                return $this->client->getAttributes()[$this->_subject][0];
         }
 
 }
