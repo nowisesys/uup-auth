@@ -30,7 +30,7 @@ namespace UUP\Authentication\Library\Authenticator {
          * 
          * @see BasicHttpAuthenticator
          */
-        class BasicHttpClient implements Restrictor
+        class BasicHttpClient
         {
 
                 /**
@@ -155,7 +155,7 @@ namespace UUP\Authentication\Authenticator {
                         // 
                         $this->_closure = function() use ($validator) {
                                 return new BasicHttpClient($validator);
-                        };                        
+                        };
                 }
 
                 /**
@@ -167,10 +167,10 @@ namespace UUP\Authentication\Authenticator {
 
                         $this->_closure = null;
                         $this->_realm = null;
-                        
+
                         $this->_redirect = null;
                         $this->_message = null;
-                        
+
                         $this->client = null;
                 }
 

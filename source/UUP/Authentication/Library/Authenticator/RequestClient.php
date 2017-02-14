@@ -33,7 +33,7 @@ use UUP\Authentication\Validator\Validator;
  * @see RequestAuthenticator
  * @see FormAuthenticator
  */
-class RequestClient implements Restrictor
+class RequestClient
 {
 
         /**

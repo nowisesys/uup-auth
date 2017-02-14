@@ -171,7 +171,7 @@ namespace UUP\Authentication\Library\Authenticator {
          * 
          * @see DigestHttpAuthenticator
          */
-        class DigestHttpClient implements Restrictor
+        class DigestHttpClient
         {
 
                 /**
