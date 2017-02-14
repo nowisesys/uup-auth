@@ -99,6 +99,11 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
          * @var Authenticator|Restrictor Current active authenticator.
          */
         private $_authenticator;
+        /**
+         * The subject normalizer callback.
+         * @var callable 
+         */
+        protected $_normalizer;
 
         /**
          * Constructor.
@@ -108,8 +113,12 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
         {
                 parent::__construct($chains);
                 $this->_authenticator = new NullAuthenticator();
+
+                $this->_normalizer = function($user) {
+                        return $user;
+                };
         }
-        
+
         /**
          * Destructor.
          */
@@ -249,7 +258,7 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
          */
         public function getSubject()
         {
-                return $this->_authenticator->getSubject();
+                return call_user_func($this->_normalizer, $this->_authenticator->getSubject());
         }
 
         /**
@@ -269,6 +278,38 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
                 if ($this->accepted()) {
                         $this->_authenticator->logout();
                 }
+        }
+
+        /**
+         * Set subject normalizer.
+         * 
+         * <code>
+         * // 
+         * // Lower case usernames:
+         * // 
+         * $auth->setNormalizer('strtolower');
+         * $auth->setNormalizer(function($user) { return strtolower($user); });
+         * </code>
+         * 
+         * @param callable $normalizer The normalizer callback.
+         */
+        public function setNormalizer(callable $normalizer)
+        {
+                $this->_normalizer = $normalizer;
+        }
+
+        /**
+         * Get normlized username.
+         * 
+         * This function passes the username argument through the current set
+         * normalizer function. The default normalizer is a noop.
+         * 
+         * @param string $user The username to normalize.
+         * @return string
+         */
+        public function getNormalized($user)
+        {
+                return call_user_func($this->_normalizer, $user);
         }
 
 }
