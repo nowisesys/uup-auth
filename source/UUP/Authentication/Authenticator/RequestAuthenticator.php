@@ -198,6 +198,15 @@ class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor
         }
 
         /**
+         * Get accepted input methods (INPUT_XXX).
+         * @return array
+         */
+        public function getMethods()
+        {
+                return $this->_methods;
+        }
+
+        /**
          * Initialize client object.
          */
         private function initialize()

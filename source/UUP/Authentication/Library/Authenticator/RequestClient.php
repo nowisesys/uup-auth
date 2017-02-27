@@ -20,7 +20,6 @@ namespace UUP\Authentication\Library\Authenticator;
 
 use UUP\Authentication\Authenticator\FormAuthenticator;
 use UUP\Authentication\Authenticator\RequestAuthenticator;
-use UUP\Authentication\Restrictor\Restrictor;
 use UUP\Authentication\Validator\Validator;
 
 /**
@@ -61,6 +60,16 @@ class RequestClient
          * @var boolean 
          */
         private $_accepted;
+        /**
+         * The subject normalizer callback.
+         * @var callable 
+         */
+        protected $_normalizer;
+        /**
+         * The default domain.
+         * @var string 
+         */
+        private $_domain;
 
         /**
          * Constructor.
@@ -85,6 +94,9 @@ class RequestClient
                 $this->_user = null;
                 $this->_pass = null;
                 $this->_accepted = null;
+
+                $this->_normalizer = null;
+                $this->_domain = null;
         }
 
         /**
@@ -125,6 +137,19 @@ class RequestClient
                         }
                 }
 
+                if (isset($options['domain'])) {
+                        $this->_domain = $options['domain'];
+                }
+
+                if (!empty($this->_user)) {
+                        $this->setNormalizer(function($user) {
+                                return $this->getPrincipal($user);
+                        });
+                }
+                if (isset($this->_normalizer)) {
+                        $this->_user = call_user_func($this->_normalizer, $this->_user);
+                }
+
                 if (!empty($this->_name) && !empty($this->_user) && !empty($this->_pass)) {
                         $this->authenticate();
                 }
@@ -141,9 +166,66 @@ class RequestClient
                 }
         }
 
+        /**
+         * Set subject normalizer.
+         * 
+         * <code>
+         * // 
+         * // Append default domain:
+         * // 
+         * $auth->setNormalizer(function($user) use($domain) {
+         *      if (strpos($user, '@') === false) {
+         *              return sprintf("%s@%s", $user, $domain);
+         *      } else {
+         *              return $user;
+         *      }
+         * });
+         * </code>
+         * 
+         * @param callable $normalizer The normalizer callback.
+         */
         public function setNormalizer(callable $normalizer)
         {
-                // ignore
+                $this->_normalizer = $normalizer;
+        }
+
+        /**
+         * Get normlized username.
+         * 
+         * This function passes the username argument through the current set
+         * normalizer function. The default normalizer is a noop.
+         * 
+         * @param string $user The username to normalize.
+         * @return string
+         */
+        public function getNormalized($user)
+        {
+                return call_user_func($this->_normalizer, $user);
+        }
+
+        /**
+         * Set default user domain.
+         * @param string $domain The default user domain.
+         */
+        public function setDomain($domain)
+        {
+                $this->_domain = $domain;
+        }
+
+        /**
+         * Get user principal.
+         * @param string $user The username.
+         */
+        private function getPrincipal($user)
+        {
+                if (strpos($user, '@') !== false) {
+                        return $user;
+                }
+                if (!isset($this->_domain)) {
+                        return $user;
+                } else {
+                        return sprintf("%s@%s", $user, $this->_domain);
+                }
         }
 
 }
