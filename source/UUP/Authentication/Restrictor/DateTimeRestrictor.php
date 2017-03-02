@@ -38,21 +38,14 @@ use UUP\Authentication\Restrictor\Restrictor;
  *      {
  *              if(!parent::authenticate()) {
  *                      die(sprintf("Service only available between %s and %s", 
- *                                   self::format($this->stime),
- *                                   self::format($this->etime)));
+ *                                   $this->_sdate, 
+ *                                   $this->_edate
+ *                      ));
  *              }
- *      }
- * 
- *      private static function format($stamp)
- *      {
- *              return strftime("%x %X", $stamp);
  *      }
  * }
  * 
- * $stime = mktime(8, 30, 0);   // start time
- * $etime = mktime(16, 0, 0);   // end time
- * 
- * $restrictor = new AccessRestrictor($stime, $etime);
+ * $restrictor = new AccessRestrictor('08:30', '16:45');
  * $restrictor->authenticate();      // kill script outside of access time period.
  * </code>
  * 
@@ -67,26 +60,56 @@ class DateTimeRestrictor extends AuthenticatorBase implements Restrictor
 {
 
         /**
+         * Format string for datetime.
+         */
+        const DATETIME_FORMAT = '%x %X';
+
+        /**
+         * The start time (UNIX timestamp).
          * @var int 
          */
         protected $_stime;
         /**
+         * The end time (UNIX timestamp).
          * @var int 
          */
         protected $_etime;
+        /**
+         * The start time (as datetime string).
+         * @var string
+         */
+        protected $_sdate;
+        /**
+         * The end time (as datetime string).
+         * @var string
+         */
+        protected $_edate;
 
         /**
          * Constructor.
          * @param int $stime The start time (UNIX timestamp).
          * @param int $etime The end time (UNIX timestamp).
          */
-        public function __construct($stime, $etime)
+        public function __construct($stime, $etime, $format = null)
         {
                 parent::__construct();
-                
+
+                if (is_string($stime)) {
+                        $stime = strtotime($stime);
+                }
+                if (is_string($etime)) {
+                        $etime = strtotime($etime);
+                }
+                if (!isset($format)) {
+                        $format = self::DATETIME_FORMAT;
+                }
+
                 $this->_stime = $stime;
                 $this->_etime = $etime;
-                
+
+                $this->_sdate = strftime($format, $stime);
+                $this->_edate = strftime($format, $etime);
+
                 $this->visible(false);
                 $this->control(Authenticator::REQUIRED);
         }
@@ -97,11 +120,14 @@ class DateTimeRestrictor extends AuthenticatorBase implements Restrictor
         public function __destruct()
         {
                 parent::__destruct();
-                
+
                 $this->_stime = null;
                 $this->_etime = null;
+
+                $this->_sdate = null;
+                $this->_edate = null;
         }
-        
+
         public function __get($name)
         {
                 switch ($name) {
@@ -112,6 +138,11 @@ class DateTimeRestrictor extends AuthenticatorBase implements Restrictor
                         default :
                                 return parent::__get($name);
                 }
+        }
+
+        public function __toString()
+        {
+                return sprintf("%s - %s", $this->_sdate, $this->_edate);
         }
 
         /**
