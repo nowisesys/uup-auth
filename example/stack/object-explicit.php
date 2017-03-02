@@ -40,6 +40,7 @@ limitations under the License.
         use UUP\Authentication\Authenticator\BasicHttpAuthenticator;
         use UUP\Authentication\Authenticator\CasAuthenticator;
         use UUP\Authentication\Restrictor\AddressRestrictor;
+        use UUP\Authentication\Restrictor\DateTimeRestrictor;
         use UUP\Authentication\Stack\AuthenticatorStack;
         use UUP\Authentication\Validator\LdapBindValidator;
         use UUP\Authentication\Validator\PamValidator;
@@ -99,6 +100,9 @@ limitations under the License.
                                 // 
                                 'access' => array(
                                         'addr' => (new AddressRestrictor(array('::1', '127.0.0.1', '192.168.0.0/16')))
+                                            ->visible(false)
+                                            ->control(Authenticator::REQUIRED),
+                                        'time' => (new DateTimeRestrictor('08:45', '16:30'))
                                             ->visible(false)
                                             ->control(Authenticator::REQUIRED)
                                 )

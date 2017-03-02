@@ -40,6 +40,7 @@ limitations under the License.
         use UUP\Authentication\Authenticator\BasicHttpAuthenticator;
         use UUP\Authentication\Authenticator\CasAuthenticator;
         use UUP\Authentication\Restrictor\AddressRestrictor;
+        use UUP\Authentication\Restrictor\DateTimeRestrictor;
         use UUP\Authentication\Stack\Access\ChainPropertyAccess;
         use UUP\Authentication\Stack\AuthenticatorStack;
         use UUP\Authentication\Validator\LdapBindValidator;
@@ -104,6 +105,10 @@ limitations under the License.
                         $chain->access->addr = new AddressRestrictor(array('::1', '127.0.0.1', '192.168.0.0/16'));
                         $chain->access->addr->visible = false;
                         $chain->access->addr->control = Authenticator::REQUIRED;
+
+                        $chain->access->time = new DateTimeRestrictor('08:45', '16:30');
+                        $chain->access->time->visible = false;
+                        $chain->access->time->control = Authenticator::REQUIRED;
                 }
 
                 public function getName()
