@@ -237,7 +237,7 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
                         foreach ($this->authenticators() as $authenticator) {
                                 if ($authenticator->control === Authenticator::REQUIRED) {
                                         if (!$authenticator->accepted()) {
-                                                throw new AuthenticatorRequiredException($authenticator->authenticator);
+                                                throw new AuthenticatorRequiredException($authenticator);
                                         }
                                 }
                         }
