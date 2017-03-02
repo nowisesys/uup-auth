@@ -38,7 +38,7 @@ class AuthenticatorRequiredException extends RuntimeException
          */
         public function __construct($authenticator)
         {
-                parent::__construct(sprintf("Required authenticator %s (%s) failed.\n", $authenticator->name, get_class($authenticator)));
+                parent::__construct(sprintf("Required authenticator %s (%s) failed on restriction %s\n", $authenticator->name, get_class($authenticator), (string) $authenticator));
                 $this->authenticator = $authenticator;
         }
 
@@ -47,6 +47,7 @@ class AuthenticatorRequiredException extends RuntimeException
          */
         public function __destruct()
         {
-                $this->autneticator = null;
+                $this->authenticator = null;
         }
+
 }
