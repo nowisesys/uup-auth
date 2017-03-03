@@ -51,7 +51,7 @@ class AuthenticatorChain implements IteratorAggregate
 
         /**
          * The authenticator 
-         * @var type 
+         * @var array
          */
         protected $_chain = array();
 
