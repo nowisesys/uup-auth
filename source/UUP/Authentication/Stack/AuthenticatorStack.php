@@ -233,23 +233,47 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
          */
         public function accepted()
         {
-                if (!$this->_authenticator->accepted()) {
-                        foreach ($this->authenticators() as $authenticator) {
-                                if ($authenticator->control === Authenticator::REQUIRED) {
-                                        if (!$authenticator->accepted()) {
-                                                throw new AuthenticatorRequiredException($authenticator);
-                                        }
-                                }
-                        }
-                        foreach ($this->authenticators() as $authenticator) {
-                                if ($authenticator->control === Authenticator::SUFFICIENT &&
-                                    $authenticator->accepted()) {
-                                        $this->_authenticator = $authenticator;
-                                        break;
+                // 
+                // Current authenticator must be valid:
+                // 
+                if (!$this->_authenticator) {
+                        return false;
+                }
+
+                // 
+                // All required authenticators must be accepted:
+                // 
+                foreach ($this->authenticators() as $authenticator) {
+                        if ($authenticator->control === Authenticator::REQUIRED) {
+                                if (!$authenticator->accepted()) {
+                                        throw new AuthenticatorRequiredException($authenticator);
                                 }
                         }
                 }
-                return $this->_authenticator->accepted();
+
+                // 
+                // We're done if current authenticator is accepted:
+                // 
+                if ($this->_authenticator->accepted()) {
+                        return true;
+                }
+
+                // 
+                // Only one sufficient authentication must be accepted:
+                // 
+                foreach ($this->authenticators() as $authenticator) {
+                        if ($authenticator->control === Authenticator::SUFFICIENT) {
+                                if ($authenticator->accepted()) {
+                                        $this->_authenticator = $authenticator;
+                                        return true;
+                                }
+                        }
+                }
+
+                // 
+                // No accepted authenticator:
+                // 
+                return false;
         }
 
         /**
@@ -267,7 +291,9 @@ class AuthenticatorStack extends AuthenticatorChain implements Authenticator, Re
          */
         public function login()
         {
-                $this->_authenticator->login();
+                if ($this->_authenticator) {
+                        $this->_authenticator->login();
+                }
         }
 
         /**
