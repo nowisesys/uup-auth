@@ -38,10 +38,10 @@ use UUP\Authentication\Validator\Validator;
  * 
  * <code>
  * $options = array(
- *      'login'  => '/login',   // Login form URL.
- *      'name'   => 'auth',     // The form name.
- *      'user'   => 'user',     // Request parameter containing the username.
- *      'pass'   => 'pass'      // Request parameter containing the password.
+ *      'login' => '/login',   // Login form URL.
+ *      'name'  => 'auth',     // The form name.
+ *      'user'  => 'user',     // Request parameter containing the username.
+ *      'pass'  => 'pass'      // Request parameter containing the password.
  * );
  * </code>
  * 
@@ -76,9 +76,9 @@ use UUP\Authentication\Validator\Validator;
  * }
  * </code>
  * 
- * @property-read string $name Unique form name, i.e. from hidden field or submit button.
- * @property-read string $user The username request parameter name.
- * @property-read string $pass The password request parameter name.
+ * @property-read string $fname Unique form name, i.e. from hidden field or submit button.
+ * @property-read string $fuser The username request parameter name.
+ * @property-read string $fpass The password request parameter name.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -142,11 +142,11 @@ class RequestAuthenticator extends RemoteUserAuthenticator implements Restrictor
                         case 'client':
                                 $this->initialize();
                                 return $this->client;
-                        case 'name':
+                        case 'fname':
                                 return $this->_options['name'];
-                        case 'user':
+                        case 'fuser':
                                 return $this->_options['user'];
-                        case 'pass':
+                        case 'fpass':
                                 return $this->_options['pass'];
                         default:
                                 return parent::__get($name);
