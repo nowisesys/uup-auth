@@ -34,14 +34,14 @@ limitations under the License.
         try {
                 session_start();
 
-                $validator = new ShadowValidator();
-                $authenticator = new RequestAuthenticator($validator, array(
+                $authenticator = new RequestAuthenticator(
+                    new ShadowValidator(), array(
                         'login' => '?showform',
                         'name'  => 'pname',
                         'user'  => 'puser',
                         'pass'  => 'ppass'
                 ));
-
+                
                 if (isset($_GET['login'])) {
                         $authenticator->login();
                 }
@@ -50,12 +50,12 @@ limitations under the License.
                 }
                 if (isset($_GET['showform'])) {
                         printf("<form action='%s' method='POST'>\n", $authenticator->return);
-                        printf("<label for='%s'>Username:</label>\n", $authenticator->user);
-                        printf("<input name='%s' type='text' />\n", $authenticator->user);
-                        printf("<label for='%s'>Password:</label>\n", $authenticator->pass);
-                        printf("<input name='%s' type='password' />\n", $authenticator->pass);
-                        printf("<label for='%s' />\n", $authenticator->name);
-                        printf("<input name='%s' type='submit' value='Login'>\n", $authenticator->name);
+                        printf("<label for='%s'>Username:</label>\n", $authenticator->fuser);
+                        printf("<input name='%s' type='text' />\n", $authenticator->fuser);
+                        printf("<label for='%s'>Password:</label>\n", $authenticator->fpass);
+                        printf("<input name='%s' type='password' />\n", $authenticator->fpass);
+                        printf("<label for='%s' />\n", $authenticator->fname);
+                        printf("<input name='%s' type='submit' value='Login'>\n", $authenticator->fname);
                         printf("</form>\n");
                 }
 

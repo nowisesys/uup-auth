@@ -35,8 +35,8 @@ limitations under the License.
         use UUP\Authentication\Validator\ShadowValidator;
 
         try {
-                $validator = new ShadowValidator();
-                $authenticator = new FormAuthenticator($validator, array(
+                $authenticator = new FormAuthenticator(
+                    new ShadowValidator(), array(
                         'login' => '?showform',
                         'name'  => 'pname',
                         'user'  => 'puser',
@@ -51,12 +51,12 @@ limitations under the License.
                 }
                 if (isset($_GET['showform'])) {
                         printf("<form action='%s' method='POST'>\n", $authenticator->return);
-                        printf("<label for='%s'>Username:</label>\n", $authenticator->user);
-                        printf("<input name='%s' type='text' />\n", $authenticator->user);
-                        printf("<label for='%s'>Password:</label>\n", $authenticator->pass);
-                        printf("<input name='%s' type='password' />\n", $authenticator->pass);
-                        printf("<label for='%s' />\n", $authenticator->name);
-                        printf("<input name='%s' type='submit' value='Login'>\n", $authenticator->name);
+                        printf("<label for='%s'>Username:</label>\n", $authenticator->fuser);
+                        printf("<input name='%s' type='text' />\n", $authenticator->fuser);
+                        printf("<label for='%s'>Password:</label>\n", $authenticator->fpass);
+                        printf("<input name='%s' type='password' />\n", $authenticator->fpass);
+                        printf("<label for='%s' />\n", $authenticator->fname);
+                        printf("<input name='%s' type='submit' value='Login'>\n", $authenticator->fname);
                         printf("</form>\n");
                 }
 
