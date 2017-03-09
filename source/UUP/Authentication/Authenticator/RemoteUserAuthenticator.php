@@ -98,10 +98,13 @@ class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, A
 
                 $this->_options = $options;
 
-                if (empty($this->_return)) {
+                if (isset($options['return'])) {
+                        $this->_return = $options['return'];
+                }
+                if (!isset($this->_return)) {
                         $this->_return = filter_input(INPUT_SERVER, 'HTTP_REFERER');
                 }
-                if (empty($this->_return)) {
+                if (!isset($this->_return)) {
                         $this->_return = filter_input(INPUT_SERVER, 'REQUEST_URI');
                 }
         }
@@ -181,6 +184,12 @@ class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, A
                 if (!isset($this->_handler)) {
                         $this->_handler = $this->_options[$method];
                 }
+                if (!isset($this->_return)) {
+                        $this->_return = filter_input(INPUT_SERVER, 'HTTP_REFERER');
+                }
+                if (!isset($this->_return)) {
+                        $this->_return = filter_input(INPUT_SERVER, 'REQUEST_URI');
+                }
 
                 header(sprintf("Location: %s", self::destination($this->_handler, $this->_return)));
         }
@@ -193,7 +202,9 @@ class RemoteUserAuthenticator extends AuthenticatorBase implements Restrictor, A
          */
         private static function destination($handler, $return)
         {
-                if (strstr($handler, '?')) {
+                if (!$return) {
+                        return $handler;
+                } elseif (strstr($handler, '?')) {
                         return sprintf("%s&return=%s", $handler, urlencode($return));
                 } else {
                         return sprintf("%s?return=%s", $handler, urlencode($return));
