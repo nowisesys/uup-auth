@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,14 @@ use UUP\Authentication\Restrictor\Restrictor;
 /**
  * Hostname authenticator. 
  * 
- * The remote host is considered as authenticated if a reverse lookup of 
- * IP-address in DNS matches the supplied hostname.
+ * Initialize with the accepted hostname. The remote peer is considered to be 
+ * authenticated if a reverse DNS-lookup mathes the accepted hostname. The 
+ * accepted hostname can be modified. 
+ * 
+ * To repeatedly check remote hostnames against the accepted hostname, call 
+ * match() passing each remote hostname. Use accepted() to authenticate remote 
+ * peer. Hostname of remote peer is resolved on-demand so that initialize multiple
+ * objects causes no delay until actually used.
  *
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -47,8 +53,11 @@ class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Aut
         protected $_accept;
 
         /**
-         * Constructor. The hostname to authenticate default to localhost if 
-         * the $accept argument is missing.
+         * Constructor. 
+         * 
+         * The hostname to authenticate default to localhost if the $accept 
+         * argument is missing.
+         * 
          * @param string $accept The hostname to authenticate.
          */
         public function __construct($accept = self::LOCALHOST)
@@ -69,6 +78,26 @@ class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Aut
                 $this->_accept = null;
         }
 
+        public function __get($name)
+        {
+                switch ($name) {
+                        case '_remote':
+                                return $this->_remote = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+                        default :
+                                return parent::__get($name);
+                }
+        }
+
+        public function __set($name, $value)
+        {
+                switch ($name) {
+                        case '_remote':
+                                $this->_remote = $value;
+                        default:
+                                parent::__set($name, $value);
+                }
+        }
+
         /**
          * Set the hostname to authenticate.
          * @param string $accept The hostname to authenticate.
@@ -79,12 +108,31 @@ class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Aut
         }
 
         /**
+         * Get the hostname to authenticate.
+         * @return string
+         */
+        public function getHostname()
+        {
+                return $this->_accept;
+        }
+
+        /**
          * Check if peer is accepted.
          * @return boolean
          */
         public function accepted()
         {
-                return gethostbyaddr($_SERVER['REMOTE_ADDR']) == $this->_accept;
+                return $this->_accept == $this->_remote;
+        }
+
+        /**
+         * Check if remote hostname matches current hostname.
+         * @param string $remote The remote hostname.
+         * @return boolean
+         */
+        public function match($remote)
+        {
+                return $this->_accept == $remote;
         }
 
         /**
@@ -93,7 +141,7 @@ class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Aut
          */
         public function getSubject()
         {
-                return $this->_accept;
+                return $this->_remote;
         }
 
         /**

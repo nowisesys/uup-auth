@@ -36,12 +36,26 @@ limitations under the License.
         use UUP\Authentication\Authenticator\HostnameAuthenticator;
 
         $authenticator = new HostnameAuthenticator();
-        // $authenticator->setHostname('hostname');
         printf("<p>\n");
         printf("Name: %s<br>\n", $authenticator->getSubject());
         printf("Authenticated: %s<br>\n", $authenticator->accepted() ? "yes" : "no");
         printf("</p>\n");
+        $authenticator->getSubject();
 
+        $authenticator->setHostname(gethostbyaddr($_SERVER['REMOTE_ADDR']));
+        printf("<h3>Testing change hostname:</h3>");
+        printf("<p>\n");
+        printf("Name: %s<br>\n", $authenticator->getHostname());
+        printf("Authenticated: %s<br>\n", $authenticator->accepted() ? "yes" : "no");
+        printf("</p>\n");
+        
+        $authenticator->setHostname('hostname.example.com');
+        printf("<h3>Testing match() method:</h3>");
+        printf("<p>\n");
+        printf("Name: %s<br>\n", $authenticator->getHostname());
+        printf("Matched: %s<br>\n", $authenticator->match('hostname.example.com') ? "yes" : "no");
+        printf("</p>\n");
+        
         ?>
     </body>
 </html>
