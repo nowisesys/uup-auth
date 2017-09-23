@@ -70,4 +70,9 @@ class ChainAccessObject implements Authenticator, Restrictor
                 
         }
 
+        public function setNormalizer(callable $normalizer)
+        {
+                
+        }
+
 }
