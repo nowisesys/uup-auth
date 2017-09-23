@@ -99,6 +99,24 @@ class HostnameAuthenticator extends AuthenticatorBase implements Restrictor, Aut
         }
 
         /**
+         * Set remote peer hostname for authentication.
+         * @param string $hostname The peer hostname.
+         */
+        public function setRemote($hostname)
+        {
+                $this->_remote = $hostname;
+        }
+
+        /**
+         * Get remote peer hostname for authentication.
+         * @return string 
+         */
+        public function getRemote()
+        {
+                return $this->_remote;
+        }
+
+        /**
          * Set the hostname to authenticate.
          * @param string $accept The hostname to authenticate.
          */
