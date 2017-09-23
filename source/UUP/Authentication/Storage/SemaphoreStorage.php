@@ -64,13 +64,17 @@ class SemaphoreStorage implements Storage
          * @param int $perm The permission bits.
          * @throws Exception
          */
-        public function __construct($key = 0, $size = null, $perm = 0666)
+        public function __construct($key = 0, $size = 0, $perm = 0666)
         {
                 if (!extension_loaded('sysvshm')) {
                         throw new Exception("The sysvshm extension is not loaded.");
                 }
 
-                $this->_key = $key != 0 ? $key : self::genkey();
+                if ($key == 0) {
+                        $key = self::genkey();
+                }
+
+                $this->_key = $key;
                 $this->_size = $size;
                 $this->_perm = $perm;
 
