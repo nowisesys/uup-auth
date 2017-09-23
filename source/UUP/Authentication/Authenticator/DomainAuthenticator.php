@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2017 Anders Lövgren (QNET/BMC CompDept).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,18 +25,23 @@ use UUP\Authentication\Restrictor\Restrictor;
 /**
  * Domain name authenticator.
  * 
- * Similar to HostnameAuthenticator, but accepts a domain name regex pattern 
- * to match remote host against.
+ * Similar to hostname authenticator, except that the constructor accepts a domain 
+ * name regex pattern to match remote host against. 
  * 
  * <code>
- * $auth = new DomainAuthenticator('|^.*.(bmc.uu.se)$|');
+ * $auth = new DomainAuthenticator('|^.*\.(bmc\.uu\.se)$|');
  * if ($auth->accepted()) {
  *      printf("Welcome %s from %s\n", $auth->getSubject(), $auth->getDomain());
  * }
  * </code>
  *
- * The same domain authenticator can be used to match against multiple DNS 
- * domains. Capture patterns are optional unless getDomain() is used.
+ * The reverse lookup in DNS is on-demand. Unless actually called for authentication,
+ * no possible expensive DNS lookup is performed. Keeping multiple object of this 
+ * class in stack is inexpensive.
+ * 
+ * The same domain authenticator can be used to match against multiple DNS by 
+ * calling match(). Using capture patterns are optional, but required if getDomain() 
+ * is called. Use hasDomain() to check if any domain was captured.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -46,19 +51,23 @@ class DomainAuthenticator extends HostnameAuthenticator implements Restrictor, A
 {
 
         /**
+         * Pattern matching missing.
+         */
+        const MISSING = '|^$|';
+
+        /**
          * The matched hostname and domain.
          * @var array 
          */
-        private $_matched;
+        private $_matched = array(null);
 
         /**
          * Constructor.
          * @param string $accept The domain matching pattern.
          */
-        public function __construct($accept)
+        public function __construct($accept = self::MISSING)
         {
                 parent::__construct($accept);
-                $this->accepted();
         }
 
         /**
@@ -76,7 +85,7 @@ class DomainAuthenticator extends HostnameAuthenticator implements Restrictor, A
          */
         public function accepted()
         {
-                return $this->match(gethostbyaddr($_SERVER['REMOTE_ADDR']));
+                return $this->match($this->_remote);
         }
 
         /**
@@ -95,6 +104,15 @@ class DomainAuthenticator extends HostnameAuthenticator implements Restrictor, A
         public function getDomain()
         {
                 return $this->_matched[1];
+        }
+
+        /**
+         * Check if domain was matched.
+         * @return boolean
+         */
+        public function hasDomain()
+        {
+                return isset($this->_matched[1]);
         }
 
         /**
