@@ -19,8 +19,8 @@ class DomainAuthenticatorTest extends \PHPUnit_Framework_TestCase
          */
         protected function setUp()
         {
-                $this->object = new DomainAuthenticator();
                 $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+                $this->object = new DomainAuthenticator();
         }
 
         /**

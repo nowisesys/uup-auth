@@ -59,7 +59,7 @@ class HostnameAuthenticatorTest extends \PHPUnit_Framework_TestCase
                 $hostname = 'www.example.com';
                 $this->assertEquals($this->object->getSubject(), HostnameAuthenticator::LOCALHOST);
                 $this->object->setHostname($hostname);
-                $this->assertEquals($this->object->getSubject(), $hostname);
+                $this->assertNotEquals($this->object->getSubject(), $hostname);
         }
 
         /**
