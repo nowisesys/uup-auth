@@ -37,23 +37,23 @@ limitations under the License.
 
         $authenticator = new HostnameAuthenticator();
         printf("<p>\n");
-        printf("Name: %s<br>\n", $authenticator->getSubject());
         printf("Authenticated: %s<br>\n", $authenticator->accepted() ? "yes" : "no");
+        printf("Name: %s<br>\n", $authenticator->getSubject());
         printf("</p>\n");
         $authenticator->getSubject();
 
         $authenticator->setHostname(gethostbyaddr($_SERVER['REMOTE_ADDR']));
         printf("<h3>Testing change hostname:</h3>");
         printf("<p>\n");
-        printf("Name: %s<br>\n", $authenticator->getHostname());
         printf("Authenticated: %s<br>\n", $authenticator->accepted() ? "yes" : "no");
+        printf("Name: %s<br>\n", $authenticator->getHostname());
         printf("</p>\n");
         
         $authenticator->setHostname('hostname.example.com');
         printf("<h3>Testing match() method:</h3>");
         printf("<p>\n");
-        printf("Name: %s<br>\n", $authenticator->getHostname());
         printf("Matched: %s<br>\n", $authenticator->match('hostname.example.com') ? "yes" : "no");
+        printf("Name: %s<br>\n", $authenticator->getHostname());
         printf("</p>\n");
         
         ?>

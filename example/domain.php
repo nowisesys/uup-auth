@@ -35,10 +35,10 @@ limitations under the License.
 
         use UUP\Authentication\Authenticator\DomainAuthenticator;
 
-        $authenticator = new DomainAuthenticator('|^.*.(bmc.uu.se)$|');
+        $authenticator = new DomainAuthenticator('|^.*.(bmc\.uu\.se)$|');
         printf("<p>\n");
-        printf("Name: %s<br>\n", $authenticator->getSubject());
         printf("Authenticated: %s<br>\n", $authenticator->accepted() ? "yes" : "no");
+        printf("Name: %s<br>\n", $authenticator->getSubject());
         printf("Domain: %s<br>\n", $authenticator->getDomain());
         printf("</p>\n");
 
