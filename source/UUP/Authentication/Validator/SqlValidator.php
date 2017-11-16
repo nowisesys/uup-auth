@@ -23,7 +23,7 @@ use UUP\Authentication\Exception;
 use UUP\Authentication\Validator\CredentialValidator;
 
 /**
- * Validate usera agains an SQL database table.
+ * Validate user against an SQL table.
  *
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
