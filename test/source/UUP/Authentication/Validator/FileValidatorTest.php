@@ -6,8 +6,8 @@ function tab_encode($data)
 {
         $array = array();
 
-        foreach ($data as $user => $pass) {
-                $array[] = sprintf("%s\t%s", $user, $pass);
+        foreach ($data as $arr) {
+                $array[] = implode("\t", $arr);
         }
 
         return implode("\n", $array);
@@ -25,21 +25,7 @@ class FileValidatorTest extends \PHPUnit_Framework_TestCase
          */
         protected function setUp()
         {
-                $data = array(
-                        'user1' => 'pass1',
-                        'user2' => 'pass1',
-                        'user3' => 'pass3'
-                );
-
-                if (!file_exists("data.ser")) {
-                        file_put_contents("data.ser", serialize($data));
-                }
-                if (!file_exists("data.json")) {
-                        file_put_contents("data.json", json_encode($data));
-                }
-                if (!file_exists("data.tab")) {
-                        file_put_contents("data.tab", tab_encode($data));
-                }
+                
         }
 
         /**
@@ -51,28 +37,123 @@ class FileValidatorTest extends \PHPUnit_Framework_TestCase
                 
         }
 
+        private function createTestFiles($data)
+        {
+                file_put_contents("data.ser", serialize($data));
+                file_put_contents("data.json", json_encode($data));
+                file_put_contents("data.tab", tab_encode($data));
+        }
+
+        private function deleteTestFiles()
+        {
+                unlink("data.ser");
+                unlink("data.json");
+                unlink("data.tab");
+        }
+
         /**
          * @covers UUP\Authentication\Validator\FileValidator::authenticate()
          */
         public function testAuthenticate()
         {
+                $this->runDataSimple();
+                $this->runDataKeyed();
+                $this->runDataOffset();
+                $this->runDataReorder();
+                $this->runDataInside();
+        }
+
+        private function runDataSimple()
+        {
+                $this->runDataTest(array(
+                        array('user1', 'pass1'),
+                        array('user2', 'pass1'),
+                        array('user3', 'pass3')
+                    ), array(
+                        'user' => 0,
+                        'pass' => 1
+                ));
+        }
+
+        private function runDataKeyed()
+        {
+                $this->runDataTest(array(
+                        array('u' => 'user1', 'p' => 'pass1'),
+                        array('u' => 'user2', 'p' => 'pass1'),
+                        array('u' => 'user3', 'p' => 'pass3')
+                    ), array(
+                        'user' => 'u',
+                        'pass' => 'p'
+                ));
+        }
+
+        private function runDataOffset()
+        {
+                $this->runDataTest(array(
+                        array('name1', 45, 'user1', 'pass1'),
+                        array('name2', 33, 'user2', 'pass1'),
+                        array('name3', 29, 'user3', 'pass3')
+                    ), array(
+                        'user' => 2,
+                        'pass' => 3
+                ));
+        }
+
+        private function runDataReorder()
+        {
+                $this->runDataTest(array(
+                        array('pass1', 'user1'),
+                        array('pass1', 'user2'),
+                        array('pass3', 'user3')
+                    ), array(
+                        'user' => 1,
+                        'pass' => 0
+                ));
+        }
+
+        private function runDataInside()
+        {
+                $this->runDataTest(array(
+                        array('pass1', 'user1'),
+                        array('pass1', 'user2'),
+                        array('pass3', 'user3')
+                    ), array(
+                        'user' => false,
+                        'pass' => false
+                ));
+        }
+        
+        private function runDataTest($data, $colmap)
+        {
+                $this->createTestFiles($data);
+                $this->runAllTests($colmap);
+                $this->deleteTestFiles();
+        }
+
+        private function runAllTests($colmap)
+        {
                 // 
                 // Test PHP serialized data:
                 // 
                 $object = new FileValidator("data.ser", FileValidator::FORMAT_PHP);
+                $object->colmap = $colmap;
                 $this->runValidatorTest($object);
 
                 // 
                 // Test JSON encoded data:
                 // 
                 $object = new FileValidator("data.json", FileValidator::FORMAT_JSON);
+                $object->colmap = $colmap;
                 $this->runValidatorTest($object);
 
                 // 
                 // Test tab-separated data:
                 // 
-                $object = new FileValidator("data.tab", FileValidator::FORMAT_TAB);
-                $this->runValidatorTest($object);
+                if (is_numeric(current($colmap))) {
+                        $object = new FileValidator("data.tab", FileValidator::FORMAT_TAB);
+                        $object->colmap = $colmap;
+                        $this->runValidatorTest($object);
+                }
         }
 
         private function runValidatorTest($object)

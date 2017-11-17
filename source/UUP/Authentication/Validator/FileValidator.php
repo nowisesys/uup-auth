@@ -21,42 +21,116 @@ namespace UUP\Authentication\Validator;
 use UUP\Authentication\Exception;
 
 /**
- * Interface for file validator backends.
+ * Decode newline/tab-separated data.
+ * 
+ * @param string $data The input data.
+ * @return array
  */
-interface FileValidatorBackend
+function tab_decode($data)
+{
+        $lines = explode("\n", $data);
+
+        foreach ($lines as $index => $line) {
+                $lines[$index] = explode("\t", $line);
+        }
+
+        return $lines;
+}
+
+/**
+ * Abstract base class for backends.
+ */
+abstract class FileValidatorBackend
 {
 
         /**
-         * Validate user/pass against file.
+         * The user/pass column map.
+         * @var array
+         */
+        private $_colmap;
+
+        /**
+         * Constructor.
+         * @param array $colmap The user/pass column map.
+         */
+        public function __construct($colmap)
+        {
+                $this->_colmap = $colmap;
+        }
+
+        /**
+         * Check if user/pass exist in data.
          * 
-         * @param string $file The file path.
+         * @param array $data The input data.
          * @param string $user The username.
          * @param string $pass The password.
-         * @return bool 
+         * @return boolean
          */
-        function validate($file, $user, $pass);
+        protected function exists($data, $user, $pass)
+        {
+                $colmap = $this->_colmap;
+
+                foreach ($data as $arr) {
+                        // 
+                        // Check username:
+                        // 
+                        if ($colmap['user']) {
+                                if ($arr[$colmap['user']] != $user) {
+                                        continue;
+                                }
+                        } else {
+                                if (!in_array($user, $arr))
+                                        continue;
+                        }
+
+                        // 
+                        // Check password:
+                        // 
+                        if ($colmap['pass']) {
+                                if ($arr[$colmap['pass']] != $pass) {
+                                        continue;
+                                }
+                        } else {
+                                if (!in_array($pass, $arr))
+                                        continue;
+                        }
+
+                        // 
+                        // Username and password found:
+                        // 
+                        return true;
+                }
+
+                // 
+                // Not found in data:
+                // 
+                return false;
+        }
+
+        /**
+         * Validate credentials against file.
+         * 
+         * @param string $file The input file.
+         * @param string $user The username.
+         * @param string $pass The password.
+         * @return boolean
+         */
+        abstract function validate($file, $user, $pass);
 }
 
 /**
  * Validate against PHP serialized data.
  */
-class FileValidatorSerialized implements FileValidatorBackend
+class FileValidatorSerialized extends FileValidatorBackend
 {
 
         public function validate($file, $user, $pass)
         {
                 if (!($data = unserialize(file_get_contents($file)))) {
                         return false;
+                } else {
+                        return parent::exists($data, $user, $pass);
                 }
-
-                if (!array_key_exists($user, $data)) {
-                        return false;
-                }
-                if (!($data[$user] == $pass)) {
-                        return false;
-                }
-
-                return true;
         }
 
 }
@@ -64,23 +138,16 @@ class FileValidatorSerialized implements FileValidatorBackend
 /**
  * Validate against JSON data.
  */
-class FileValidatorJson implements FileValidatorBackend
+class FileValidatorJson extends FileValidatorBackend
 {
 
         public function validate($file, $user, $pass)
         {
                 if (!($data = json_decode(file_get_contents($file), true))) {
                         return false;
+                } else {
+                        return parent::exists($data, $user, $pass);
                 }
-
-                if (!array_key_exists($user, $data)) {
-                        return false;
-                }
-                if (!($data[$user] == $pass)) {
-                        return false;
-                }
-
-                return true;
         }
 
 }
@@ -88,32 +155,15 @@ class FileValidatorJson implements FileValidatorBackend
 /**
  * Validate against tab-separated data.
  */
-class FileValidatorTab implements FileValidatorBackend
+class FileValidatorTab extends FileValidatorBackend
 {
 
-        public function validate($file, $user, $pass, $handle = false)
+        public function validate($file, $user, $pass)
         {
-                if (filesize($file) == 0) {
+                if (!($data = tab_decode(file_get_contents($file)))) {
                         return false;
-                }
-
-                try {
-                        if (!($handle = fopen($file, "r"))) {
-                                throw new Exception(sprintf("Failed open input file %s for reading in file validator.", $this->_file));
-                        }
-
-                        while (($line = fgets($handle))) {
-                                $data = explode("\t", trim($line));
-                                if (count($data) < 2) {
-                                        throw new Exception(sprintf("Expected two columns of data in input file %s in file validator.", $this->_file));
-                                } elseif ($data[0] == $user && $data[1] == $pass) {
-                                        return true;
-                                }
-                        }
-                } finally {
-                        if ($handle && !fclose($handle)) {
-                                throw new Exception(sprintf("Failed close input file %s in file validator.", $this->_file));
-                        }
+                } else {
+                        return parent::exists($data, $user, $pass);
                 }
         }
 
@@ -129,8 +179,37 @@ class FileValidatorTab implements FileValidatorBackend
  * The prefered format is PHP serialized and is also the default format. No exception is throwed
  * if unserialize fails because input data might be a empty file.
  * 
+ * <code>
+ * // 
+ * // Username is in second column and password in third:
+ * // 
+ * $columnmap = array('user' => 1, 'pass' => 2);
+ * 
+ * // 
+ * // Validate user credentials:
+ * // 
+ * $validator = new FileValidator('file.tab', FileValidator::TAB, );
+ * $validator->setCredentials($user, $pass);
+ * 
+ * if ($validator->authenticate()) {
+ *      // Successful validated credentials
+ * }
+ * </code>
+ * 
+ * The column map can reference user/pass columns with numeric index or keys:
+ * <code>
+ * $columnmap = array('user' => 0, 'pass' => 1);        // Default
+ * $columnmap = array('user' => 1, 'pass' => 0);        // Swapped order
+ * $columnmap = array('user' => 2, 'pass' => 3);        // Offset
+ * $columnmap = array('user' => 'u', 'pass' => 'p');    // Using key names (not for tab-separated)
+ * </code>
+ * 
+ * If column map has false as user/pass columns, the user/pass is matched on any column in
+ * input data. This is not recommended.
+ * 
  * @property-write string $file The file path.
  * @property-write int $format The file format.
+ * @property-write array $colmap The user/pass to array index map.
  * 
  * @author Anders Lövgren (QNET/BMC CompDept)
  * @package UUP
@@ -162,17 +241,37 @@ class FileValidator extends CredentialValidator
          * @var int 
          */
         private $_format;
+        /**
+         * The user/pass to array index map.
+         * @var array 
+         */
+        private $_colmap = array('user' => 0, 'pass' => 1);
 
         /**
          * Constructor.
          * 
          * @param string $file The file path.
-         * @param int $format File data format.
+         * @param int $format The file format.
          */
         public function __construct($file = 'user.dat', $format = self::FORMAT_PHP)
         {
                 $this->_file = $file;
                 $this->_format = $format;
+        }
+
+        public function __set($name, $value)
+        {
+                switch ($name) {
+                        case 'file':
+                                $this->_file = (string) $value;
+                                break;
+                        case 'format':
+                                $this->_format = (int) $value;
+                                break;
+                        case 'colmap':
+                                $this->_colmap = (array) $value;
+                                break;
+                }
         }
 
         /**
@@ -203,13 +302,13 @@ class FileValidator extends CredentialValidator
 
                 switch ($this->_format) {
                         case self::FORMAT_PHP:
-                                $validator = new FileValidatorSerialized();
+                                $validator = new FileValidatorSerialized($this->_colmap);
                                 break;
                         case self::FORMAT_JSON:
-                                $validator = new FileValidatorJson();
+                                $validator = new FileValidatorJson($this->_colmap);
                                 break;
                         case self::FORMAT_TAB:
-                                $validator = new FileValidatorTab();
+                                $validator = new FileValidatorTab($this->_colmap);
                                 break;
                 }
 
