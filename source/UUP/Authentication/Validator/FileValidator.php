@@ -70,7 +70,14 @@ abstract class FileValidatorBackend
         {
                 $colmap = $this->_colmap;
 
-                foreach ($data as $arr) {
+                foreach ($data as $key => $arr) {
+                        // 
+                        // Reset colmap if data is user => pass entries.
+                        // 
+                        if (is_string($arr)) {
+                                $colmap = array('user' => false, 'pass' => false);
+                        }
+                        
                         // 
                         // Check username:
                         // 
@@ -78,9 +85,13 @@ abstract class FileValidatorBackend
                                 if ($arr[$colmap['user']] != $user) {
                                         continue;
                                 }
-                        } else {
+                        } elseif (is_array($arr)) {
                                 if (!in_array($user, $arr))
                                         continue;
+                        } else {
+                                if ($user != $key) {
+                                        continue;
+                                }
                         }
 
                         // 
@@ -90,9 +101,13 @@ abstract class FileValidatorBackend
                                 if ($arr[$colmap['pass']] != $pass) {
                                         continue;
                                 }
-                        } else {
+                        } elseif (is_array($arr)) {
                                 if (!in_array($pass, $arr))
                                         continue;
+                        } else {
+                                if ($pass != $arr) {
+                                        continue;
+                                }
                         }
 
                         // 
@@ -188,7 +203,7 @@ class FileValidatorTab extends FileValidatorBackend
  * // 
  * // Validate user credentials:
  * // 
- * $validator = new FileValidator('file.tab', FileValidator::TAB, );
+ * $validator = new FileValidator('file.tab', FileValidator::TAB);
  * $validator->setCredentials($user, $pass);
  * 
  * if ($validator->authenticate()) {
