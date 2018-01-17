@@ -20,6 +20,8 @@ namespace UUP\Authentication\Storage;
 
 use Serializable;
 use UUP\Authentication\Exception;
+use UUP\Authentication\Library\Session\SessionAdapter;
+use UUP\Authentication\Library\Session\SessionNative;
 use UUP\Authentication\Storage\SessionData;
 use UUP\Authentication\Storage\Storage;
 
@@ -49,7 +51,7 @@ class SessionData implements Serializable
         {
                 $this->_data = (object) array();
         }
-        
+
         /**
          * Destructor.
          */
@@ -136,6 +138,11 @@ class SessionStorage implements Storage
          * @var int 
          */
         private $_expires = self::EXPIRES;
+        /**
+         * The session adapter.
+         * @var SessionAdapter 
+         */
+        private $_session;
 
         /**
          * Constructor.
@@ -144,11 +151,12 @@ class SessionStorage implements Storage
          * @param bool $match Require callers IP-address to match IP-address saved in session data.
          * @throws Exception
          */
-        public function __construct($name = null, $https = true, $match = true)
+        public function __construct($name = null, $https = true, $match = true, $session = false)
         {
                 $this->_https = $https;
                 $this->_match = $match;
                 $this->_name = self::name($name);
+                $this->_session = $session;
 
                 $this->initialize();
         }
@@ -216,9 +224,9 @@ class SessionStorage implements Storage
          */
         public function remove($user)
         {
-                session_start();
+                $this->_session->start();
                 unset($_SESSION[$this->_name]);
-                session_write_close();
+                $this->_session->close();
         }
 
         /**
@@ -227,9 +235,9 @@ class SessionStorage implements Storage
          */
         public function read()
         {
-                session_start();
+                $this->_session->start();
                 $data = isset($_SESSION[$this->_name]) ? $_SESSION[$this->_name] : new SessionData();
-                session_write_close();
+                $this->_session->close();
                 return $data;
         }
 
@@ -239,9 +247,9 @@ class SessionStorage implements Storage
          */
         private function save($data)
         {
-                session_start();
+                $this->_session->start();
                 $_SESSION[$this->_name] = $data;
-                session_write_close();
+                $this->_session->close();
         }
 
         /**
@@ -253,10 +261,13 @@ class SessionStorage implements Storage
                 if ($this->_https && !isset($_SERVER['HTTPS'])) {
                         throw new Exception("HTTPS protocol is required");
                 }
+                if (!$this->_session) {
+                        $this->_session = new SessionNative();
+                }
 
-                session_start();
-                session_regenerate_id(true);
-                session_write_close();
+                $this->_session->start();
+                $this->_session->regenerate(true);
+                $this->_session->close();
         }
 
         /**
