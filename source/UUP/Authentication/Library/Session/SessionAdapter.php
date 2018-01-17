@@ -48,12 +48,9 @@ interface SessionAdapter
         function status();
 
         /**
-         * Write session data.
-         * 
-         * If close is true, then the session is closed on finish.
-         * @param bool $close Close session on return.
+         * Write session data and close.
          */
-        function write($close = true);
+        function close();
 
         /**
          * Start session.
