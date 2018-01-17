@@ -22,7 +22,9 @@ use CAS_Client;
 use UUP\Authentication\Authenticator\Authenticator;
 use UUP\Authentication\Exception;
 use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
+use UUP\Authentication\Library\Session\SessionAdapter as Session;
 use UUP\Authentication\Restrictor\Restrictor;
+use const CAS_VERSION_2_0;
 
 /**
  * CAS (Central Authentication Service) authenticator.
@@ -71,6 +73,11 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
          * @var int 
          */
         private $_status;
+        /**
+         * The optional session adapter.
+         * @var Session 
+         */
+        private $_session = false;
 
         /**
          * Constructor.
@@ -136,6 +143,15 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
         }
 
         /**
+         * Set session adapter.
+         * @param Session $session The session adapter.
+         */
+        public function setSessionAdapter($session)
+        {
+                $this->_session = $session;
+        }
+
+        /**
          * Check if client is authenticated.
          * @return boolean
          */
@@ -189,11 +205,15 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
          */
         private function invoke()
         {
-                $this->_status = session_status();
+                if (!($session = $this->_session)) {
+                        return;
+                }
 
-                if (session_status() == PHP_SESSION_NONE &&
-                    session_status() != PHP_SESSION_DISABLED) {
-                        session_start();
+                $this->_status = $session->status();
+
+                if ($session->status() == Session::MISSING &&
+                    $session->status() != Session::DISABLED) {
+                        $session->start();
                 }
         }
 
@@ -202,13 +222,17 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
          */
         private function leave()
         {
-                if (session_status() == PHP_SESSION_ACTIVE &&
-                    session_status() != PHP_SESSION_DISABLED) {
-                        session_write_close();
+                if (!($session = $this->_session)) {
+                        return;
                 }
-                if ($this->_status == PHP_SESSION_ACTIVE &&
-                    session_status() == PHP_SESSION_NONE) {
-                        session_start();
+
+                if ($session->status() == Session::ACTIVE &&
+                    $session->status() != Session::DISABLED) {
+                        $session->write(true);
+                }
+                if ($this->_status == Session::ACTIVE &&
+                    $session->status() == Session::MISSING) {
+                        $session->start();
                 }
         }
 
