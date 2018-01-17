@@ -292,7 +292,7 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
 
                 if ($session->status() == Session::ACTIVE &&
                     $session->status() != Session::DISABLED) {
-                        $session->write(true);
+                        $session->close();
                 }
                 if ($session->status() == Session::MISSING &&
                     $session->status() != Session::DISABLED) {
@@ -311,7 +311,7 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
 
                 if ($session->status() == Session::ACTIVE &&
                     $session->status() != Session::DISABLED) {
-                        $session->write(true);
+                        $session->close();
                 }
                 if ($this->_status == Session::ACTIVE &&
                     $session->status() == Session::MISSING) {

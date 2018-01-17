@@ -228,7 +228,7 @@ class CasAuthenticator extends AuthenticatorBase implements Restrictor, Authenti
 
                 if ($session->status() == Session::ACTIVE &&
                     $session->status() != Session::DISABLED) {
-                        $session->write(true);
+                        $session->close();
                 }
                 if ($this->_status == Session::ACTIVE &&
                     $session->status() == Session::MISSING) {
