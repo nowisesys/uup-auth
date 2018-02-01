@@ -18,7 +18,8 @@
 
 namespace UUP\Authentication\Authenticator;
 
-use SimpleSAML_Auth_Simple;
+use SimpleSAML\Auth\Simple as SimpleSAML_Auth_Simple3;
+use SimpleSAML_Auth_Simple as SimpleSAML_Auth_Simple1;
 use UUP\Authentication\Authenticator\Authenticator;
 use UUP\Authentication\Exception;
 use UUP\Authentication\Library\Authenticator\AuthenticatorBase;
@@ -271,7 +272,15 @@ class SimpleSamlAuthenticator extends AuthenticatorBase implements Restrictor, A
         private function initialize()
         {
                 $this->requires('lib/_autoload.php', $this->_path);
-                $this->client = new SimpleSAML_Auth_Simple($this->_spid);
+
+                // 
+                // Support both new namespaced class and older version:
+                // 
+                if (class_exists("SimpleSAML\Auth\Simple")) {
+                        $this->client = new SimpleSAML_Auth_Simple3($this->_spid);
+                } else {
+                        $this->client = new SimpleSAML_Auth_Simple1($this->_spid);
+                }
         }
 
         // 
