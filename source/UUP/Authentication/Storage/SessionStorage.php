@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (Nowise Systems/Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,7 +104,7 @@ class SessionData implements Serializable
  * @property bool $https Enforce HTTPS protocol for session.
  * @property bool $match Require peer address to match recorded session data address.
  * 
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/Uppsala University)
  * @package UUP
  * @subpackage Authentication
  * 

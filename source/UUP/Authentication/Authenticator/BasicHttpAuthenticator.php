@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2017 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2017 Anders Lövgren (Nowise Systems/Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ namespace UUP\Authentication\Library\Authenticator {
         /**
          * Basic HTTP (WWW-Authenticate) access restrictor.
          * 
-         * @author Anders Lövgren (QNET/BMC CompDept)
+         * @author Anders Lövgren (Nowise Systems/Uppsala University)
          * @package UUP
          * @subpackage Authentication
          * 
@@ -121,7 +121,7 @@ namespace UUP\Authentication\Authenticator {
         /**
          * Basic HTTP (WWW-Authenticate) authenticator.
          * 
-         * @author Anders Lövgren (QNET/BMC CompDept)
+         * @author Anders Lövgren (Nowise Systems/Uppsala University)
          * @package UUP
          * @subpackage Authentication
          */

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (Nowise Systems/Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ use UUP\Authentication\Storage\Storage;
 /**
  * Storage using shared memory. This class uses the sysvshm extension.
  *
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/Uppsala University)
  * @package UUP
  * @subpackage Authentication
  */

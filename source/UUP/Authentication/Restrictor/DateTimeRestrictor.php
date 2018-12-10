@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (Nowise Systems/Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ use UUP\Authentication\Restrictor\Restrictor;
  * @property-read int $start The start time (UNIX timestamp).
  * @property-read int $end The end time (UNIX timestamp).
  * 
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/Uppsala University)
  * @package UUP
  * @subpackage Authentication
  */

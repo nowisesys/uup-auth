@@ -226,7 +226,7 @@ class FileValidatorTab extends FileValidatorBackend
  * @property-write int $format The file format.
  * @property-write array $colmap The user/pass to array index map.
  * 
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/Uppsala University)
  * @package UUP
  * @subpackage Authentication
  */

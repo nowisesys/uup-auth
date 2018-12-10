@@ -25,7 +25,7 @@ use UUP\Authentication\Validator\Validator;
 /**
  * Client for request authenticator.
  * 
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/Uppsala University)
  * @package UUP
  * @subpackage Authentication
  * 

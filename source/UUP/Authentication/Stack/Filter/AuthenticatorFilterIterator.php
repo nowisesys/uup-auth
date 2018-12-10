@@ -24,7 +24,7 @@ use UUP\Authentication\Restrictor\Restrictor;
 /**
  * Filter on object instances implementing the Authenticator interface.
  *
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/Uppsala University)
  * @package UUP
  * @subpackage Authentication
  */

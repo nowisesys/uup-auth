@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2017 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2017 Anders Lövgren (Nowise Systems/Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ use UUP\Authentication\Restrictor\Restrictor;
  * calling match(). Using capture patterns are optional, but required if getDomain() 
  * is called. Use hasDomain() to check if any domain was captured.
  * 
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/Uppsala University)
  * @package UUP
  * @subpackage Authentication
  */

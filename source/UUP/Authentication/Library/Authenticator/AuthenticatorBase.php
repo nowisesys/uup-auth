@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2017 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2017 Anders Lövgren (Nowise Systems/Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ use UUP\Authentication\Authenticator\Authenticator;
  * @property string $description Longer descriptive text for wrapped authenticator.
  * @property bool $visible This authenticator is visible for and selectable by remote user.
  * 
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/Uppsala University)
  * @package UUP
  * @subpackage Authentication
  */

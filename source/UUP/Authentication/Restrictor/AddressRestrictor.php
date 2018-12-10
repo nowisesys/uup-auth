@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2014-2016 Anders Lövgren (QNET/BMC CompDept).
+ * Copyright (C) 2014-2016 Anders Lövgren (Nowise Systems/Uppsala University).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ namespace UUP\Authentication\Restrictor {
          * </code>
          * @property-read array $addresses The array of addresses.
          * 
-         * @author Anders Lövgren (QNET/BMC CompDept)
+         * @author Anders Lövgren (Nowise Systems/Uppsala University)
          * @package UUP
          * @subpackage Authentication
          */
@@ -388,7 +388,7 @@ namespace UUP\Authentication\Library\Authenticator {
          * @property-read int $hosts The number of hosts on this network.
          * @property-read string $input The input argument for constructor.
          * 
-         * @author Anders Lövgren (QNET/BMC CompDept)
+         * @author Anders Lövgren (Nowise Systems/Uppsala University)
          * @package UUP
          * @subpackage Authentication
          */

@@ -26,7 +26,7 @@ use UUP\Authentication\Stack\AuthenticatorChain;
 /**
  * Base class for chain access implementations.
  *
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/Uppsala University)
  * @package UUP
  * @subpackage Authentication
  */

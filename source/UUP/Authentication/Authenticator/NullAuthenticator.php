@@ -29,7 +29,7 @@ use UUP\Authentication\Restrictor\Restrictor;
  * to the authenticator stack and setting it as required. Usage case might 
  * be if the system is taken down for service.
  * 
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/Uppsala University)
  * @package UUP
  * @subpackage Authentication
  */

@@ -60,7 +60,7 @@ use UUP\Authentication\Stack\Access\ChainAccessBase;
  * $chain->chain1->_;   // Get chain as array.
  * </code>
  * 
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/Uppsala University)
  * @package UUP
  * @subpackage Authentication
  */

@@ -24,7 +24,7 @@ use UUP\Authentication\Stack\AuthenticatorChain;
 /**
  * Filter on object instances of class AuthenticatorChain or array nodes.
  *
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/Uppsala University)
  * @package UUP
  * @subpackage Authentication
  */

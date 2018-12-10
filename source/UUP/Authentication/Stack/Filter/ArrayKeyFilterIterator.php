@@ -24,7 +24,7 @@ use Iterator;
 /**
  * Filter on array keys matching the supplied name.
  *
- * @author Anders Lövgren (QNET/BMC CompDept)
+ * @author Anders Lövgren (Nowise Systems/Uppsala University)
  * @package UUP
  * @subpackage Authentication
  */
