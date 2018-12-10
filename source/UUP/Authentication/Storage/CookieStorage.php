@@ -234,12 +234,12 @@ class CookieStorage implements Storage
         /**
          * Read cookie data.
          * @param string $user The expected username.
-         * @return \UUP\Authentication\Storage\CookieData
+         * @return CookieData
          */
         private function read($user)
         {
                 $data = new CookieData();
-                $temp = filter_input(INPUT_COOKIE, $this->_name);
+                $temp = filter_input(INPUT_COOKIE, $this->_name, FILTER_SANITIZE_STRING);
 
                 if (isset($temp)) {
                         $data->unserialize($temp);
@@ -249,21 +249,6 @@ class CookieStorage implements Storage
         }
 
         /**
-         * Read cookie data.
-         * @param string $user The expected username.
-         * @return CookieData function read($user)
-          {
-          $data = new CookieData();
-          $temp = filter_input(INPUT_COOKIE, $this->name);
-
-          if (isset($temp)) {
-          $data->unserialize($temp);
-          $this->validate($user, $data);
-          }
-          return $data;
-          }
-
-          /**
          * Compute hash value.
          * @param CookieData $data The cookie data.
          * @return string
