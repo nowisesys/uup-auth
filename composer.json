@@ -1,15 +1,19 @@
 {
-    "name": "bmc/uup-auth",
-    "version": "2.3.19",
+    "name": "nowise/uup-auth",
+    "version": "2.3.20",
     "description": "Flexible authentication stack supporting multiple credential obtaining methods and account validation backends.",
     "type": "library",
     "keywords": ["authentication", "auth", "uup", "bmc"],
-    "homepage": "http://it.bmc.uu.se/andlov/php/proj/bmc/uup-auth",
+    "homepage": "https://nowise.se/oss/uup-auth",
     "license": "Apache-2.0",
     "authors": [
         {
             "name": "Anders Lövgren",
             "email": "anders.lovgren@bmc.uu.se"
+        },
+        {
+            "name": "Anders Lövgren",
+            "email": "andlov@nowise.se"
         }
     ],
     "require": {
