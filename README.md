@@ -97,7 +97,10 @@ try {
     }
 
     if ($authenticator->accepted()) {
-        printf("<p>Logged on to %s as %s | <a href=\"?logout\">Logout</a>\n", $authenticator->getName(), $authenticator->getSubject());
+        printf("<p>Logged on to %s as %s | <a href=\"?logout\">Logout</a>\n", 
+                $authenticator->getName(), 
+                $authenticator->getSubject()
+        );
     } else {
         printf("<form action=\"\" method=\"GET\">\n");
         printf("<select name=\"login\">\n");
@@ -113,4 +116,4 @@ try {
 }
 ```
 
-Visit the [project page](https://nowise.se/oss/uup-auth) for more information.
+See examples directory for fully functional code. Visit the [project page](https://nowise.se/oss/uup-auth) for more information.
