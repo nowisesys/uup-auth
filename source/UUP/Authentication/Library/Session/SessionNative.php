@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2018 Anders Lövgren (QNET).
+ * Copyright (C) 2018 Anders Lövgren (Nowise Systems).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ namespace UUP\Authentication\Library\Session;
 /**
  * The native session handler.
  *
- * @author Anders Lövgren (QNET)
+ * @author Anders Lövgren (Nowise Systems)
  * @package UUP
  * @subpackage Authentication
  */
