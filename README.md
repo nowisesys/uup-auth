@@ -116,4 +116,4 @@ try {
 }
 ```
 
-See examples directory for fully functional code. Visit the [project page](https://nowise.se/oss/uup-auth) for more information.
+See examples directory for fully functional code. Visit the [project page](https://nowise.se/oss/uup/auth) for more information.
