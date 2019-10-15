@@ -3,7 +3,7 @@
     "version": "2.3.21",
     "description": "Flexible authentication stack supporting multiple credential obtaining methods and account validation backends.",
     "type": "library",
-    "keywords": ["authentication", "auth", "uup", "bmc"],
+    "keywords": ["authentication", "auth", "uup"],
     "homepage": "https://nowise.se/oss/uup/auth",
     "license": "Apache-2.0",
     "authors": [
